@@ -225,22 +225,11 @@
         //check if a town is selected
         if ($(".searchTownInput:visible").getSelectedTown())
         {
-            //close side menu if displayed
-            if ($("#sideMenu").hasClass("active"))
-                toggleAll();
-
-            //display loading
-            if ( $("#wegeooMap").length)
-                $("#wegeooMap").startloading();
-
-            //update state from page
-            Wegeoo.FrontController.getInstance().updateStateFromPage();
-
-            //debug
-            //setTimeout(function(){
-            //    Wegeoo.FrontController.getInstance().updateStateFromPage();
-            //}, 2000);
-
+            $.event.trigger(
+                {
+                    type: $.SideMenu.SUBMIT
+                }
+            )
         } else {
             //display alert only if this method is called from a tap on the search button
             if ( event)
@@ -261,5 +250,7 @@
     {
         onLoad: null
     };
+
+    $.SideMenu.SUBMIT = "SideMenuEventSubmit";
 
 })( jQuery );

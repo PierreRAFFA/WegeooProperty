@@ -229,6 +229,9 @@ Wegeoo.HomePageViewController.prototype.init = function()
     });
 
 
+    //sidemenu
+    $("#sideMenu").sideMenu({});
+
 };
 Wegeoo.HomePageViewController.prototype.onClusterSelected = function()
 {

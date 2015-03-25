@@ -101,7 +101,11 @@ Wegeoo.RouteController.prototype.unserialiseState = function(stateURL)
 
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////// UPDATE STATE FROM PAGE
-Wegeoo.RouteController.prototype.updateStateFromPage = function()
+/**
+ *
+ * @param type Can be _blank, _self
+ */
+Wegeoo.RouteController.prototype.updateStateFromPage = function(type)
 {
     var lRoute = this.mRoutes[0];
     var lStateURL = lRoute.getPath();
@@ -120,7 +124,15 @@ Wegeoo.RouteController.prototype.updateStateFromPage = function()
             lThis.registerValue(slug.getName() , lWebserviceValue);
     });
 
-    this.pushState(Wegeoo.Service.BASE_URL + lStateURL);
+    //go to URL or just push state
+    var lURL = Wegeoo.Service.BASE_URL + lStateURL;
+    if ( type == "_blank")
+    {
+        window.location.href = lURL;
+    }else{
+        this.pushState(lURL);
+    }
+
 };
 Wegeoo.RouteController.prototype.getValueFromSlug = function(slug)
 {

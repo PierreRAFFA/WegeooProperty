@@ -14,6 +14,8 @@ function loadWegeooEngine()
 }
 function loadComponents()
 {
+    $(document).on($.SideMenu.SUBMIT, this.onSideMenuSubmit.bind(this));
+
     //load Google maps
     var lOptions = {};
     $("#wegeooMap").wegeooMap(lOptions);
@@ -40,7 +42,24 @@ function loadComponents()
         type : "greenhouseGasesEmission"
     });
 
+    //sidemenu
     $("#sideMenu").sideMenu({});
+
+
+}
+
+function onSideMenuSubmit()
+{
+    //close side menu if displayed
+    if ($("#sideMenu").hasClass("active"))
+        toggleAll();
+
+    //display loading
+    if ( $("#wegeooMap").length)
+        $("#wegeooMap").startloading();
+
+    //update state from page
+    Wegeoo.FrontController.getInstance().updateStateFromPage("_blank");
 }
 /////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////// WEGEOO EVENT CALLBACKS
@@ -74,7 +93,37 @@ function displayAlert(pType)
 
 function registerRoutes()
 {
-    var lRoute = Wegeoo.FrontController.getInstance().addRoute("/{theme}/{category}/{cityPostCode}-{cityName}/{reference}");
+    //route 1
+    var lRoute = Wegeoo.FrontController.getInstance().addRoute("/{theme}/{category}/{cityPostCode}-{cityName}/search{map}/{filters}");
+    lRoute.addSlug("theme")
+        .setRequirement("([-a-zA-Z0-9]*)")
+        .addSlugView("#theme" , "val" , "val('%s')");
+    lRoute.addSlug("category")
+        .setRequirement("([-a-zA-Z0-9]*)")
+        .addSlugView(".searchCategoryRow:visible .searchCategory" , 'find("li.active a").attr("data-value")' , 'find("li a[data-value=%s]").tab("show")');
+    lRoute.addSlug("cityPostCode")
+        .setRequirement("([a-zA-Z0-9]*)")
+        .addSlugView(".searchForm:visible .searchTownInput" , "getSelectedCityPostCode" , "setSelectedCityPostCode('%s')");
+    lRoute.addSlug("cityName")
+        .setRequirement("([-%a-zA-Z0-9]*)")
+        .addSlugView(".searchForm:visible .searchTownInput" , "getSelectedCityName" , "setSelectedCityName('%s')");
+    lRoute.addSlug("map" , "map", "latLngZoom")
+        .setRequirement("(@[-.0-9]*,[-.0-9]*,[0-9]*)")
+        .addSlugView("#wegeooMap" , "toString" , "moveTo" , "getBounds()");
+    var lSlug = lRoute.addSlug("filters")
+        .setRequirement("([;+&=,a-zA-Z0-9]*)")
+        .setDelimiter("&");
+    lSlug.addChild("propertyType", "pt" , "enum")
+        .addSlugView(".searchForm:visible .searchPropertyTypeSelect" , 'selectpicker("val")' , 'selectpicker("val",%s)');
+    lSlug.addChild("price" , "p r" , "interval")
+        .setDelimiter(";")
+        .addSlugView(".searchForm:visible .searchPriceMinInput" , "val" , "val('%s')")
+        .addSlugView(".searchForm:visible .searchPriceMaxInput" , "val" , "val('%s')")
+    lSlug.addChild("numRooms", "nr" , "enum")
+        .addSlugView(".searchForm:visible .searchNumRoomsSelect"  , 'selectpicker("val")' , 'selectpicker("val",%s)');
+
+    //route2
+    var lRoute = Wegeoo.FrontController.getInstance().addRoute("/{theme}/{category}/{cityPostCode}-{cityName}");
     lRoute.addSlug("theme")
         .setRequirement("([-a-zA-Z0-9]*)")
         .addSlugView("#theme" , "val" , "val('%s')");

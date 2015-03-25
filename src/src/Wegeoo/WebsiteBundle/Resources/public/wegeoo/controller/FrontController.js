@@ -72,9 +72,9 @@ Wegeoo.FrontController.prototype.filterTowns = function(parameters , callback)
 };
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////// UPDATE STATE
-Wegeoo.FrontController.prototype.updateStateFromPage = function()
+Wegeoo.FrontController.prototype.updateStateFromPage = function(type)
 {
-    this.mRouteController.updateStateFromPage();
+    this.mRouteController.updateStateFromPage(type);
 };
 Wegeoo.FrontController.prototype.updatePageFromState = function()
 {
