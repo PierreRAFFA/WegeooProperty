@@ -1,0 +1,38 @@
+@media (max-width: 992px) {
+
+    .newsLayoutTextContainer {
+    }
+
+    .searchShorcutsTowns {
+        -webkit-columns: 3;
+        -moz-columns: 3;
+        columns: 3;
+    }
+
+    .grayBackgroundColumn1 {
+        background-color: #FFFFFF;
+        height: 452px;
+    }
+
+    .grayBackgroundColumn2 {
+        background-color: #F0F0F0;
+        height: 452px;
+    }
+
+    .grayBackgroundColumn3 {
+        background-color: #F0F0F0;
+        height: 452px;
+    }
+
+    .grayBackgroundColumn4 {
+        background-color: #FFFFFF;
+        height: 452px;
+    }
+
+    .footerLayout {
+    }
+
+    .searchButtonSubmit {
+        padding: 6px;
+    }
+}

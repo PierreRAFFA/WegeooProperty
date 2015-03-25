@@ -1,0 +1,59 @@
+{# src/Wegeoo/Website/Resources/views/Form/map.html.twig #}
+{% block wegeoo_map_widget %}
+    {% spaceless %}
+
+        {% block wegeoo_map_fields %}
+            {% for child in form %}
+                {{ form_row(child) }}
+            {% endfor %}
+        {% endblock %}
+
+        {% block wegeoo_map_map %}
+            <div id="wegeooMap" class="form-control detailsMap" style="width:100%; height:{{ height }}"
+                 mode="edition" markerLatitude="{{ map_latitude }}" markerLongitude="{{ map_longitude }}"
+                 enableSelection="false">
+            </div>
+        {% endblock %}
+
+        {## Prévoir ici de loader les lib js nécessaires
+        {% block oh_google_maps_javascripts %}
+            {% if include_jquery %}
+                <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+            {% endif %}
+            {% if include_gmaps_js %}
+                <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+            {% endif %}
+            {% javascripts
+            '@OhGoogleMapFormTypeBundle/Resources/public/js/jquery.ohgooglemaps.js'
+            %}
+            <script type="text/javascript" src="{{ asset_url }}"></script>
+            {% endjavascripts %}
+        {% endblock %}
+        ##}
+
+
+        <script>
+            var lOptions =
+            {
+                externalLatitudeInput: "{{ form.vars.full_name ~ '[latitude]'}}",
+                externalLongitudeInput: "{{ form.vars.full_name ~ '[longitude]'}}"
+            };
+            $("#wegeooMap").wegeooMap(lOptions);
+            /////////////////////////////////////////////////////////////////////////////////////
+            // on submit
+            $(document).ready(function()
+            {
+                var $lButton = $('button[name="{{ form.vars.full_name }}[move_marker]"]');
+                $lButton.click(function(e)
+                {
+                    var lAddress = $('input[name="{{ form.vars.full_name }}[address]"]').val();
+                    var lCity = $("#city_city").val();
+                    $("#wegeooMap").geocode(lAddress + "," + lCity );
+                });
+            });
+
+
+            /////////////////////////////////////////////////////////////////////////////////////
+        </script>
+    {% endspaceless %}
+{% endblock %}

@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en-US" xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+
+        <!-- META -->
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+        <meta property="og:title" content="{{title}}" />
+        <title>{{title}}</title>
+        <meta name="description" content="{{ title }}"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+
+		<!--FAVICON-->
+		<link rel="icon" type="image/gif" href="/favicon.ico" />
+
+		<!--JQUERY-->
+    	<script src="{{ asset('js/jquery.js') }}"></script>
+
+    	<!--ANGULAR JS -->
+    	<!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>-->
+
+		<!-- Intégration de Bootstrap -->
+		<link rel="stylesheet" media="screen" href="{{ asset('css/bootstrap.css') }}">
+		<script src="{{ asset('js/bootstrap.js') }}"></script>
+
+
+		<!-- GOOGLE MAPS -->
+		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+
+		<!-- WEGEOO LIB -->
+		{% block stylesheets %}
+			{% stylesheets output="css/compiled/wegeoo-engine2.css" filter="cssrewrite"
+            'bundles/wegeoowebsite/wegeoo/component/alert/bootstrap-dialog.css'
+            'bundles/wegeoowebsite/wegeoo/component/multiselect/bootstrap-select.css'
+            'bundles/wegeoowebsite/wegeoo/component/autocomplete/jquery.autocomplete.css'
+            'bundles/wegeoowebsite/css/header.less'
+            'bundles/wegeoowebsite/css/classified.css'
+            'bundles/wegeoowebsite/css/classified-768.less'
+            'bundles/wegeoowebsite/css/footer.css'
+            'bundles/wegeoowebsite/wegeoo/component/swiper/idangerous.swiper.css'
+            'bundles/wegeoowebsite/css/sideMenu.less'
+            %}
+            	<link type="text/css" media="screen" rel="stylesheet" href="{{ asset_url }}" />
+			{% endstylesheets %}
+		{% endblock %}
+
+		{% block javascripts %}
+			{% javascripts output="js/compiled/wegeoo-engine.js"
+            'bundles/wegeoowebsite/wegeoo/Wegeoo.js'
+            'bundles/wegeoowebsite/wegeoo/component/alert/bootstrap-dialog.js'
+            'bundles/wegeoowebsite/wegeoo/component/banner/wegeoo.banner.js'
+            'bundles/wegeoowebsite/wegeoo/component/energeticArrow/wegeoo.energeticarrow.js'
+            'bundles/wegeoowebsite/wegeoo/component/sideMenu/ui.js'
+            'bundles/wegeoowebsite/wegeoo/component/multiselect/bootstrap-select.js'
+            'bundles/wegeoowebsite/wegeoo/component/tabs/bootstrap-tabs.js'
+            'bundles/wegeoowebsite/wegeoo/component/infinitescroll/infiniteScroll.js'
+            'bundles/wegeoowebsite/wegeoo/component/wegeoomap/WegeooMap.js'
+            'bundles/wegeoowebsite/wegeoo/component/wegeoomap/markerclusterer.js'
+            'bundles/wegeoowebsite/wegeoo/component/autocomplete/jquery.autocomplete.js'
+            'bundles/wegeoowebsite/wegeoo/component/swiper/idangerous.swiper.min.js'
+            'bundles/wegeoowebsite/wegeoo/controller/FrontController.js'
+            'bundles/wegeoowebsite/wegeoo/controller/StorageController.js'
+            'bundles/wegeoowebsite/wegeoo/controller/ClassifiedController.js'
+            'bundles/wegeoowebsite/wegeoo/controller/CityController.js'
+            'bundles/wegeoowebsite/wegeoo/route/RouteController.js'
+            'bundles/wegeoowebsite/wegeoo/route/Route.js'
+            'bundles/wegeoowebsite/wegeoo/route/Slug.js'
+            'bundles/wegeoowebsite/wegeoo/route/SlugView.js'
+            'bundles/wegeoowebsite/wegeoo/locale/LocaleManager.js'
+            'bundles/wegeoowebsite/wegeoo/event/WegeooEvent.js'
+            'bundles/wegeoowebsite/wegeoo/service/Service.js'
+            'bundles/wegeoowebsite/wegeoo/service/Operation.js'
+            'bundles/wegeoowebsite/wegeoo/utils/Ini.js'
+            'bundles/wegeoowebsite/wegeoo/utils/StringUtils.js'
+			%}
+				<script src="{{ asset_url }}" charset="UTF-8"></script>
+			{% endjavascripts %}
+		{% endblock %}
+
+        <!-- PAGE BEHAVIOR -->
+        <script src="{{ asset('bundles/wegeoowebsite/js/classified.js') }}" charset="UTF-8"></script>
+
+        <!-- GOOGLE ANALYTICS -->
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-59398211-1', 'auto');
+            ga('send', 'pageview');
+
+        </script>
+
+		<!-- BOOTSTRAP SLIDER -->
+		<!-- <script src="/libs/bootstrap/js/bootstrap-slider.js"></script>
+		<script src="/libs/bootstrap/js/modernizr.js"></script>
+		<link href="/libs/bootstrap/css/bootstrap-slider.css" rel="stylesheet"> -->
+
+		<!--FONTS-->
+		<!--<link rel='stylesheet' type='text/css' href='http://fonts.googleapis.com/css?family=Maven+Pro:400,500,700' >-->
+
+		<script>
+			//@TODO locale symfony
+			var lStrings = {};
+			lStrings.estate = "immobilier";
+			lStrings.rent = "location";
+
+			var gBaseURL = "{{baseURL}}";
+			var gAssetDirectory = "{{ asset('bundles/wegeoowebsite/') }}";
+
+		</script>
+		<!--[if gte IE 9]>
+		  <style type="text/css">
+		    .gradient {
+		       filter: none;
+		    }
+		  </style>
+		<![endif]-->
+	</head>
+
+	<body>
+		<div id="mainContainer" class="container container-wegeoo">
+
+
+            {% include "WegeooWebsiteBundle:Default:sideMenu.html.twig" %}
+
+			<!-- HEADER -->
+			<header class="row show-grid logoLayout">
+				<div class="span12">
+
+                    <!-- LOGO -->
+                    <a href="{{ baseURL }}">
+                        <div class="logo">
+                            <img src="{{ asset("bundles/wegeoowebsite/images/logo180px.png") }}" width="90" height="90" alt="Wegeoo Logo"/>
+                        </div>
+
+
+                        <!-- TEXT -->
+                        <div class="logo-text">
+                            <h1>
+                                <span class="logoName1">we</span><span class="logoName2">Geoo</span>
+                                <br/>
+                                <span class="logo-text-span">{% trans %} wegeoo.slogan.part1 {% endtrans %}</span>
+                            </h1>
+                        </div>
+                    </a>
+				</div>
+			</header>
+
+			<!-- PREVIOUS/NEXT CLASSIFIED -->
+			<div class="row show-grid classifiedNavigationLayout">
+
+				<!-- LINE -->
+				<div class="line"></div>
+
+				<!-- BUTTONS -->
+				<div class="previousNextClassified">
+					<a href="{{ previousClassifiedURL }}" class="fs16 futuraBook {{ previousClassifiedURL ? "" : "linkDisable" }}">⟨⟨ {% trans %} classified.previous {% endtrans %}</a>
+                        &nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;
+                    <a href="{{ nextClassifiedURL }}" class="fs16 futuraBook {{ nextClassifiedURL ? "" : "linkDisable" }}">{% trans %} classified.next {% endtrans %} ⟩⟩</a>
+				</div>
+
+				<!-- LINE -->
+				<div class="line"></div>
+			</div>
+
+
+			<!-- CLASSIFIED -->
+			<div class="row show-grid contentsContainer">
+
+				<!-- CONTACT -->
+				<div class="col-xs-12 col-sm-12 col-md-12 contactLayout nopadding">
+
+                        {% if classified.contact.logo is defined %}
+						    <img class="contactLogo" src="{{classified.contact.logo}}" alt="Wegeoo Contact Logo"/>
+                        {% endif %}
+
+                        {% if classified.contact.name is defined and classified.contact.address is defined %}
+						<p class="annonce_infos_contact_properties_container">
+                            {% if classified.contact.name is defined %}
+							    <span class="contactName">{{classified.contact.name}}</span>
+                            {% endif %}
+
+                            {% if classified.contact.address is defined %}
+                                <br/><span class="contactProperty">{% trans %}classified.contact.address{% endtrans %} : </span><span class="contactValue">{{classified.contact.address}}</span>
+                            {% endif %}
+						</p>
+                        {% endif %}
+
+
+
+						<p class="annonce_infos_contact_properties_container">
+                            {% if classified.contact.contact is defined %}
+                            <span class="contactProperty">{% trans %}classified.contact.contact{% endtrans %} : </span><span class="contactValue">{{classified.contact.contact}}</span>
+                            <br/>
+                            {% endif %}
+
+                            {% if classified.contact.phone is defined %}
+                                {% if classified.contact.exposePhone is defined %}
+                                    {% if classified.contact.exposePhone %}
+                                        <span class="contactProperty">{% trans %}classified.contact.phone{% endtrans %} : </span><span class="contactValue">{{classified.contact.phone}}</span>
+                                    {% else %}
+                                        <span class="contactProperty">{% trans %}classified.contact.phone{% endtrans %} : </span><span class="contactValue">{% trans %}classified.phone.not_exposed{% endtrans %}</span>
+                                    {% endif %}
+                                {% endif %}
+                            <br/>
+                            {% endif %}
+
+                            {% if classified.contact.fax is defined %}
+							<span class="contactProperty">{% trans %}classified.contact.fax{% endtrans %} : </span><span class="contactValue">{{classified.contact.fax}}</span>
+							<br/>
+                            {% endif %}
+
+                            {% if classified.contact.website is defined %}
+							<span class="contactProperty">{% trans %}classified.contact.website{% endtrans %} : </span><span class="contactValue"><a href='{{classified.contact.website}}'>{{classified.contact.website}}</a></span>
+							<br/>
+							<br/>
+                            {% endif %}
+
+                            {% if classified.contact.legal_information is defined %}
+							<span class="contactProperty2">{% trans %}classified.contact.legal_information{% endtrans %} : </span>
+							<br/>
+							<span class="contactValue2">{{classified.contact.legalInformation|nl2br}}</span>
+                            {% endif %}
+						</p>
+
+
+					<!-- EXTERNAL LINK -->
+					{% if classified.externalLink != "" %}
+						<div class="annonce_infos_external_link">
+							<a href="{{classified.externalLink}}" target="_blank">
+                                <button id="searchButtonSubmit" class="btn btn-primary btn-large seeMoreSubmit" type="submit">
+                                    <img class="seeMoreIcon" src="{{ asset('bundles/wegeoowebsite/images/eye.png') }}" width="23" height="13"/>
+                                    <div class="seeMore">{% trans %}classified.seeMore{% endtrans %}</div>
+                                </button>
+							</a>
+                        </div>
+					{% endif %}
+
+					<!-- BUTTONS -->
+					<div class="interactivities">
+						<div class="userSendMail"></div>
+                        {% if classified.externalLink != "" %}
+                            <a class="interactivity" href="{{ classified.externalLink }}">{% trans %}classified.action.contact_advertiser{% endtrans %}</a>
+                        {% else %}
+                            <a class="interactivity" href="javascript:displayAlert('contactAdvertiser')">{% trans %}classified.action.contact_advertiser{% endtrans %}</a>
+                        {% endif %}
+                        <br/>
+						<div class="userFavorites"></div>
+						<a href="" class="interactivity">{% trans %}classified.action.warn{% endtrans %}</a>
+						<br/>
+						<div class="userWarn"></div>
+						<a href="" class="interactivity">{% trans %}classified.action.add_to_favorites{% endtrans %}</a>
+					</div>
+
+					<!-- QRCODE -->
+					<div class="qrCode">
+						<div class="qrCodeMobile"></div>
+						<img class="qrCodeImage" src="{{classified.qrcode}}" width="90" height="90" alt="qrCode"/>
+						<span class="qrcodeExplanation">{% trans %}classified.qrcode.help{% endtrans %}</span>
+					</div>
+
+					<!-- OWNER INTERACTIVITY -->
+					<div class="interactivities">
+						<div class="interactivitesTitle">{% trans %}classified.advertiser_action.title{% endtrans %}</div>
+						<div class="interactivitiesSeparator"></div>
+						<div class="ownerTopList"></div>
+						<a class="interactivity" href="http://www.google.fr">{% trans %}classified.advertiser_action.top_list{% endtrans %}</a>
+						<br/>
+						<div class="ownerHighlight"></div>
+						<a href="" class="interactivity">{% trans %}classified.advertiser_action.highlight{% endtrans %}</a>
+						<br/>
+						<div class="ownerUrgent"></div>
+						<a href="" class="interactivity">{% trans %}classified.advertiser_action.urgent{% endtrans %}</a>
+						<br/>
+						<div class="ownerDelete"></div>
+						<a href="" class="interactivity">{% trans %}classified.advertiser_action.delete{% endtrans %}</a>
+					</div>
+
+                    <!-- AD -->
+                    <div class="classifiedAd">
+                        <img src="{{ asset('bundles/wegeoowebsite/images/temp/adClassified.png') }}" width="300" height="600" alt="ad"/>
+                    </div>
+
+				</div>
+
+				<!-- DETAILS LAYOUT-->
+				<div class="detailsLayout" itemscope itemtype="http://schema.org/Place">
+
+					<!-- DETAILS -->
+					<div class="detailsTitleBackground">
+						<p>
+							<h1 class="detailsTitle" itemprop="name">{{classified.title}}</h1>
+							<br/>
+							<span class="detailsCity">{{classified.city.postCode}} - {{classified.city.name}}</span>
+							<br/>
+							<span class="detailsDate">{% trans %}classified.since{% endtrans %} {{ date.getLocalizedDate(classified.modificationDate|date('Y-m-d H:i:s') , app.request.locale) }}</span>
+						</p>
+					</div>
+
+					<!--SHARE-->
+					<div class="detailsShareBackground">
+						<div class="detailsShareText">
+							<span class="detailsShare">{% trans %}classified.share{% endtrans %}</span>
+						</div>
+
+						<div class="detailsFacebookLogo"></div>
+						<div class="detailsTwitterLogo"></div>
+					</div>
+
+					<!-- SLIDESHOW -->
+				  	<div class="detailsMedias" id="slideshow">
+					  	<div class="swiper-container" style="overflow:hidden;">
+						    <div class="swiper-wrapper">
+						    	{% if classified.medias|length > 0 %}
+							    	{% for media in classified.medias %}
+								      	<div itemscope itemtype="http://schema.org/ImageObject" class="swiper-slide red-slide">
+								        	<img class="detailsImage" src="{{media}}" height="355" alt="{{classified.title}}" itemprop="contentUrl"/>
+								      	</div>
+							      	{% endfor %}
+							    {% else %}
+						    			<div itemscope itemtype="http://schema.org/ImageObject" class="swiper-slide red-slide">
+								        	<img class="detailsImage" src="{{asset('bundles/wegeoowebsite/images/annonce/defaultClassifiedLarge.jpg')}}" height="355" alt="{{classified.title}}" itemprop="contentUrl"/>
+								      	</div>
+							    {% endif %}
+						    </div>
+						    <div class="swiper-pagination"></div>
+						  </div>
+					</div>
+
+					<!-- PRICE -->
+					<div class="detailsProperty">{% trans %}classified.details.price{% endtrans %}</div>
+					<p class="detailsPrices">
+                        {% if classified.category == 'sale' %}
+                            {% if classified.details.price is defined %}
+                                <span class="detailsPrice">{{ formatPrice(classified.details.price) }}</span>
+                            {% else %}
+                                <span class="detailsPrice">{% trans %}classified.details.price.notProvided{% endtrans %}</span>
+                            {% endif %}
+                        {% elseif classified.category == 'rent' %}
+                            {% if classified.details.weekPrice is defined and  classified.details.monthPrice is defined %}
+
+                                {% if classified.details.weekPrice is defined %}
+                                    <span class="detailsPrice">{{ formatPrice(classified.details.weekPrice) }} pw</span>
+                                {% endif %}
+                                &nbsp;&nbsp;-&nbsp;&nbsp;
+                                {% if classified.details.monthPrice is defined %}
+                                    <span class="detailsPrice">{{ formatPrice(classified.details.monthPrice) }} pcm</span>
+                                {% endif %}
+                            {% else %}
+                                {% if classified.details.price is defined %}
+                                    {% if classified.details.price == '-1' %}
+                                        <span class="detailsPrice">Price on application</span>
+                                    {% elseif classified.details.price is defined %}
+                                        <span class="detailsPrice">{{ formatPrice(classified.details.price) }}</span>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="detailsPrice">{% trans %}classified.details.price.notProvided{% endtrans %}</span>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+
+
+						{% if classified.details.deposit is defined %}
+							<br/><span class="detailsDeposit">{% trans %}classified.details.deposit{% endtrans %} : {{formatPrice(classified.details.deposit)}}</span>
+						{% elseif classified.contactType == 1 %}
+                            <br/><span class="detailsDeposit">{% trans %}classified.details.deposit{% endtrans %} : {% trans %}classified.data.empty{% endtrans %}</span>
+						{% endif %}
+                        {% if classified.details.fees is defined %}
+                            <br/><span class="detailsFees">{% trans %}classified.details.fees {% endtrans %} : {{formatPrice(classified.details.fees)}}</span>
+						{% elseif classified.contactType == 1 %}
+                            <br/><span class="detailsDeposit">{% trans %}classified.details.fees{% endtrans %} : {% trans %}classified.data.empty{% endtrans %}</span>
+						{% endif %}
+					</p>
+
+					<!-- DESCRIPTION -->
+					<div class="detailsProperty">{% trans %}classified.description{% endtrans %}</div>
+					<h2 class="detailsDescription" itemprop="description">{{setDefaultDivStyle(classified.description) | raw }}</h2>
+
+					<!-- ENERGETIC PERFORMANCE-->
+					<div class="detailsProperty">{% trans %}classified.details.energetic_performance{% endtrans %}</div>
+
+					<div class="detailsEnergeticPerformance">
+						<div class="energeticHelp">
+							<span>{% trans %}classified.details.energy_consumption{% endtrans %}</span>
+						</div>
+
+						{% if classified.details.energyConsumption is defined %}
+							<div id="detailsEnergyConsumption" class="detailsEnergy" data-value="{{classified.details.energyConsumption}}">
+								<canvas height="35px" ></canvas>
+								<div class="detailsEnergyValue">{{classified.details.energyConsumption}} {% trans %}classified.details.energetic_performance.measuring_unit{% endtrans %}</div>
+								<div id="energyLetter" class="detailsEnergyLetter"></div>
+							</div>
+						{% else %}
+							<div id="detailsEnergyConsumption" class="detailsEnergy" data-value="">
+								<canvas height="35px" data-value=""></canvas>
+								<div class="detailsEnergyValue">{% trans %}classified.data.empty{% endtrans %}</div>
+								<div id="energyLetter" class="detailsEnergyLetter"></div>
+							</div>
+						{% endif %}
+
+						<div class="energeticHelp">
+                            <span>{% trans %}classified.details.greenhouse_gases_emission{% endtrans %}</span>
+						</div>
+
+						{% if classified.details.greenhouseGasesEmission is defined %}
+							<div id="detailsGreenhouseGasesEmission" class="detailsEnergy" data-value="{{classified.details.greenhouseGasesEmission}}">
+								<canvas height="35px" ></canvas>
+								<div class="detailsEnergyValue">{{classified.details.greenhouseGasesEmission}} {% trans %}classified.details.energetic_performance.measuring_unit{% endtrans %}</div>
+								<div class="detailsEnergyLetter"></div>
+							</div>
+						{% else %}
+							<div id="detailsGreenhouseGasesEmission" class="detailsEnergy" data-value="">
+								<canvas height="35px"></canvas>
+								<div class="detailsEnergyValue">{% trans %}classified.data.empty{% endtrans %}</div>
+								<div class="detailsEnergyLetter"></div>
+							</div>
+						{% endif %}
+
+					</div>
+
+					<!-- OTHER PROPERTIES-->
+					<div class="detailsProperty">{% trans %}classified.details{% endtrans %}</div>
+
+					<div class="detailsOtherProperties">
+						<form class="form-horizontal" role="form">
+							<div class="form-group">
+
+								{% if classified.category == 'sale' %}
+								    <!-- BUILDING YEAR -->
+								    <label for="inputEmail3" class="col-sm-4 col-xs-4 control-label">{% trans %}classified.details.building_year{% endtrans %} :</label>
+                                    <div class="col-sm-8 col-xs-8">
+                                        {% if classified.details.buildingYear is defined %}
+                                            <div class="form-control">{{classified.details.buildingYear}}</div>
+                                        {% else %}
+                                            <div class="form-control">{% trans %}classified.data.empty{% endtrans %}</div>
+                                        {% endif %}
+                                    </div>
+
+								    <!-- WORK REQUIRED -->
+								    <label for="inputEmail3" class="col-sm-4 col-xs-4 control-label">{% trans %}classified.details.work_required{% endtrans %} :</label>
+								    <div class="col-sm-8 col-xs-8">
+                                        {% if classified.details.workRequired is defined %}
+                                            <div class="form-control">{% if classified.details.workRequired %} {{ "yes" | trans() }} {% else %} {{ "no" | trans() }} {% endif %}</div>
+                                        {% else %}
+                                            <div class="form-control">{% trans %}classified.data.empty{% endtrans %}</div>
+                                        {% endif %}
+
+								    </div>
+							    {% endif %}
+
+							    <!-- AREA -->
+							    <label for="inputEmail3" class="col-sm-4 col-xs-4 control-label">{% trans %}classified.details.living_area{% endtrans %} :</label>
+							    <div class="col-sm-8 col-xs-8">
+                                    {% if classified.details.livingArea is defined %}
+							    	    <div class="form-control">{{classified.details.livingArea}} {% trans %}m2{% endtrans %}</div>
+                                    {% else %}
+                                        <div class="form-control">{% trans %}classified.data.empty{% endtrans %}</div>
+                                    {% endif %}
+							    </div>
+
+							    <!-- FLOORS -->
+							    <label for="inputEmail3" class="col-sm-4 col-xs-4 control-label">{% trans %}classified.details.num_floors{% endtrans %} :</label>
+							    <div class="col-sm-8 col-xs-8">
+                                    {% if classified.details.numFloors is defined %}
+                                        <div class="form-control">{{classified.details.numFloors}}</div>
+                                    {% else %}
+                                        <div class="form-control">{% trans %}classified.data.empty{% endtrans %}</div>
+                                    {% endif %}
+							    </div>
+
+							    <!-- ROOMS -->
+							    <label for="inputEmail3" class="col-sm-4 col-xs-4 control-label">{% trans %}classified.details.num_rooms{% endtrans %} :</label>
+							    <div class="col-sm-8 col-xs-8">
+                                    {% if classified.details.numRooms is defined %}
+                                        <div class="form-control">{{classified.details.numRooms}}</div>
+                                    {% else %}
+                                        <div class="form-control">{% trans %}classified.data.empty{% endtrans %}</div>
+                                    {% endif %}
+							    </div>
+
+							    <!-- BEDROOMS -->
+							    <label for="inputEmail3" class="col-sm-4 col-xs-4 control-label">{% trans %}classified.details.num_bedrooms{% endtrans %} :</label>
+							    <div class="col-sm-8 col-xs-8">
+                                    {% if classified.details.numBedrooms is defined %}
+                                        <div class="form-control">{{classified.details.numBedrooms}}</div>
+                                    {% else %}
+                                        <div class="form-control">{% trans %}classified.data.empty{% endtrans %}</div>
+                                    {% endif %}
+							    </div>
+
+							    <!-- BATHROOMS -->
+							    <label for="inputEmail3" class="col-sm-4 col-xs-4 control-label">{% trans %}classified.details.num_bathrooms{% endtrans %} :</label>
+							    <div class="col-sm-8 col-xs-8">
+                                    {% if classified.details.numBathrooms is defined %}
+                                        <div class="form-control">{{classified.details.numBathrooms}}</div>
+                                    {% else %}
+                                        <div class="form-control">{% trans %}classified.data.empty{% endtrans %}</div>
+                                    {% endif %}
+							    </div>
+
+							    <!-- TOILETS -->
+							    <label for="inputEmail3" class="col-sm-4 col-xs-4 control-label">{% trans %}classified.details.num_toilets{% endtrans %} :</label>
+							    <div class="col-sm-8 col-xs-8">
+                                    {% if classified.details.numToilets is defined %}
+                                        <div class="form-control">{{classified.details.numToilets}}</div>
+                                    {% else %}
+                                        <div class="form-control">{% trans %}classified.data.empty{% endtrans %}</div>
+                                    {% endif %}
+							    </div>
+
+							    <!-- HEATING -->
+							    <label for="inputEmail3" class="col-sm-4 col-xs-4 control-label">{% trans %}classified.details.heating{% endtrans %} :</label>
+							    <div class="col-sm-8 col-xs-8">
+                                    {% if classified.details.heating is defined %}
+                                        <div class="form-control">{{ ('classified.details.heating.' ~ classified.details.heating)  | trans() }}</div>
+                                    {% else %}
+                                        <div class="form-control">{% trans %}classified.data.empty{% endtrans %}</div>
+                                    {% endif %}
+							    </div>
+
+							    <!-- LIVING ROOM AREA -->
+							    {#<label for="inputEmail3" class="col-sm-4 control-label">{% trans %}classified.details.livingroom_area{% endtrans %} :</label>#}
+							    {#<div class="col-sm-8">#}
+							    	{#<div class="form-control">{{classified.details.livingRoomArea}}</div>#}
+							    {#</div>#}
+
+
+						  	</div>
+						</form>
+					</div>
+
+					<!-- GEOLOCATION -->
+					<div class="detailsProperty">{% trans %}classified.geolocation{% endtrans %}</div>
+
+                    <div>
+                    </div>
+
+                    <!-- MICRO DATA GEOCOORDINATES -->
+                    <div itemprop="geo" itemscope itemtype="http://schema.org/GeoCoordinates">
+                        <meta itemprop="latitude" content="{{classified.latitude}}" />
+                        <meta itemprop="longitude" content="{{classified.longitude}}" />
+                    </div>
+
+                    <div class="detailsMap">
+                        <div id="wegeooMap" class="wegeoomap"
+                             style="width:100%; height:300px"
+                             markerLongitude="{{classified.longitude}}" markerLatitude="{{classified.latitude}}"
+                             enableSelection="false">
+                        </div>
+                    </div>
+
+
+				</div>
+
+                <!-- PREVIOUS/NEXT CLASSIFIED -->
+                <div class="row show-grid classifiedNavigationLayout classifiedNavigationLayoutBottom">
+
+                    <!-- LINE -->
+                    <div class="line"></div>
+
+                    <!-- BUTTONS -->
+                    <div class="previousNextClassified">
+                        <span class="fs16 futuraBook">⟨⟨ {% trans %} classified.previous {% endtrans %}&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;{% trans %} classified.next {% endtrans %} ⟩⟩</span>
+                    </div>
+
+                    <!-- LINE -->
+                    <div class="line"></div>
+                </div>
+
+            </div>
+
+            {% embed "@WegeooWebsite/Default/footer.html.twig" %}{% endembed %}
+
+        </div>
+
+        <div hidden="hidden">
+            <div id="contactAdvertiser" data-title="{% trans %}Contact the advertiser{% endtrans %}">
+                {% embed "@WegeooWebsite/Default/classified.popup.contactAdvertiser.html.twig" %}{% endembed %}
+            </div>
+        </div>
+
+
+	</body>
+</html>

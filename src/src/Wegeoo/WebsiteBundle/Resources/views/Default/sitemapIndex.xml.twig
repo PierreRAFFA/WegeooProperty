@@ -1,0 +1,8 @@
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    {% for i in 0..numSitemaps-1 %}
+        <sitemap>
+            <loc>{{  serverName ~ '/sitemap' ~ i ~ '.xml' }}</loc>
+            <lastmod>{{"now"|date('Y-m-d')}}</lastmod>
+        </sitemap>
+    {%  endfor %}
+</sitemapindex>

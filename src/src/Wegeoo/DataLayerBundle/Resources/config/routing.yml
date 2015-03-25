@@ -1,0 +1,22 @@
+#http://localhost:8888/app_dev.php/api/v1/cities/?filters={"filterName":"startwith","limit":3}
+cities:
+   type: rest
+   prefix: /api/v1/
+   resource: Wegeoo\DataLayerBundle\Controller\CityController
+
+#http://localhost:8888/app_dev.php/api/v1/classifieds/wg-aze123
+#http://localhost:8888/app_dev.php/api/v1/classifieds?filter_params={"references":"wg-aze123,wg-aze124"}
+classifieds:
+    type: rest
+    prefix: /api/v1/
+    resource: Wegeoo\DataLayerBundle\Controller\ClassifiedController
+
+#http://localhost:8888/app_dev.php/api/v1/classifieds/wg-aze123
+#http://localhost:8888/app_dev.php/api/v1/classifieds/?filter_params={"references":"wg-aze123,wg-aze124"}
+#classifieds:
+#   type: rest
+#   prefix: /api/v1/classifieds
+#   resource: Wegeoo\DataLayerBundle\Controller\ClassifiedController
+   
+
+

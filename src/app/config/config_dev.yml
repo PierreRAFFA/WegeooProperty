@@ -1,0 +1,4 @@
+imports:
+    - { resource: config.yml }
+    - { resource: parameters_dev.yml }
+    - { resource: security.yml }

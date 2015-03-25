@@ -1,0 +1,92 @@
+@font-face{
+    font-family: "FuturaStd-Light";
+    src: url('/bundles/wegeoowebsite/images/fonts/FuturaStd-Light.ttf');
+}
+@font-face{
+    font-family: "FuturaStd-Medium";
+    src: url('/bundles/wegeoowebsite/images/fonts/FuturaStd-Medium.ttf');
+}
+@font-face{
+    font-family: "FuturaStd-Bold";
+    src: url('/bundles/wegeoowebsite/images/fonts/FuturaStd-Bold.otf');
+}
+@font-face{
+    font-family: "FuturaStd-Book";
+    src: url('/bundles/wegeoowebsite/images/fonts/FuturaStd-Book.ttf');
+}
+@font-face{
+    font-family: "FuturaStd-Heavy";
+    src: url('/bundles/wegeoowebsite/images/fonts/FuturaStd-Heavy.otf');
+}
+
+body{
+    width:100%;
+    margin:0;
+    font-family: Arial, "MS Trebuchet", sans-serif;
+
+}
+h1{
+    font:1em FuturaStd-Light;
+    color:#444444;
+}
+.container-wegeoo
+{
+    background:#FFFFFF;
+    max-width: 1024px;
+}
+/**************** MAIN **************/
+/************************************/
+.show-grid [class*="span"] {
+    /*background-color: #aaa;*/
+    text-align: center;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+.show-grid:hover [class*="span"] {
+    /*background: #ddd;*/
+}
+
+/***************** HEADER    ********/
+/************************************/
+.line
+{
+    position:relative;
+    background:#E0E0E0;
+    margin-top:5px;
+    margin-bottom:5px;
+    width:100%;
+    height:1px;
+}
+/********************** PREVIOUS/NEXT CLASSIFIED ********/
+/************************************/
+.previousNextClassified
+{
+    position:relative;
+    clear:left;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-left: 10px;
+}
+.postTitle{
+    font: 1.75em FuturaStd-Light;
+    color:#353535;
+}
+.postText{
+    font: 1em FuturaStd-Light;
+    color:#353535;
+    margin-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.detailsMap{
+    margin-top:10px;
+    margin-bottom:10px;
+}
+.well{
+    margin-left: -5px;
+}
+.info{
+    font: 1em FuturaStd-Light;
+}

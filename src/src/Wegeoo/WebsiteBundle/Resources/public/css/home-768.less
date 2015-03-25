@@ -1,0 +1,52 @@
+@media (max-width: 768px)
+{
+  @menuWidth : 280px;
+  @menuWidth2 : 80%;
+  @blue1 : #52AAD1;
+  @duration : 0.3s;
+
+  body{
+
+    -webkit-transition: all @duration ease;
+    -moz-transition: all @duration ease;
+    -ms-transition: all @duration ease;
+    -o-transition: all @duration ease;
+    transition: all @duration ease;
+
+    &.showMenu
+    {
+      //transform: translate(@menuWidth);
+      //margin-left: @menuWidth;
+    }
+  }
+
+  #mapLayout{
+
+    .searchParameterContainer , .searchButtonSubmit{
+      display:none;
+    }
+
+    .mapContainer{
+      padding-right: 35px;
+    }
+    .scrollIcon{
+      display: block;
+      position: fixed;
+      float: right;
+      right: 15px;
+      bottom: 10px;
+
+      -webkit-transition: all @duration ease;
+      -moz-transition: all @duration ease;
+      -ms-transition: all @duration ease;
+      -o-transition: all @duration ease;
+      transition: all @duration ease;
+
+    }
+
+    .searchForm{
+      display:none;
+    }
+  }
+
+}

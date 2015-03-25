@@ -1,0 +1,11 @@
+gregwar_captcha_routing:
+    resource: "@GregwarCaptchaBundle/Resources/config/routing/routing.yml"
+    prefix:   /_gcb
+
+wegeoo_data_layer:
+    resource: "@WegeooDataLayerBundle/Resources/config/routing.yml"
+    prefix:   /
+
+wegeoo_website:
+    resource: "@WegeooWebsiteBundle/Resources/config/routing.yml"
+    prefix:   /

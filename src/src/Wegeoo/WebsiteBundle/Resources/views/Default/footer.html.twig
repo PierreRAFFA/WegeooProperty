@@ -1,0 +1,90 @@
+<!-- NEWS -->
+<footer>
+    <div class ="row show-grid newsLayout">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="newsLayoutTextContainer">
+                <div class="newsLayoutText">
+                    <span class="newsLayoutContent1">{% trans %}footer.followus{% endtrans %}</span>
+                    <!--<span class="newsLayoutContent2">we</span><span class="newsLayoutContent3">geoo</span>-->
+                </div>
+                <a href="https://www.facebook.com/wegeoo">
+                    <div class="facebookLogo"></div>
+                </a>
+                <div class="twitterLogo"></div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- SEARCH SHORTCUTS -->
+    <div class ="row show-grid searchShortcutsLayout">
+        <div class="col-xs-12 col-sm-6 col-md-6 searchShortcutsContainers">
+            <div class="searchShortcutsTitle">
+                <span>{% trans %}footer.classified.sale{% endtrans %}</span>
+            </div>
+
+            <div class="searchShorcutsTowns">
+                {% for lTown in mostPopulatedTowns %}
+                    <a href="{{baseURL}}/{% trans %}wegeoo.property{% endtrans %}/{% trans %}wegeoo.sale{% endtrans %}/{{lTown.postCode}}-{{lTown.uppercaseName|lower}}">{{lTown.name}}</a><br/>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-6 col-md-6 searchShortcutsContainers">
+            <div class="searchShortcutsTitle">
+                <span>{% trans %}footer.classified.rent{% endtrans %}</span>
+            </div>
+            <div class="searchShorcutsTowns">
+                {% for lTown in mostPopulatedTowns %}
+                    <a href="{{baseURL}}/{% trans %}wegeoo.property{% endtrans %}/{% trans %}wegeoo.rent{% endtrans %}/{{lTown.postCode}}-{{lTown.uppercaseName|lower}}">{{lTown.name}}</a><br/>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- OTHER LINKS -->
+    <div class ="row show-grid footerLayout">
+
+
+        <div class="col-xs-12 col-sm-12 col-md-12">
+
+            <!-- COMPANY -->
+            <span class="footerTitle">{% trans %}Wegeoo Society{% endtrans %}</span>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <span class="footerContents">
+                <a href="/a-propos">{% trans %}footer.about{% endtrans %}</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="emploi">{% trans %}footer.job{% endtrans %}</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="presse">{% trans %}footer.media{% endtrans %}</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="aide">{% trans %}footer.help{% endtrans %}</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="cg">{% trans %}footer.conditions{% endtrans %}</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="mailto:wegeoo.uk@gmail.com">{% trans %}footer.contact{% endtrans %}</a>&nbsp;&nbsp;&nbsp;&nbsp;
+            </span>
+            <br/>
+
+            <!-- ADVERTISERS -->
+            <span class="footerTitle">{% trans %}footer.advertiser{% endtrans %}</span>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <span class="footerContents">
+                <a href="annonceurs">{% trans %}footer.advertiser.discoverOffers{% endtrans %}</a>&nbsp;&nbsp;&nbsp;&nbsp;
+            </span>
+            <br/>
+
+            <!-- FOLLOW US -->
+            <span class="footerTitle">{% trans %}Follow Us{% endtrans %}</span>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <span class="footerContents">
+                <a href="https://www.facebook.com/wegeoo">Facebook</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="annonceurs">Twitter</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="annonceurs">Google</a>&nbsp;&nbsp;&nbsp;&nbsp;
+            </span>
+
+        </div>
+
+        <div class ="row show-grid">
+            <div class="col-xs-12 col-sm-12 col-md-12 copyright">
+                {% trans %}footer.copyright{% endtrans %}<br/>
+                {% trans %}footer.use{% endtrans %}
+            </div>
+        </div>
+    </div>
+</footer>
