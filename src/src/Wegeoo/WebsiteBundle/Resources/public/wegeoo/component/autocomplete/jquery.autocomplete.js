@@ -151,7 +151,9 @@
 
             this.selectItemFromDataAndValue(lSelectedCity.uppercaseName , lSelectedCity);
         }else{
-            this.selectItemFromDataAndValue(null, {});
+
+            //if ( lSelectedCity )
+            //this.selectItemFromDataAndValue(null, {});
         }
 
         /**
@@ -664,7 +666,7 @@
         this.dom.$elem.val(displayValue);//.focus();
         this.setCaret(displayValue.length);
         this.callHook('onItemSelect', { value: pValue, data: pData });
-        this.setSelectedTown(pData);
+        this.selectedTown = pData;
         this.finish();
     };
 	$.Autocompleter.prototype.displayValue = function(value, data) {
@@ -712,11 +714,12 @@
 		this.selectRange(pos, pos);
 	};
 	
-	$.Autocompleter.prototype.setSelectedTown = function(pValue)
+	$.Autocompleter.prototype.setSelectedCity = function(pValue)
 	{
 	    this.selectedTown = pValue;
+        this.selectItemFromDataAndValue(this.selectedTown.libelle, this.selectedTown);
 	};
-	$.Autocompleter.prototype.getSelectedTown = function()
+	$.Autocompleter.prototype.getSelectedCity = function()
 	{
 	    return this.selectedTown;
 	};
@@ -789,7 +792,7 @@
         var lPostCode = null;
         if ( $(this).data('autocompleter') )
         {
-            var lSelectedTown = $(this).data('autocompleter').getSelectedTown();
+            var lSelectedTown = $(this).data('autocompleter').getSelectedCity();
             if ( lSelectedTown)
                 lPostCode = lSelectedTown.postCode;
         }
@@ -815,23 +818,34 @@
         var lCityName = null;
         if ( $(this).data('autocompleter') )
         {
-            var lSelectedTown = $(this).data('autocompleter').getSelectedTown();
+            var lSelectedTown = $(this).data('autocompleter').getSelectedCity();
             if ( lSelectedTown)
                 lCityName = lSelectedTown.uppercaseName.toLowerCase();
         }
         return lCityName;
     };
+    $.fn.getSelectedCleanedCityName = function ()
+    {
+        var lCityName = null;
+        if ( $(this).data('autocompleter') )
+        {
+            var lSelectedTown = $(this).data('autocompleter').getSelectedCity();
+            if ( lSelectedTown)
+                lCityName = lSelectedTown.uppercaseName.toLowerCase().replace(" " , "-");
+        }
+        return lCityName;
+    };
 
-    $.fn.getSelectedTown = function()
+    $.fn.getSelectedCity = function()
     {
         var lSelectedTown = null;
         if ( $(this).data('autocompleter') )
 	    {
-            lSelectedTown = $(this).data('autocompleter').getSelectedTown();
+            lSelectedTown = $(this).data('autocompleter').getSelectedCity();
         }
         return lSelectedTown;
     };
-	$.fn.setSelectedTown = function(pTownName, pTownPostalCode)
+	$.fn.setSelectedCity = function(pTownName, pTownPostalCode)
 	{
 	    var lSelectedTown = null;
 	    if ( $(this).data('autocompleter') )

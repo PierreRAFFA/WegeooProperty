@@ -254,7 +254,7 @@ Wegeoo.HomePageViewController.prototype.registerRoutes = function()
         .addSlugView(".searchForm:visible .searchTownInput" , "getSelectedCityPostCode" , "setSelectedCityPostCode('%s')");
     lRoute.addSlug("cityName")
         .setRequirement("([-%a-zA-Z0-9]*)")
-        .addSlugView(".searchForm:visible .searchTownInput" , "getSelectedCityName" , "setSelectedCityName('%s')");
+        .addSlugView(".searchForm:visible .searchTownInput" , "getSelectedCleanedCityName" , "setSelectedCityName('%s')");
     lRoute.addSlug("map" , "map", "latLngZoom")
         .setRequirement("(@[-.0-9]*,[-.0-9]*,[0-9]*)")
         .addSlugView("#wegeooMap" , "toString" , "moveTo" , "getBounds()");
@@ -282,8 +282,8 @@ Wegeoo.HomePageViewController.prototype.registerRoutes = function()
         .setRequirement("([a-zA-Z0-9]*)")
         .addSlugView(".searchForm:visible .searchTownInput" , "getSelectedCityPostCode" , "setSelectedCityPostCode('%s')");
     lRoute.addSlug("cityName")
-        .setRequirement("([-%a-zA-Z0-9]*)")
-        .addSlugView(".searchForm:visible .searchTownInput" , "getSelectedCityName" , "setSelectedCityName('%s')");
+        .setRequirement("([-a-zA-Z0-9]*)")
+        .addSlugView(".searchForm:visible .searchTownInput" , "getSelectedCleanedCityName" , "setSelectedCityName('%s')");
 
     //route 3
     var lRoute = Wegeoo.FrontController.getInstance().addRoute("");
@@ -301,7 +301,7 @@ Wegeoo.HomePageViewController.prototype.registerRoutes = function()
         .setDefaultValue("city");
     lRoute.addSlug("cityName")
         .setRequirement("([-%a-zA-Z0-9]*)")
-        .addSlugView(".searchForm:visible .searchTownInput" , "getSelectedCityName" , "setSelectedCityName('%s')")
+        .addSlugView(".searchForm:visible .searchTownInput" , "getSelectedCleanedCityName" , "setSelectedCityName('%s')")
         .setDefaultValue("london");
 
 }
@@ -320,6 +320,8 @@ Wegeoo.HomePageViewController.prototype.onBoundsChanged = function(event)
 //////////////////////////////////////////////////////////////////////////// REGISTER ROUTES
 Wegeoo.HomePageViewController.prototype.loadLatestClassifieds = function(cityPostCode,cityName)
 {
+    return;
+    
     var lCategory = Wegeoo.FrontController.getInstance().getSlugValue("category");
 
     if ( lCategory == null)
@@ -414,7 +416,7 @@ Wegeoo.HomePageViewController.prototype.onSearchButtonClicked = function(pEvent)
         pEvent.preventDefault();
 
     //check if a town is selected
-    if ($(".searchTownInput:visible").getSelectedTown())
+    if ($(".searchTownInput:visible").getSelectedCity())
     {
         //close side menu if displayed
         if ($("#sideMenu").hasClass("active"))

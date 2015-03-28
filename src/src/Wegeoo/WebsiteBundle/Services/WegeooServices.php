@@ -128,4 +128,10 @@ class WegeooServices
         return $d;
     }
 
+
+    public function getSlugName($cityPostCode,$cityName)
+    {
+        return strtolower(sprintf("%s-%s", $cityPostCode, str_replace(" ", "-", $cityName)));
+    }
+
 }

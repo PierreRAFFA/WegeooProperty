@@ -214,14 +214,14 @@ class ClassifiedRepository extends EntityRepository
 		$lFullResults = array();
 
         //create city query
+        $lSlugName      = strtolower(sprintf("%s-%s" , $pFilterParams->cityPostCode , str_replace(" " , "-" , $pFilterParams->cityName)));
         $lCityName 		= strtoupper($pFilterParams->cityName);
         $lCityPostCode 	= $pFilterParams->cityPostCode;
 
         $lCityQueryBuilder = $this->_em->createQueryBuilder();
         $lCityQueryBuilder = $lCityQueryBuilder->select('ci.id', 'ci.postCode' , 'ci.name','ci.uppercaseName','ci.latitude', 'ci.longitude', 'ci.pop', 'ci.code' )
             ->from('Wegeoo\DataLayerBundle\Entity\City' , 'ci')
-            ->where("ci.uppercaseName = '$lCityName'")
-            ->andWhere("ci.postCode = '$lCityPostCode'");
+            ->where("ci.slugName = '$lSlugName'");
 
         $lCityResults = $lCityQueryBuilder->getQuery()->getResult();
 

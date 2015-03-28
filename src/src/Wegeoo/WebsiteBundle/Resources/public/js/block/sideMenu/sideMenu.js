@@ -52,6 +52,7 @@
 
         /**  **/
         this.mCurrentSearchTownInput = null;
+        this.mLastResults = null;
 
 
         this.render();
@@ -83,7 +84,7 @@
         this.mCurrentSearchTownInput = $(event.currentTarget);
 
         if (vTown.length <= 2)
-            _lastResults = null;
+            this.mLastResults = null;
 
         var isThereAnyBracket = vTown.indexOf("(") >= 0 || vTown.indexOf(")") >= 0;
 
@@ -95,13 +96,13 @@
                         var lParameters = {};
                         lParameters["filterName"]   = "startwith";
                         lParameters["letters"]      = vTown + "%";
-                        Wegeoo.FrontController.getInstance().filterTowns(lParameters , onTownsLoadComplete);
+                        Wegeoo.FrontController.getInstance().filterTowns(lParameters , this.onTownsLoadComplete.bind(this));
                     }
                 } catch(vError) {
                     alert(vError);
                 }
             } else {
-                displayTowns(_lastResults);
+                this.displayTowns(this.mLastResults);
             }
         }
     }
@@ -136,7 +137,7 @@
 
         });
 
-        _lastResults = lResults;
+        this.mLastResults = lResults;
         this.mCurrentSearchTownInput.autocomplete("destroy");
 
         try {
@@ -223,7 +224,7 @@
             event.preventDefault();
 
         //check if a town is selected
-        if ($(".searchTownInput:visible").getSelectedTown())
+        if ($(".searchTownInput:visible").getSelectedCity())
         {
             $.event.trigger(
                 {

@@ -35,42 +35,47 @@ class WegeooWebsiteHomeController extends Controller
 
         $this->get("logger")->info("lConfiguration:".var_export($lConfiguration,true));
 
-        $this->get("logger")->info("pCategoryLocaleName:".var_export($pCategoryLocaleName == "",true));
-        $this->get("logger")->info("pCityPostCode:".var_export($pCityPostCode == "",true));
-        $this->get("logger")->info("pCityName:".var_export($pCityName == "",true));
-
-        if ( $pCategoryLocaleName == "" || ($pCityPostCode == "" && $pCityName == ""))
-        {
-            $lConfiguration["category"] = $this->get("translator")->trans("sale" , array(), "routing");
-            $lConfiguration["cityPostCode"] = "city";
-            $lConfiguration["cityName"]     = "london";
-
-            return $this->render('WegeooWebsiteBundle:Default:home.html.twig', $lConfiguration);
-
-            $lParams = array();
-            $lParams["pWegeooType"]         = $pWegeooType;
-            $lParams["pCategoryLocaleName"] = "sale";
-            $lParams["pCityPostCode"]       = $lConfiguration["cityPostCode"];
-            $lParams["pCityName"]           = strtolower($lConfiguration["cityName"]);
-
-            $this->get("logger")->info("REDIRECT");
-            $this->get("logger")->info("lParams:".var_export($lParams,true));
-            //return $this->redirect($this->generateUrl('wegeoo_website_homepage' , $lParams));
-
-        }else{
-            //render the index page
-            return $this->render('WegeooWebsiteBundle:Default:home.html.twig', $lConfiguration);
-        }
+        return $this->render('WegeooWebsiteBundle:Default:home.html.twig', $lConfiguration);
     }
 
     protected function getWegeooConfiguration($pWegeooType, $pCategoryLocaleName,$pCityPostCode=null, $pCityName=null, $map = null, $pSearch=null)
     {
+        //find the city from name and postCode
+        $lCityName = NULL;
+        $lCityPostCode = NULL;
+
+        if ( $pCityPostCode !== "" && $pCityName !== "")
+        {
+            $lSlugName = $this->get("wegeoo")->getSlugName($pCityPostCode,$pCityName);
+
+            $this->get("logger")->info("lSlugName:" . $lSlugName);
+            $lCities = $this->getDoctrine()
+                ->getRepository("WegeooDataLayerBundle:City")
+                ->findBy(array("slugName" => $lSlugName));
+
+            $this->get("logger")->info("count(lCities):" . count($lCities));
+
+            if (count($lCities) == 1)
+            {
+                $lCityPostCode  = $lCities[0]->getPostCode();
+                $lCityName      = $lCities[0]->getName();
+            }
+        }
+
+        //set the default city if nothing is specified or found above
+        if ( $lCityName === NULL && $lCityPostCode === NULL)
+        {
+            $lCityPostCode = $this->container->getParameter("default_city_postcode");
+            $lCityName     = $this->container->getParameter("default_city_name");
+        }
+
         $lConfiguration = array();
 
+        $lConfiguration["cityPostCode"]         = $lCityPostCode;
+        $lConfiguration["cityName"]             = $lCityName;
         $lConfiguration["title"] 		        = $this->get("translator")->trans("wegeoo.meta.title");
+        $lConfiguration["title"]                = sprintf($lConfiguration["title"] , ucfirst($lConfiguration["cityName"]));
         $lConfiguration["description"] 		    = $this->get("translator")->trans("wegeoo.meta.description");
-        $lConfiguration["cityPostCode"]         = $pCityPostCode;
-        $lConfiguration["cityName"]             = $pCityName;
         $lConfiguration["category"]             = $this->get("translator")->trans($pCategoryLocaleName , array(), "routing");
         $lConfiguration["filters"] 		        = $this->getSearchParams($pSearch);
         $lConfiguration["mostPopulatedTowns"] 	= $this->getMostPopulatedTowns();
@@ -78,37 +83,6 @@ class WegeooWebsiteHomeController extends Controller
         $lConfiguration["previewClassifiedAdTemplateURL"] = "";//@TODO create a config file
 
         $this->get("logger")->info("lConfiguration1:".var_export($lConfiguration,true));
-
-        //get Wegeoo configuration
-        $lUserConfiguration = $this->getUserConfiguration();
-        $this->get("logger")->info("lUserConfiguration:".var_export($lUserConfiguration,true));
-
-        if ($lConfiguration !== FALSE && $lConfiguration["cityName"] == '' )
-        {
-            $this->get("logger")->info("OOOK1");
-            $lCities = $this->getDoctrine()->getRepository("WegeooDataLayerBundle:City")->findBy(array("uppercaseName" => strtoupper($lUserConfiguration["cityName"])));
-
-            if (count($lCities))
-            {
-                $this->get("logger")->info("lCities:".var_export($lCities,true));
-                $lCity = $lCities[0];
-                $lConfiguration["cityPostCode"] = $lCity->getPostCode();
-                $lConfiguration["cityName"]     = $lCity->getName();
-            }
-
-            //$lConfiguration["cityPostCode"] = $this->get("translator")->trans("wegeoo.default.cityPostCode");
-            //$lConfiguration["cityName"]     = $this->get("translator")->trans("wegeoo.default.cityName");
-        }
-
-        //otherwise, if always empty, set london as city.
-        if ($lConfiguration["cityPostCode"] == "" && $lConfiguration["cityName"] == "" )
-        {
-            $lConfiguration["cityPostCode"] = $this->container->getParameter("default_city_postcode");
-            $lConfiguration["cityName"]     = $this->container->getParameter("default_city_name");
-        }
-
-        //fill the title with the city name.
-        $lConfiguration["title"] = sprintf($lConfiguration["title"] , ucfirst($lConfiguration["cityName"]));
 
         return $lConfiguration;
     }
