@@ -136,7 +136,7 @@ classifiedList.sortBy.leastExpensive,Annonces les moins chères,Least Expensive 
 classifiedList.sortBy.mostExpensive,Annonces les plus chères,Most Expensive Classified
 classifiedList.sortBy.mostRecent,Annonces les plus récentes,Most Recent Classified
 
-footer.followus,SUIVEZ TOUTE L’ACTUALITÉ IMMOBILIÈRE,FOLLOW ALL PROPERTY NEWS
+footer.followus,SUIVEZ TOUTE L’ACTUALITÉ IMMOBILIÈRE,Follow News About Properties
 footer.classified.sale,Annonces Vente,Sale
 footer.classified.rent,Annonces Location,Rent
 footer.about,A propos,About
@@ -150,8 +150,8 @@ footer.advertiser.discoverOffers,Découvrez notre offre,Discover our offers
 footer.copyright,"Copyright © 2015 WeGeoo Tous droits réservés  | WeGeoo, London, UK","Copyright © 2015 WeGeoo All Rights reserved  | WeGeoo, London, UK"
 footer.use,L'utilisation de ce site Web implique l'acceptation des Conditions Générales d'Utilisation.,Use of this website means the acceptation of Conditions
 
-classified.previous,Annonce Précédente, Previous Classified
-classified.next,Annonce Suivante, Next Classified
+classified.previous,Précédent,Previous
+classified.next,Suivant, Next
 classified.qrcode.help,"Scannez ce code avec votre smartphone pour accéder directement à l'annonce sur internet.<br/>Pour obtenir un lecteur de code, tapez qrcode sur votre application store.","Scan this code with your smartphone to get the classified web page.<br/>You can get a code reader by typing qrcode in your application store"
 classified.undefined.title,Annonce introuvable,Unknown Classified
 

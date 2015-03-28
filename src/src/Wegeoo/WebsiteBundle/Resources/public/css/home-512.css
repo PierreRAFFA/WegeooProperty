@@ -104,4 +104,8 @@
     {
         font: 0.875em FuturaStd-Bold;
     }
+    .newsLayoutText
+    {
+        width:100%;
+    }
 }
