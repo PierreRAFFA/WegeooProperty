@@ -75,10 +75,17 @@
                 return inData.libelle + " (" + inData.postCode + ")";
             }
         });
+
         $(".searchTownInput").keyup(this.onTownChange.bind(this));
+
+        //Locked to prevent RouteController to modify it at start. Only a keyPress can remove the lock
+        $(".searchTownInput").lock();
     }
     $.SideMenu.prototype.onTownChange = function(event)
     {
+
+        $(".searchTownInput").unlock();
+
         var vTown = event.target.value.toString();
 
         this.mCurrentSearchTownInput = $(event.currentTarget);
@@ -128,8 +135,6 @@
                     uppercaseName : item.uppercaseName,
                     libelle : item.name,
                     code : item.code,
-                    region_name : item.region_name,
-                    department_name : item.department_name,
                     latitude:item.latitude,
                     longitude:item.longitude
                 }

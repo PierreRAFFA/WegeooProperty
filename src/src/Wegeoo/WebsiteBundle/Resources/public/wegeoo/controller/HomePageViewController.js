@@ -65,7 +65,7 @@ Wegeoo.HomePageViewController.prototype.init = function()
         $("#wegeooMap").wegeooMap(lOptions);
     }
 
-    this.mOriginalMapPositionY = $("#mapLayout").offset().top + 68;
+    this.mOriginalMapPositionY = $("#mapLayout").offset().top;
 
     $('#resultLayoutSortList').selectpicker({
         dropupAuto : true
@@ -209,12 +209,12 @@ Wegeoo.HomePageViewController.prototype.init = function()
     $('#resultLayout').infiniteScroll(this.mInfiniteScrollParams);
     $('#resultLayout').disableInfiniteScroll();
     
-    $(".searchTownInput").autocomplete({
-        displayValue : function(inValue, inData)
-        {
-            return inData.libelle + " (" + inData.postCode + ")";
-        }
-    });
+    //$(".searchTownInput").autocomplete({
+    //    displayValue : function(inValue, inData)
+    //    {
+    //        return inData.libelle + " (" + inData.postCode + ")";
+    //    }
+    //});
 
     $('#banner').banner({
         delay : 2000
@@ -311,6 +311,8 @@ Wegeoo.HomePageViewController.prototype.onBoundsChanged = function(event)
 {
     //load all views depending on stateURL
     Wegeoo.FrontController.getInstance().updatePageFromState();
+
+
 
     //load banner
     this.loadLatestClassifieds(gCityPostCode,gCityName);
@@ -456,6 +458,10 @@ Wegeoo.HomePageViewController.prototype.onClassifiedSearchedComplete = function(
     if ( lData && lData["classifieds"])
     {
         var lIsNewSearch = lData.hasOwnProperty("city");
+
+        //clean the result if it is a new search
+        if ( lIsNewSearch )
+            $('#resultLayout').empty();
 
         var lMarkers = [];
         $.each(lData["classifieds"], function(j, item)

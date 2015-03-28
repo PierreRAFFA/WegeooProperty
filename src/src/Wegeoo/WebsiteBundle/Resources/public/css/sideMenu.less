@@ -214,6 +214,13 @@
     top: 0;
     left: 0px;
 
+    -webkit-transition: all @duration ease;
+    -moz-transition: all @duration ease;
+    -ms-transition: all @duration ease;
+    -o-transition: all @duration ease;
+    transition: all @duration ease;
+
+
     &.active{
       //      transform: translate(@menuWidth);
       //      -ms-transform: translate(@menuWidth);
@@ -297,15 +304,6 @@
   /*
       Add transition to containers so they can push in and out.
       */
-  #sideMenu,
-  #menu {
-    -webkit-transition: all @duration ease;
-    -moz-transition: all @duration ease;
-    -ms-transition: all @duration ease;
-    -o-transition: all @duration ease;
-    transition: all @duration ease;
-    display:block;
-  }
 
   /*
       The `#menu` `<div>` is the parent `<div>` that contains the `.pure-menu` that
@@ -315,6 +313,12 @@
     margin-left: ((@menuWidth * -1)); /* "#menu" width */
     width: @menuWidth;
     position: fixed;
+    -webkit-transition: all @duration ease;
+    -moz-transition: all @duration ease;
+    -ms-transition: all @duration ease;
+    -o-transition: all @duration ease;
+    transition: all @duration ease;
+    display:block;
     top: 0;
     left: 0;
     bottom: 0;

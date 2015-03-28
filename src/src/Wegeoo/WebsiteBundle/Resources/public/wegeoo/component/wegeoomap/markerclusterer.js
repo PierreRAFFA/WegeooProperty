@@ -776,7 +776,7 @@ MarkerClusterer.prototype.distanceBetweenPoints_ = function(p1, p2) {
  * @private
  */
 MarkerClusterer.prototype.addToClosestCluster_ = function(marker) {
-  var distance = 1; // Some large number
+  var distance = 10000; // Some large number
   var clusterToAddTo = null;
   var pos = marker.getPosition();
   for (var i = 0, cluster; cluster = this.clusters_[i]; i++) {

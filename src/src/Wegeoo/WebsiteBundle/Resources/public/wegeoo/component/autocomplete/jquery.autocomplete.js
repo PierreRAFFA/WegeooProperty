@@ -85,6 +85,12 @@
         this.finishOnBlur_ = true;
 
         /**
+         *
+         * @type {boolean}
+         */
+        this.mLocked = false;
+
+        /**
          * Assert parameters
          */
         if (!$elem || !($elem instanceof jQuery) || $elem.length !== 1 || $elem.get(0).tagName.toUpperCase() !== 'INPUT') {
@@ -151,7 +157,7 @@
 
             this.selectItemFromDataAndValue(lSelectedCity.uppercaseName , lSelectedCity);
         }else{
-
+            console.log("ooooooook");
             //if ( lSelectedCity )
             //this.selectItemFromDataAndValue(null, {});
         }
@@ -725,14 +731,18 @@
 	};
 	$.Autocompleter.prototype.setSelectedCityPostCode = function(postCode)
 	{
-        if ( this.selectedTown == null)
-            this.selectedTown = {};
+        if ( this.mLocked) return;
 
+        if ( this.selectedTown == null){
+            this.selectedTown = {};}
 	    this.selectedTown.postCode = postCode;
+
         this.selectItemFromDataAndValue(this.selectedTown.libelle, this.selectedTown);
-	};
-	$.Autocompleter.prototype.setSelectedCityName = function(cityName)
-	{
+    };
+    $.Autocompleter.prototype.setSelectedCityName = function(cityName)
+    {
+        if ( this.mLocked) return;
+
         if ( this.selectedTown == null)
             this.selectedTown = {};
 
@@ -740,11 +750,18 @@
 	    this.selectedTown.uppercaseName = cityName.toUpperCase();
         this.selectItemFromDataAndValue(this.selectedTown.libelle, this.selectedTown);
 	};
+	$.Autocompleter.prototype.lock = function() {
+        this.mLocked = true;
+	};
+	$.Autocompleter.prototype.unlock = function() {
+        this.mLocked = false;
+	};
+
 
 	$.Autocompleter.prototype.remove = function() {
 		this.dom.$results.remove();
 	};
-	
+
 	$.Autocompleter.prototype.removeAccents = function(str) 
 	{
 		 var norm = new Array('À','Á','Â','Ã','Ä','Å','Æ','Ç','È','É','Ê','Ë',
@@ -841,7 +858,20 @@
         }
         return lCityName;
     };
-
+    $.fn.lock = function ()
+    {
+        if ( $(this).data('autocompleter') )
+        {
+            var lSelectedTown = $(this).data('autocompleter').lock();
+        }
+    };
+    $.fn.unlock = function ()
+    {
+        if ( $(this).data('autocompleter') )
+        {
+            var lSelectedTown = $(this).data('autocompleter').unlock();
+        }
+    };
     $.fn.getSelectedCity = function()
     {
         var lSelectedTown = null;

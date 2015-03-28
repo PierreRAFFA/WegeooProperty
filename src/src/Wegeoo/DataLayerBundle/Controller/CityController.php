@@ -77,8 +77,8 @@ class CityController extends FOSRestController
                     if (is_null($lBeginningLetters) == FALSE) {
                         $lLetters = $this->removeSpecialChars($lLetters);
                         $lLetters = strtoupper($lLetters);
-                        $lLetters = str_replace(" ", "-", $lLetters);
-                        $lLetters = str_replace("'", "-", $lLetters);
+                        //$lLetters = str_replace(" ", "-", $lLetters);
+                        //$lLetters = str_replace("'", "-", $lLetters);
                         $this->get("logger")->info(var_export($lLetters, true));
 
                         $lViewData = $this->getDoctrine()->getManager()

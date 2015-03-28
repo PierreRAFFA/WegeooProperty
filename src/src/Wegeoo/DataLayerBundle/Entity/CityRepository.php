@@ -18,7 +18,7 @@ class CityRepository extends EntityRepository
 		if ($pLimit == "" || $pLimit > 100)
 			$pLimit = 100;
 		
-		$lQueryBuilder = $this->_em->createQueryBuilder('c'); 
+		$lQueryBuilder = $this->_em->createQueryBuilder('c');
 		
 		$lQueryBuilder->select('c')
 				      ->from($this->_entityName , 'c')
@@ -34,10 +34,9 @@ class CityRepository extends EntityRepository
 	{
 		$lQueryBuilder = $this->_em->createQueryBuilder('c'); 
 		
-		$lQueryBuilder->select('c.id,c.name,c.uppercaseName,c.slugName,c.code,c.postCode,c.latitude,c.longitude')
+		$lQueryBuilder->select('c.name,c.uppercaseName,c.slugName,c.code,c.postCode,c.latitude,c.longitude,c.slugName')
 				      ->from($this->_entityName , 'c')
 					  ->where("c.uppercaseName LIKE :uppercaseName")
-
                       ->setParameter("uppercaseName" , "$pString%")
 					  ->orderBy('c.pop', 'DESC')
 					  ->setMaxResults(50);
