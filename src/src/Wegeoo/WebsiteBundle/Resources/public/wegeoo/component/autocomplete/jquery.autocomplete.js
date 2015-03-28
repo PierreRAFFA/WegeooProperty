@@ -725,11 +725,17 @@
 	};
 	$.Autocompleter.prototype.setSelectedCityPostCode = function(postCode)
 	{
+        if ( this.selectedTown == null)
+            this.selectedTown = {};
+
 	    this.selectedTown.postCode = postCode;
         this.selectItemFromDataAndValue(this.selectedTown.libelle, this.selectedTown);
 	};
 	$.Autocompleter.prototype.setSelectedCityName = function(cityName)
 	{
+        if ( this.selectedTown == null)
+            this.selectedTown = {};
+
 	    this.selectedTown.libelle = cityName;
 	    this.selectedTown.uppercaseName = cityName.toUpperCase();
         this.selectItemFromDataAndValue(this.selectedTown.libelle, this.selectedTown);
