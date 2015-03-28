@@ -486,14 +486,16 @@ WHERE ";
             //create city query
             $lCityName      = strtoupper($filterParams->cityName);
             $lCityPostCode  = $filterParams->cityPostCode;
+            $lSlugName      = strtolower(sprintf("%s-%s" , $lCityPostCode , str_replace(" " , "-" , $lCityName)));
             $lCategory      = $filterParams->category;
 
             //get city
+
             $lCityQueryBuilder = $this->_em->createQueryBuilder();
             $lCityQueryBuilder = $lCityQueryBuilder->select('ci')
                 ->from('Wegeoo\DataLayerBundle\Entity\City', 'ci')
-                ->where("ci.uppercaseName = '$lCityName'")
-                ->andWhere("ci.postCode = '$lCityPostCode'");
+                ->where("ci.slugName = :slugName")
+                ->setParameter("slugName" , $lSlugName);
 
             $lCityResults = $lCityQueryBuilder->getQuery()->getResult();
 
@@ -504,9 +506,7 @@ WHERE ";
                 $lLat = $lCity->getLatitude();
                 $lLng = $lCity->getLongitude();
 
-
-
-                $lRadius = 0.02;
+                $lRadius = 0.05;
                 $lQuery = $this->_em->createQueryBuilder()
                     ->select('partial cl.{id,reference,category,title,city,details,externalMedias}')
                     ->from('WegeooDataLayerBundle:Classified' , 'cl')
@@ -526,7 +526,6 @@ WHERE ";
                     $lClassified->findMedias();
                 }
             }
-            ClassifiedController::$LOGGER->info(var_export($lClassifieds,true));
         }
 
         return $lClassifieds;
@@ -554,7 +553,6 @@ WHERE ";
             ->setMaxResults(self::MAX_NUMBER_OF_LATEST_CLASSIFIEDS)
             ->getQuery();
 
-        //ClassifiedController::$LOGGER->info(sprintf(str_replace('?', '%s', $lClassifieds->getSql()), $lClassifieds->getParams()));
         $lClassifieds = $lQuery->getResult();
 
         foreach($lClassifieds as $lClassified)

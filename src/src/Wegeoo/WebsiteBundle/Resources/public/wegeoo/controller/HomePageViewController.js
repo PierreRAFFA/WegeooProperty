@@ -313,15 +313,13 @@ Wegeoo.HomePageViewController.prototype.onBoundsChanged = function(event)
     Wegeoo.FrontController.getInstance().updatePageFromState();
 
     //load banner
-    //this.loadLatestClassifieds(gCityPostCode,gCityName);
+    this.loadLatestClassifieds(gCityPostCode,gCityName);
 
 };
 ///////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////// REGISTER ROUTES
 Wegeoo.HomePageViewController.prototype.loadLatestClassifieds = function(cityPostCode,cityName)
 {
-    return;
-    
     var lCategory = Wegeoo.FrontController.getInstance().getSlugValue("category");
 
     if ( lCategory == null)
