@@ -91,7 +91,7 @@ Wegeoo.HomePageViewController.prototype.init = function()
     //$('#displayMarkerAnnouncementsButtonSubmit').on('click', this.displayAdsFromSelectedMarkers.bind(this));
 
     //Load all components
-    $(".searchTownInput").keyup(this.onTownChange.bind(this));
+    //$(".searchTownInput").keyup(this.onTownChange.bind(this));
     $("#search_pricefrom_input,#search_priceto_input").click(this.onPriceClick);
     $("#search_pricefrom_input,#search_priceto_input").focusout(this.onPriceFocusOut);
     $("#cheapLocation").click(function()
@@ -209,25 +209,9 @@ Wegeoo.HomePageViewController.prototype.init = function()
     $('#resultLayout').infiniteScroll(this.mInfiniteScrollParams);
     $('#resultLayout').disableInfiniteScroll();
     
-    //$(".searchTownInput").autocomplete({
-    //    displayValue : function(inValue, inData)
-    //    {
-    //        return inData.libelle + " (" + inData.postCode + ")";
-    //    }
-    //});
-
     $('#banner').banner({
         delay : 2000
     });
-
-    $(window).scroll(function()
-    {
-        if ( window.scrollY + window.screen.height < $("#mapLayout").position().top + $("#mapLayout").height())
-            $(".scrollIcon").css("opacity" , 1);
-        else
-            $(".scrollIcon").css("opacity" , 0);
-    });
-
 
     //sidemenu
     $("#sideMenu").sideMenu({});

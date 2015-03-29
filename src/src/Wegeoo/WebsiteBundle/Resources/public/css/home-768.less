@@ -3,6 +3,7 @@
   @menuWidth : 280px;
   @menuWidth2 : 80%;
   @blue1 : #52AAD1;
+  @blue2 : #B1D4E7;
   @duration : 0.3s;
 
   body{
@@ -20,7 +21,17 @@
     }
   }
 
+  .logoLayout
+  {
+    padding-bottom: 0;
+
+    .logoName1,.logoName2{
+      display: none;
+    }
+  }
   #mapLayout{
+
+    position: relative;
 
     .searchParameterContainer , .searchButtonSubmit{
       display:none;
@@ -31,21 +42,30 @@
     }
     .scrollIcon{
       display: block;
-      position: fixed;
-      float: right;
+      position: absolute;
       right: 15px;
-      bottom: 10px;
-
-      -webkit-transition: all @duration ease;
-      -moz-transition: all @duration ease;
-      -ms-transition: all @duration ease;
-      -o-transition: all @duration ease;
-      transition: all @duration ease;
+      top: 10px;
+      -webkit-transition: all 0.3s ease;
+      -moz-transition: all 0.3s ease;
+      -ms-transition: all 0.3s ease;
+      -o-transition: all 0.3s ease;
+      transition: all 0.3s ease;
 
     }
 
     .searchForm{
       display:none;
+    }
+  }
+
+  .resultLayoutSort{
+    padding-left: 10px;
+  }
+
+  footer{
+
+    .searchShorcutsTowns{
+      line-height: 1.8em;
     }
   }
 

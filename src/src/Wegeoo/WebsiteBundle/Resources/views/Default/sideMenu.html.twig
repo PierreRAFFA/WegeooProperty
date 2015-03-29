@@ -19,17 +19,21 @@
         {% endstylesheets %}
     {% endblock %}
 
-
     <div id="sideMenu">
+
+        <!-- HEADER LOGO -->
+        <div class="sideMenuHeader">
+            <img class="sideMenuHeaderImage" src="/bundles/wegeoowebsite/images/headerWegeoo.png" width="285" height="40" alt="Wegeoo" title="Wegeoo" />
+        </div>
 
         <!-- SEARCH BUTTON -->
         <a id="menuLink" href="#menu" class="menu-link">
-            <img class="menuIcon" src="/bundles/wegeoowebsite/images/searchIcon.png" width="23" height="23">
+            <img class="menuIcon" src="/bundles/wegeoowebsite/images/searchIcon.png" width="23" height="23" alt="Wegeoo Search" title="Wegeoo Search"/>
         </a>
 
         <!-- PUBLISH BUTTON -->
         <a href="{{baseURL}}/{% trans %}wegeoo.property{% endtrans %}/{% trans %}wegeoo.post{% endtrans %}" class="sideMenuPostButton">
-            <img src="{{ asset('bundles/wegeoowebsite/images/pen.png') }}" width="23" height="23"/>
+            <img src="{{ asset('bundles/wegeoowebsite/images/pen.png') }}" width="23" height="23"alt="Wegeoo Post" title="Wegeoo Post" />
         </a>
 
         <div id="menu">
