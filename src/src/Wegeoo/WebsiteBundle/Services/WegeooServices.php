@@ -39,8 +39,8 @@ class WegeooServices
         $lParams = array();
         $lParams["wegeooType"]          = $this->mTranslator->trans( $this->mWegeooType, array() , NULL , $classified->getCountryCode());
         $lParams["categoryLocaleName"]  = $this->mTranslator->trans($classified->getCategory() , array() , NULL , $classified->getCountryCode());
-        $lParams["cityPostCode"]        = $classified->getCity()->getPostCode();
-        $lParams["cityName"]            = $classified->getCity()->getName();
+        $lParams["cityPostCode"]        = strtolower($classified->getCity()->getPostCode());
+        $lParams["cityName"]            = strtolower(str_replace(" " , "-" , $classified->getCity()->getUppercaseName()));
         $lParams["reference"]           = $classified->getReference();
 
         $lURL = $this->mRouter->generate("wegeoo_website_classifiedpage", $lParams);

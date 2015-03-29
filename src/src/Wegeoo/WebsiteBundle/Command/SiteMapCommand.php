@@ -82,7 +82,7 @@ class SiteMapCommand extends ContainerAwareCommand
                 $lParams = array();
                 $lParams["pWegeooType"]         = $this->getContainer()->get("translator")->trans("wegeoo.property" , array(), null, $this->getContainer()->getParameter('locale'));//@TODO locale
                 $lParams["pCategoryLocaleName"] = $this->getContainer()->get("translator")->trans($lType , array(), null, $this->getContainer()->getParameter('locale'));//@TODO locale
-                $lParams["pCityPostCode"]       = $lCity->getPostCode();
+                $lParams["pCityPostCode"]       = strtolower($lCity->getPostCode());
                 $lParams["pCityName"]           = strtolower(str_replace(" " , "-" , $lCity->getUppercaseName()));
 
                 $lURL = array('loc' => "http://" . $this->mServerName . $this->getContainer()->get('router')->generate('wegeoo_website_homepage', $lParams , false) ,
@@ -100,14 +100,6 @@ class SiteMapCommand extends ContainerAwareCommand
         {
             if ( $lClassified->getReference())
             {
-//                $lParams = array();
-//                $lParams["pWegeooType"]         = $this->getContainer()->get("translator")->trans("realestate" , array(), null, $lClassified->getCountryCode());
-//                $lParams["pCategoryLocaleName"] = $this->getContainer()->get("translator")->trans($lClassified->getType() , array(), null, $lClassified->getCountryCode());
-//                $lParams["pCityPostCode"]       = $lClassified->getCity()->getPostCode();
-//                $lParams["pCityName"]           = strtolower($lClassified->getCity()->getUppercaseName());
-//                $lParams["pReference"]          = $lClassified->getReference();
-//                $lURL = array('loc' => $this->getContainer()->get('router')->generate('wegeoo_website_classifiedpage', $lParams , true) ,  'priority' => '0.5');
-
                 $lURL = array('loc' => "http://" . $this->mServerName . $this->getContainer()->get("wegeoo")->getClassifiedURL($lClassified) ,  'priority' => '0.5');
                 $this->addURLInfo($lURL);
             }
