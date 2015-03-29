@@ -19,7 +19,7 @@ class SiteMapCommand extends ContainerAwareCommand
 {
     const MAX_URLS_PER_SITEMAP = 40000;
 
-    const SITEMAP_DIRECTORY = "/var/www/web";
+    const SITEMAP_DIRECTORY = "/var/www/prod/web";
 
     /**
      * @var Output
@@ -83,7 +83,7 @@ class SiteMapCommand extends ContainerAwareCommand
                 $lParams["pWegeooType"]         = $this->getContainer()->get("translator")->trans("wegeoo.property" , array(), null, $this->getContainer()->getParameter('locale'));//@TODO locale
                 $lParams["pCategoryLocaleName"] = $this->getContainer()->get("translator")->trans($lType , array(), null, $this->getContainer()->getParameter('locale'));//@TODO locale
                 $lParams["pCityPostCode"]       = $lCity->getPostCode();
-                $lParams["pCityName"]           = strtolower($lCity->getUppercaseName());
+                $lParams["pCityName"]           = strtolower(str_replace(" " , "-" , $lCity->getUppercaseName()));
 
                 $lURL = array('loc' => "http://" . $this->mServerName . $this->getContainer()->get('router')->generate('wegeoo_website_homepage', $lParams , false) ,
                     'changefreq' => "daily",
