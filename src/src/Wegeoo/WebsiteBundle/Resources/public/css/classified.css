@@ -34,6 +34,12 @@ h1{
 	background:#FFFFFF;
 	max-width: 1024px;
 }
+.btn-primary
+{
+    background-color: #52AAD1;
+    border-color: #52AAD1;
+}
+
 /**************** MAIN **************/
 /************************************/
 .show-grid [class*="span"] {
@@ -489,7 +495,7 @@ h1{
 }
 
 .interactivities a:hover{
-	color:#5d97cc;
+	color:#52AAD1;
 	text-decoration: none;
 }
 .qrCode
@@ -752,7 +758,7 @@ h1{
 }
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a
 {
-	background:#5d97cc;
+	background:#52AAD1;
 	color:#FFFFFF;
 	-webkit-border-radius: 0px;
 	-moz-border-radius: 0px;
@@ -765,8 +771,6 @@ h1{
 .nav-tabs > li.active:after > a, .nav-tabs > li.active:after > a:hover, .nav-tabs > li.active:after
 {
 	content: url('../images/selector.png');
-	/*width:11px;
-	height:5px;*/
 	position:relative;
 	text-align: center;
 	display: block;
@@ -785,7 +789,7 @@ h1{
 }
 li.selected
 {
-	background: #5d97cc;
+	background: #52AAD1;
 }
 li.selected > a:hover
 {
