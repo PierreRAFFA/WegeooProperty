@@ -28,12 +28,19 @@ class WegeooWebsiteClassifiedController extends Controller
 		
  		//get context for the baseURL
  		$lRequestContext = $this->get("router")->getContext();
-		
+
+        //get the classified informations
+        $lClassifiedInformations = $this->getClassified($reference);
+
 		//get Wegeoo configuration
-		$lConfiguration = $this->get("user_configuration")->getWebsiteConfigurationFromUser();
+		$lConfiguration = $this->get("wegeoo")
+                               ->getWegeooConfiguration(
+                                   "not usefull yet" ,
+                                   $lClassifiedInformations->getCategory(),
+                                   $lClassifiedInformations->getCity()->getPostCode() ,
+                                   $lClassifiedInformations->getCity()->getName());
 		
-		//get the classified informations
-		$lClassifiedInformations = $this->getClassified($reference);
+
 
         //get previous and next classified informations
         $lPreviousClassifiedURL    = NULL;
@@ -64,13 +71,17 @@ class WegeooWebsiteClassifiedController extends Controller
         if ( $lClassifiedInformations !== FALSE)
         {
             //Create params used in the twig
-            $lRenderParams = array();
-            $lRenderParams["baseURL"] 		        = $lRequestContext->getBaseUrl();
-            $lRenderParams["title"] 		        = $this->getTitle($lClassifiedInformations->getTitle());
-            $lRenderParams["classified"] 	        = $lClassifiedInformations;
-            $lRenderParams["previousClassifiedURL"] = $lPreviousClassifiedURL;
-            $lRenderParams["nextClassifiedURL"] 	= $lNextClassifiedURL;
-            $lRenderParams["mostPopulatedTowns"] 	= $this->getMostPopulatedTowns();
+//            $lRenderParams = array();
+//            $lRenderParams["baseURL"] 		        = $lRequestContext->getBaseUrl();
+//            $lRenderParams["title"] 		        = $this->getTitle($lClassifiedInformations->getTitle());
+//            $lRenderParams["classified"] 	        = $lClassifiedInformations;
+//            $lRenderParams["previousClassifiedURL"] = $lPreviousClassifiedURL;
+//            $lRenderParams["nextClassifiedURL"] 	= $lNextClassifiedURL;
+//            $lRenderParams["mostPopulatedTowns"] 	= $this->getMostPopulatedTowns();
+
+            $lConfiguration["classified"] 	        = $lClassifiedInformations;
+            $lConfiguration["previousClassifiedURL"]= $lPreviousClassifiedURL;
+            $lConfiguration["nextClassifiedURL"]    = $lNextClassifiedURL;
 
             //start session
             $session = $this->getRequest()->getSession();
@@ -83,7 +94,7 @@ class WegeooWebsiteClassifiedController extends Controller
 
             $this->get("logger")->info("10");
             //render the index page
-            return $this->render('WegeooWebsiteBundle:Default:classified.html.twig', $lRenderParams);
+            return $this->render('WegeooWebsiteBundle:Default:classified.html.twig', $lConfiguration);
         }else{
             //Create params used in the twig
             $lRenderParams = array();
@@ -91,7 +102,7 @@ class WegeooWebsiteClassifiedController extends Controller
             $lRenderParams["title"] 		    = $this->get("translator")->trans("classified.undefined.title");
             $lRenderParams["mostPopulatedTowns"]= $this->getMostPopulatedTowns();
 
-            return $this->render('WegeooWebsiteBundle:Default:classifiedUndefined.html.twig', $lRenderParams);
+            return $this->render('WegeooWebsiteBundle:Default:classifiedUndefined.html.twig', $lConfiguration);
         }
 
     }

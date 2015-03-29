@@ -9,6 +9,7 @@
 namespace Wegeoo\WebsiteBundle\Services;
 
 
+use Doctrine\ORM\EntityManager;
 use Monolog\Logger;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\DependencyInjection\Container;
@@ -21,16 +22,134 @@ class WegeooServices
     protected $mRouter;
     protected $mLogger;
     protected $mTranslator;
+    protected $mEntityManager;
     protected $mWegeooType;
 
-    public function __construct(Container $container, Router $router , Logger $logger, Translator $translator , $wegeooType)
+    public function __construct(Container $container, Router $router , Logger $logger, Translator $translator ,
+                                EntityManager $em, $wegeooType)
     {
         $this->mContainer = $container;
+        $this->mEntityManager = $em;
         $this->mRouter = $router;
         $this->mLogger = $logger;
         $this->mTranslator = $translator;
         $this->mWegeooType = $wegeooType;
     }
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////// GET WEGEOO CONFIGURATION
+    public function getWegeooConfiguration($wegeooType, $categoryLocaleName,$cityPostCode=null, $cityName=null, $map = null, $search=null)
+    {
+        //find the city from name and postCode
+        $lCityName = NULL;
+        $lCityPostCode = NULL;
+
+        if ( $cityPostCode !== "" && $cityName !== "")
+        {
+            $lSlugName = $this->getSlugName($cityPostCode,$cityName);
+
+            $this->mLogger->info("lSlugName:" . $lSlugName);
+            $lCities = $this->mEntityManager
+                ->getRepository("WegeooDataLayerBundle:City")
+                ->findBy(array("slugName" => $lSlugName));
+
+            $this->mLogger->info("count(lCities):" . count($lCities));
+
+            if (count($lCities) == 1)
+            {
+                $lCityPostCode  = $lCities[0]->getPostCode();
+                $lCityName      = $lCities[0]->getName();
+            }
+        }
+
+        //set the default city if nothing is specified or found above
+        if ( $lCityName === NULL && $lCityPostCode === NULL)
+        {
+            $lCityPostCode = $this->mContainer->getParameter("default_city_postcode");
+            $lCityName     = $this->mContainer->getParameter("default_city_name");
+        }
+
+        $lConfiguration = array();
+        $lConfiguration["cityPostCode"]         = $lCityPostCode;
+        $lConfiguration["cityName"]             = $lCityName;
+        $lConfiguration["title"] 		        = $this->mTranslator->trans("wegeoo.meta.title");
+        $lConfiguration["title"]                = sprintf($lConfiguration["title"] , ucfirst($lConfiguration["cityName"]));
+        $lConfiguration["description"] 		    = $this->mTranslator->trans("wegeoo.meta.description");
+        $lConfiguration["category"]             = $this->mTranslator->trans($categoryLocaleName , array(), "routing");
+        $lConfiguration["mostPopulatedTowns"] 	= $this->getMostPopulatedTowns();
+        $lConfiguration["baseURL"] 				= $this->mRouter->getContext()->getBaseUrl();
+        $lConfiguration["previewClassifiedAdTemplateURL"] = "";//@TODO create a config file
+
+        $this->mLogger->info("lConfiguration1:".var_export($lConfiguration,true));
+
+        return $lConfiguration;
+    }
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////// GET USER LOCATION
+    protected function getUserLocation()
+    {
+        $lRemoteAddr = $_SERVER['REMOTE_ADDR'];
+
+        if ( $lRemoteAddr == '::1')
+        {
+            $lRemoteAddr = '91.109.47.11';
+            $lRemoteAddr = '79.141.163.6';
+        }
+
+        $lConfiguration = array();
+
+        //detect user town in Database
+        $lData = $this->mEntityManager->getRepository("WegeooDataLayerBundle:Data")
+            ->findOneBy(array("key" => $lRemoteAddr, "type" => "userLocation"));
+
+        if ( count($lData) == 1)
+        {
+            $lConfiguration = $lData->getValue();
+        }else{
+            @$lContents = file_get_contents('http://www.geoplugin.net/php.gp?ip='.$lRemoteAddr);
+
+            if ( $lContents !== FALSE)
+            {
+                $lUserLocalisation = unserialize($lContents);
+
+                if ( is_null($lUserLocalisation) == FALSE && is_array($lUserLocalisation) && isset($lUserLocalisation["geoplugin_city"]))
+                {
+                    //country
+                    $lConfiguration["countryCode"] 	= $lUserLocalisation["geoplugin_countryCode"];
+
+                    //city
+                    $lConfiguration["cityName"] 	= $lUserLocalisation["geoplugin_city"];
+
+                    //get position
+                    $lConfiguration["lat"] 	= $lUserLocalisation["geoplugin_latitude"];
+                    $lConfiguration["lng"] = $lUserLocalisation["geoplugin_longitude"];
+
+                    //store data
+                    $lData = new Data();
+                    $lData->setKey($lRemoteAddr);
+                    $lData->setValue($lConfiguration);
+                    $lData->setType("userLocation");
+                    $this->getDoctrine()->getManager()->persist($lData);
+                    $this->getDoctrine()->getManager()->flush();
+
+                }else{
+                    $this->mLogger->warn("Can not get the user location");
+                }
+            }else{
+                $lConfiguration = FALSE;
+            }
+        }
+
+        return $lConfiguration;
+    }
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////// GET MOST POPULATED TOWNS
+    protected function getMostPopulatedTowns()
+    {
+        $lViewData = $this->mEntityManager->getRepository("WegeooDataLayerBundle:City")->getCitiesFromPopulation(48);
+        return $lViewData;
+    }
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////// GET CLASSIFIED URL
     public function getClassifiedURL(Classified $classified , $absolute = FALSE)
     {
         if ( is_null($classified)) return NULL;
@@ -52,6 +171,8 @@ class WegeooServices
 
         return $lURL;
     }
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////// FORMAT PRICE
     public function formatPrice($price,$pCountry)
     {
         $lPrice = $price;
@@ -70,7 +191,8 @@ class WegeooServices
         }
         return $lPrice;
     }
-
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////// SEND ACTIVATION MAIL
     public function sendActivationMail(Classified $classified)
     {
         // Create the Transport
@@ -112,7 +234,8 @@ class WegeooServices
 
         $this->mLogger->info("lSuccess:".var_export($lSuccess,true));
     }
-
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////// COMPUTE DISTANCE
     public function computeDistanceBetweenLatLng($lat1,$lng1,$lat2,$lng2)
     {
         $R = 6371;
@@ -128,10 +251,10 @@ class WegeooServices
         return $d;
     }
 
-
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////// GET SLUGNAME
     public function getSlugName($cityPostCode,$cityName)
     {
         return strtolower(sprintf("%s-%s", $cityPostCode, str_replace(" ", "-", $cityName)));
     }
-
 }
