@@ -17,15 +17,6 @@ class WegeooWebsiteClassifiedController extends Controller
  	{
         self::$LOGGER = $this->get("logger");
 
- 		//@HARDCODE
-		//$_SERVER['REMOTE_ADDR'] 			= '91.109.47.11';
- 		//$_SERVER['HTTP_ACCEPT_LANGUAGE']	= "fr_FR";
- 		
- 		//change locale
-// 		$lLocale = $this->get("user_configuration")->getLocaleFromAcceptedLanguage($_SERVER['HTTP_ACCEPT_LANGUAGE']);
-// 		$request = $this->getRequest();
-//	    $request->setLocale($lLocale);
-		
  		//get context for the baseURL
  		$lRequestContext = $this->get("router")->getContext();
 
@@ -39,8 +30,6 @@ class WegeooWebsiteClassifiedController extends Controller
                                    $lClassifiedInformations->getCategory(),
                                    $lClassifiedInformations->getCity()->getPostCode() ,
                                    $lClassifiedInformations->getCity()->getName());
-		
-
 
         //get previous and next classified informations
         $lPreviousClassifiedURL    = NULL;
@@ -70,15 +59,6 @@ class WegeooWebsiteClassifiedController extends Controller
 
         if ( $lClassifiedInformations !== FALSE)
         {
-            //Create params used in the twig
-//            $lRenderParams = array();
-//            $lRenderParams["baseURL"] 		        = $lRequestContext->getBaseUrl();
-//            $lRenderParams["title"] 		        = $this->getTitle($lClassifiedInformations->getTitle());
-//            $lRenderParams["classified"] 	        = $lClassifiedInformations;
-//            $lRenderParams["previousClassifiedURL"] = $lPreviousClassifiedURL;
-//            $lRenderParams["nextClassifiedURL"] 	= $lNextClassifiedURL;
-//            $lRenderParams["mostPopulatedTowns"] 	= $this->getMostPopulatedTowns();
-
             $lConfiguration["classified"] 	        = $lClassifiedInformations;
             $lConfiguration["previousClassifiedURL"]= $lPreviousClassifiedURL;
             $lConfiguration["nextClassifiedURL"]    = $lNextClassifiedURL;
@@ -104,7 +84,6 @@ class WegeooWebsiteClassifiedController extends Controller
 
             return $this->render('WegeooWebsiteBundle:Default:classifiedUndefined.html.twig', $lConfiguration);
         }
-
     }
     /////////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////  TITLE

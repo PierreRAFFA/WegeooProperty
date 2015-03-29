@@ -36,6 +36,7 @@
             'bundles/wegeoowebsite/css/header.less'
             'bundles/wegeoowebsite/css/classified.css'
             'bundles/wegeoowebsite/css/classified-768.less'
+            'bundles/wegeoowebsite/css/classified-380.less'
             'bundles/wegeoowebsite/css/footer.css'
             'bundles/wegeoowebsite/wegeoo/component/swiper/idangerous.swiper.css'
             'bundles/wegeoowebsite/css/sideMenu.less'
@@ -158,9 +159,9 @@
 
 				<!-- BUTTONS -->
 				<div class="previousNextClassified">
-					<a href="{{ previousClassifiedURL }}" class="fs16 futuraBook {{ previousClassifiedURL ? "" : "linkDisable" }}">⟨⟨ {% trans %} classified.previous {% endtrans %}</a>
+					<a href="{{ previousClassifiedURL }}" class="fs16 futuraBook {{ previousClassifiedURL ? "" : "linkDisable" }}"><< {% trans %} classified.previous {% endtrans %}</a>
                         &nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;
-                    <a href="{{ nextClassifiedURL }}" class="fs16 futuraBook {{ nextClassifiedURL ? "" : "linkDisable" }}">{% trans %} classified.next {% endtrans %} ⟩⟩</a>
+                    <a href="{{ nextClassifiedURL }}" class="fs16 futuraBook {{ nextClassifiedURL ? "" : "linkDisable" }}">{% trans %} classified.next {% endtrans %} >></a>
 				</div>
 
 				<!-- LINE -->
@@ -564,7 +565,7 @@
 
                     <!-- BUTTONS -->
                     <div class="previousNextClassified">
-                        <span class="fs16 futuraBook">⟨⟨ {% trans %} classified.previous {% endtrans %}&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;{% trans %} classified.next {% endtrans %} ⟩⟩</span>
+                        <span class="fs16 futuraBook"><< {% trans %} classified.previous {% endtrans %}&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;{% trans %} classified.next {% endtrans %} >></span>
                     </div>
 
                     <!-- LINE -->

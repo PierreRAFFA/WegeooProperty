@@ -26,8 +26,6 @@ Wegeoo.HomePageViewController = function()
     this.mSelectedClassifiedAds = [];
 
     this.mInfiniteScrollParams = {};
-    /** Represents the original Y of the map. Used to scroll to map */
-    this.mOriginalMapPositionY = 0;
 
     this.mLocalOnly = false;
 
@@ -64,8 +62,6 @@ Wegeoo.HomePageViewController.prototype.init = function()
     {
         $("#wegeooMap").wegeooMap(lOptions);
     }
-
-    this.mOriginalMapPositionY = $("#mapLayout").offset().top;
 
     $('#resultLayoutSortList').selectpicker({
         dropupAuto : true
@@ -571,7 +567,14 @@ Wegeoo.HomePageViewController.prototype.displayClassifieds = function(pClassifie
     {
         this.mIsFirstSearch = false;
     }else{
-        Wegeoo.FrontController.getInstance().scrollToPosition(this.mOriginalMapPositionY);
+
+        var lScrollDestinationY = $("#mapLayout").offset().top;
+        if ( $("#sideMenu").is(":visible"))
+        {
+            lScrollDestinationY -= $("#sideMenu").height();
+        }
+
+        Wegeoo.FrontController.getInstance().scrollToPosition(lScrollDestinationY);
     }
 };
 ///////////////////////////////////////////////////////////////////////////////////////////
