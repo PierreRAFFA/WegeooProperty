@@ -171,3 +171,14 @@
     text-align:center;
     top:40px;
 }
+
+
+@media (max-width: 768px)
+{
+    footer .searchShorcutsTowns {
+        line-height: 1.8em;
+    }
+    footer .copyright {
+        font: 0.67em FuturaStd-Medium;
+    }
+}

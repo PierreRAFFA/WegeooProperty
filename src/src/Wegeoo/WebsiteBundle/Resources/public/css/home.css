@@ -789,6 +789,11 @@ li.selected > a:hover .text
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
 }
+.classifiedAdRowA{
+    display: inline-block;
+    width: 100%;
+    height: auto;
+}
 .specialistLayout{
     display:none;
 	position:relative;
@@ -892,6 +897,11 @@ li.selected > a:hover .text
 	width:600px;
 	height:25px;
 	overflow:hidden;
+}
+.premiumClassifiedAdPreviewDetails a
+{
+    pointer-events: none;
+    cursor: default;
 }
 .classifiedAdRowTitle{
 	font: 1.125em FuturaStd-Medium;

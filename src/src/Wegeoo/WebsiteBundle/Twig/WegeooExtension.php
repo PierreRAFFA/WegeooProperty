@@ -9,6 +9,7 @@
 namespace Wegeoo\WebsiteBundle\Twig;
 
 
+use Symfony\Component\DomCrawler\Crawler;
 use Wegeoo\WebsiteBundle\Controller\WegeooWebsiteClassifiedController;
 
 class WegeooExtension extends \Twig_Extension
@@ -23,7 +24,8 @@ class WegeooExtension extends \Twig_Extension
         return array(
             'formatPrice' => new \Twig_Function_Method($this, 'formatPriceFunction'),
             //is_safe allow to return text as HTML
-            'setDefaultDivStyle' => new \Twig_Function_Method($this, 'setDefaultDivStyleFunction', array('is_safe' => array('html')))
+            'setDefaultDivStyle' => new \Twig_Function_Method($this, 'setDefaultDivStyleFunction', array('is_safe' => array('html'))),
+            'repairHTML' => new \Twig_Function_Method($this, 'repairHTML')
         );
     }
 
@@ -58,5 +60,13 @@ class WegeooExtension extends \Twig_Extension
     public function getName()
     {
         return 'wegeoo_extension';
+    }
+
+
+
+    public function repairHTML($string)
+    {
+        $lCrawler = new Crawler($string);
+        return $lCrawler->text();
     }
 }

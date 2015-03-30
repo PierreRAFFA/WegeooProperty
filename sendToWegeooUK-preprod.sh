@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "Send to Wegeoo SoYouStart"
+echo "Send to Wegeoo SoYouStart Preprod"
 echo "YCVxTTHCAg3P";
 
 #move to the correct folder

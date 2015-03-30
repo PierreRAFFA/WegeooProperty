@@ -1,9 +1,9 @@
 {% for lClassified in classifieds %}
-<a class="classifiedAdRowContain"  href="{{lClassified.url}}" target="_blank">
-	<div class="classifiedAdRowContainer" 
+
+<div class="classifiedAdRowContainer"
 		onmouseover="javascript:Wegeoo.FrontController.getInstance().dispatchEvent(new Wegeoo.WegeooEvent(Wegeoo.WegeooEvent.PREVIEW_CLASSIFIED_MOUSE_OVER , '{{lClassified.reference}}'))"
 		onmouseout="javascript:Wegeoo.FrontController.getInstance().dispatchEvent(new Wegeoo.WegeooEvent(Wegeoo.WegeooEvent.PREVIEW_CLASSIFIED_MOUSE_OUT ,  '{{lClassified.reference}}'))" >
-		
+    <a class="classifiedAdRowA"  href="{{lClassified.url}}" target="_blank">
 		<!-- PHOTO -->
         <div class="annonce_preview_image_container premiumClassifiedAdPreviewImageContainer">
             {% if lClassified.medias|length > 0 %}
@@ -64,9 +64,10 @@
 
 			<!-- DESCRIPTION -->
 			<div class="premiumClassifiedAdPreviewDetails">
-				<h2 class="annonce_preview_description premiumClassifiedAdPreviewDescription" id="description">{{lClassified.description | raw}}</h2>
+				<h2 class="annonce_preview_description premiumClassifiedAdPreviewDescription" id="description">{{repairHTML(lClassified.description)}}</h2>
 			</div>
 		</div>
-	</div>
-</a>
+    </a>
+</div>
+
 {% endfor %}

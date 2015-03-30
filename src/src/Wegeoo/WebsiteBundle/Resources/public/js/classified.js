@@ -115,7 +115,7 @@ function registerRoutes()
         .setDelimiter("&");
     lSlug.addChild("propertyType", "pt" , "enum")
         .addSlugView(".searchForm:visible .searchPropertyTypeSelect" , 'selectpicker("val")' , 'selectpicker("val",%s)');
-    lSlug.addChild("price" , "p r" , "interval")
+    lSlug.addChild("price" , "pr" , "interval")
         .setDelimiter(";")
         .addSlugView(".searchForm:visible .searchPriceMinInput" , "val" , "val('%s')")
         .addSlugView(".searchForm:visible .searchPriceMaxInput" , "val" , "val('%s')")
