@@ -6,12 +6,15 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Finder\Finder;
 use Wegeoo\WebsiteBundle\Controller\WegeooWebsitePostController;
 use Symfony\Component\Validator\Constraints;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Classified
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Wegeoo\DataLayerBundle\Entity\ClassifiedRepository")
+ * @UniqueEntity("reference")
+ *
  */
 class Classified
 {
@@ -67,7 +70,7 @@ class Classified
     /**
      * @var string
      *
-     * @ORM\Column(name="reference", type="string", length=30)
+     * @ORM\Column(name="reference", type="string", length=30 , unique=true)
      */
     private $reference;
 

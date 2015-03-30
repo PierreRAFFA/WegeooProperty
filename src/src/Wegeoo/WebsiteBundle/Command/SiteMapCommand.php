@@ -28,6 +28,7 @@ class SiteMapCommand extends ContainerAwareCommand
     protected $mNumSitemaps = 0;
     protected $mCurrentSitemap = array();
     protected $mServerName;
+    protected $mNumURLs = 0;
     ///////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////// CONFIGURE
     protected function configure()
@@ -111,11 +112,14 @@ class SiteMapCommand extends ContainerAwareCommand
         }
 
         $this->writeSitemapIndex();
+
+        $this->mOutput->writeln("Sitemaps Complete: {$this->mNumURLs} URLs added");
     }
     /////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////// ADD URL
     protected function addURLInfo($pURL)
     {
+        $this->mNumURLs++;
         if ( count($this->mCurrentSitemap) >= self::MAX_URLS_PER_SITEMAP)
         {
             $this->writeSitemap();

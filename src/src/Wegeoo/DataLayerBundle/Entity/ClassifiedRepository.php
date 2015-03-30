@@ -57,7 +57,8 @@ class ClassifiedRepository extends EntityRepository
 
         //echo var_export($lResults,true);
         WegeooWebsiteClassifiedController::$LOGGER->info("count(lResult):".count($lResults));
-        if (count($lResults) == 1)
+        //@TODO Be careful of duplicata of classifieds
+        if (count($lResults))
         {
             //Only one data is possible because reference is unique.
             $lClassified = $lResults[0];
@@ -85,6 +86,18 @@ class ClassifiedRepository extends EntityRepository
 		return $lClassified;
 	}
 
+    public function getAllDistinct()
+    {
+        $lQueryBuilder = $this->_em->createQueryBuilder();
+
+        $lClassifieds = $lQueryBuilder
+            ->select('cl')
+            ->from($this->_entityName , 'cl')
+            ->getQuery()->getResult();
+
+        return $lClassifieds;
+    }
+
 	////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////
 	/**
@@ -96,9 +109,10 @@ class ClassifiedRepository extends EntityRepository
 	 */
 	public function getPreviewClassifiedFromReferencesAction($pReferences,$pSort)
 	{
-		$lQueryBuilder = $this->_em->createQueryBuilder(); 
+		$lQueryBuilder = $this->_em->createQuery("");
 		
 		$lQueryBuilder->select('cl')
+                        ->addSelect("DISTINCT cl.reference")
 				      ->from($this->_entityName , 'cl')
                       ->leftJoin('cl.city', 'City');
 					  /*->leftJoin(

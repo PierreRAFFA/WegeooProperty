@@ -36,5 +36,10 @@ class DatabaseCleanCommand extends ContainerAwareCommand
         $output->writeln("Number of Classifieds deleted:$lNum");
         $output->writeln("Clean complete");
         $output->writeln(date('Y-m-d H:i:s', time() - 86400 * 30));
+
+
+        //to remove duplicatas
+        //DELETE FROM classified USING classified ua2
+        //WHERE classified.reference = ua2.reference AND classified.id < ua2.id;
     }
 }
