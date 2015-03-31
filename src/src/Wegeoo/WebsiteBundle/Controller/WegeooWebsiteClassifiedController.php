@@ -23,42 +23,44 @@ class WegeooWebsiteClassifiedController extends Controller
         //get the classified informations
         $lClassifiedInformations = $this->getClassified($reference);
 
-		//get Wegeoo configuration
-		$lConfiguration = $this->get("wegeoo")
-                               ->getWegeooConfiguration(
-                                   "not usefull yet" ,
-                                   $lClassifiedInformations->getCategory(),
-                                   $lClassifiedInformations->getCity()->getPostCode() ,
-                                   $lClassifiedInformations->getCity()->getName());
-
-        //get previous and next classified informations
-        $lPreviousClassifiedURL    = NULL;
-        $lNextClassifiedURL        = NULL;
-        $lSession = $this->getRequest()->getSession();
-        if ( $lSession->has("references"))
-        {
-            $lReferences = $lSession->get("references");
-            $lReferenceIndex = array_search($reference , $lReferences);
-
-            //previous
-            if ( $lReferenceIndex - 1 >= 0)
-            {
-                $lPreviousClassifiedURL = $this->get("wegeoo")->getClassifiedURL($this->getClassified($lReferences[$lReferenceIndex - 1]));
-            }
-
-            //next
-            if ( $lReferenceIndex + 1 <= count($lReferences))
-            {
-                $lNextClassifiedURL = $this->get("wegeoo")->getClassifiedURL($this->getClassified($lReferences[$lReferenceIndex + 1]));
-            }
-        }
-
-        $this->get("logger")->info("lClassifiedInformations:".var_export($lClassifiedInformations,true));
-        $this->get("logger")->info("lPreviousClassifiedURL:".var_export($lPreviousClassifiedURL,true));
-        $this->get("logger")->info("lNextClassifiedURL:".var_export($lNextClassifiedURL,true));
+        //$this->get("logger")->info("lClassifiedInformations:".var_export($lClassifiedInformations,true));
 
         if ( $lClassifiedInformations !== FALSE)
         {
+            //get Wegeoo configuration
+            $lConfiguration = $this->get("wegeoo")
+                ->getWegeooConfiguration(
+                    "not usefull yet" ,
+                    $lClassifiedInformations->getCategory(),
+                    $lClassifiedInformations->getCity()->getPostCode() ,
+                    $lClassifiedInformations->getCity()->getName());
+
+            //get previous and next classified informations
+            $lPreviousClassifiedURL    = NULL;
+            $lNextClassifiedURL        = NULL;
+            $lSession = $this->getRequest()->getSession();
+            if ( $lSession->has("references"))
+            {
+                $lReferences = $lSession->get("references");
+                $lReferenceIndex = array_search($reference , $lReferences);
+
+                //previous
+                if ( $lReferenceIndex - 1 >= 0)
+                {
+                    $lPreviousClassifiedURL = $this->get("wegeoo")->getClassifiedURL($this->getClassified($lReferences[$lReferenceIndex - 1]));
+                }
+
+                //next
+                if ( $lReferenceIndex + 1 <= count($lReferences))
+                {
+                    $lNextClassifiedURL = $this->get("wegeoo")->getClassifiedURL($this->getClassified($lReferences[$lReferenceIndex + 1]));
+                }
+            }
+
+            $this->get("logger")->info("lPreviousClassifiedURL:".var_export($lPreviousClassifiedURL,true));
+            $this->get("logger")->info("lNextClassifiedURL:".var_export($lNextClassifiedURL,true));
+
+
             $lConfiguration["classified"] 	        = $lClassifiedInformations;
             $lConfiguration["previousClassifiedURL"]= $lPreviousClassifiedURL;
             $lConfiguration["nextClassifiedURL"]    = $lNextClassifiedURL;
@@ -82,7 +84,7 @@ class WegeooWebsiteClassifiedController extends Controller
             $lRenderParams["title"] 		    = $this->get("translator")->trans("classified.undefined.title");
             $lRenderParams["mostPopulatedTowns"]= $this->getMostPopulatedTowns();
 
-            return $this->render('WegeooWebsiteBundle:Default:classifiedUndefined.html.twig', $lConfiguration);
+            return $this->render('WegeooWebsiteBundle:Default:classifiedUndefined.html.twig', $lRenderParams);
         }
     }
     /////////////////////////////////////////////////////////////////////////////////////////////////
