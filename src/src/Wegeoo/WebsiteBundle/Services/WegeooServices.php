@@ -155,20 +155,33 @@ class WegeooServices
         if ( is_null($classified)) return NULL;
         if ( $classified instanceof Classified == FALSE) return NULL;
 
-        $lParams = array();
-        $lParams["wegeooType"]          = $this->mTranslator->trans( $this->mWegeooType, array() , NULL , $classified->getCountryCode());
-        $lParams["categoryLocaleName"]  = $this->mTranslator->trans($classified->getCategory() , array() , NULL , $classified->getCountryCode());
-        $lParams["cityPostCode"]        = strtolower($classified->getCity()->getPostCode());
-        $lParams["cityName"]            = strtolower(str_replace(" " , "-" , $classified->getCity()->getUppercaseName()));
-        $lParams["reference"]           = $classified->getReference();
-
-        $lURL = $this->mRouter->generate("wegeoo_website_classifiedpage", $lParams);
-        if ( $absolute)
+        /**  HACK to get the postCode and cityName. We should use the slugName directly in the generateURL */
+        /** ********************/
+        //@TODO modify the way to have postCode and cityName
+        preg_match("/([0-9a-zA-Z]*)-([0-9a-zA-Z]*)/", $classified->getCity()->getSlugName() , $lMatches);
+        /**  HACK to get the postCode and cityName. We should use the slugName directly in the generateURL */
+        /** ********************/
+        $lURL = NULL;
+        if ( count($lMatches) == 3)
         {
-            $lHost = $this->mContainer->get('request')->getSchemeAndHttpHost();
-            $lURL = $lHost . $lURL;
-        }
+            $lPostCode = $lMatches[1];
+            $lCityName = $lMatches[2];
 
+            $lParams = array();
+            $lParams["wegeooType"]          = $this->mTranslator->trans($this->mWegeooType, array(), NULL, $classified->getCountryCode());
+            $lParams["categoryLocaleName"]  = $this->mTranslator->trans($classified->getCategory(), array(), NULL, $classified->getCountryCode());
+            $lParams["cityPostCode"]        = $lPostCode;
+            $lParams["cityName"]            = $lCityName;
+            $lParams["reference"]           = $classified->getReference();
+
+            $lURL = $this->mRouter->generate("wegeoo_website_classifiedpage", $lParams);
+            if ($absolute) {
+                $lHost = $this->mContainer->get('request')->getSchemeAndHttpHost();
+                $lURL = $lHost . $lURL;
+            }
+        }else{
+
+        }
         return $lURL;
     }
     //////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -78,18 +78,36 @@ class SiteMapCommand extends ContainerAwareCommand
 
             $lTypes = array("sale" , "rent");
 
-            foreach($lTypes as $lType)
-            {
-                $lParams = array();
-                $lParams["pWegeooType"]         = $this->getContainer()->get("translator")->trans("wegeoo.property" , array(), null, $this->getContainer()->getParameter('locale'));//@TODO locale
-                $lParams["pCategoryLocaleName"] = $this->getContainer()->get("translator")->trans($lType , array(), null, $this->getContainer()->getParameter('locale'));//@TODO locale
-                $lParams["pCityPostCode"]       = strtolower($lCity->getPostCode());
-                $lParams["pCityName"]           = strtolower(str_replace(" " , "-" , $lCity->getUppercaseName()));
+            /**  HACK to get the postCode and cityName. We should use the slugName directly in the generateURL */
+            /** ********************/
+            //@TODO modify the way to have postCode and cityName
+            preg_match("/([0-9a-zA-Z]*)-([0-9a-zA-Z]*)/", $lCity->getSlugName() , $lMatches);
+            /**  HACK to get the postCode and cityName. We should use the slugName directly in the generateURL */
+            /** ********************/
 
-                $lURL = array('loc' => "http://" . $this->mServerName . $this->getContainer()->get('router')->generate('wegeoo_website_homepage', $lParams , false) ,
-                    'changefreq' => "daily",
-                    'priority' => '0.9');
-                $this->addURLInfo($lURL);
+            if ( count($lMatches) == 3)
+            {
+                $lPostCode = $lMatches[1];
+                $lCityName = $lMatches[2];
+
+                foreach($lTypes as $lType)
+                {
+
+                    $lParams = array();
+                    $lParams["pWegeooType"]         = $this->getContainer()->get("translator")->trans("wegeoo.property" , array(), null, $this->getContainer()->getParameter('locale'));//@TODO locale
+                    $lParams["pCategoryLocaleName"] = $this->getContainer()->get("translator")->trans($lType , array(), null, $this->getContainer()->getParameter('locale'));//@TODO locale
+                    $lParams["pCityPostCode"]       = $lPostCode;
+                    $lParams["pCityName"]           = $lCityName;
+
+
+                    $lURL = array('loc' => "http://" . $this->mServerName . $this->getContainer()->get('router')->generate('wegeoo_website_homepage', $lParams , false) ,
+                        'changefreq' => "daily",
+                        'priority' => '0.9');
+
+                    $this->addURLInfo($lURL);
+                }
+            }else{
+                $this->mOutput->writeln("ERROR : no cityName and postcode found in '{$lCity->getSlugName()}'");
             }
         }
 
@@ -101,8 +119,14 @@ class SiteMapCommand extends ContainerAwareCommand
         {
             if ( $lClassified->getReference())
             {
-                $lURL = array('loc' => "http://" . $this->mServerName . $this->getContainer()->get("wegeoo")->getClassifiedURL($lClassified) ,  'priority' => '0.5');
-                $this->addURLInfo($lURL);
+                $lClassifiedURL = $this->getContainer()->get("wegeoo")->getClassifiedURL($lClassified);
+                if ( is_null($lClassifiedURL) == FALSE)
+                {
+                    $lURL = array('loc' => "http://" . $this->mServerName . $lClassifiedURL ,  'priority' => '0.5');
+                    $this->addURLInfo($lURL);
+                }else{
+                    $this->mOutput->writeln("ERROR : No classified URL for reference '{$lClassified->getReference()}'");
+                }
             }
         }
 

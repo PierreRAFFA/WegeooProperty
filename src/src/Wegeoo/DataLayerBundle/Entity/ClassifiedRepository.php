@@ -109,10 +109,9 @@ class ClassifiedRepository extends EntityRepository
 	 */
 	public function getPreviewClassifiedFromReferencesAction($pReferences,$pSort)
 	{
-		$lQueryBuilder = $this->_em->createQuery("");
+		$lQueryBuilder = $this->_em->createQueryBuilder();
 		
 		$lQueryBuilder->select('cl')
-                        ->addSelect("DISTINCT cl.reference")
 				      ->from($this->_entityName , 'cl')
                       ->leftJoin('cl.city', 'City');
 					  /*->leftJoin(
