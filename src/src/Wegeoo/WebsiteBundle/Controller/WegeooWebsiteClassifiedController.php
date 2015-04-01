@@ -80,7 +80,7 @@ class WegeooWebsiteClassifiedController extends Controller
         }else{
             //Create params used in the twig
             $lRenderParams = array();
-            $lRenderParams["baseURL"] 		    = $lRequestContext->getBaseUrl();
+            $lRenderParams["baseURL"] 		    = $lRequestContext->getBaseUrl() ?: "/";
             $lRenderParams["title"] 		    = $this->get("translator")->trans("classified.undefined.title");
             $lRenderParams["mostPopulatedTowns"]= $this->getMostPopulatedTowns();
 

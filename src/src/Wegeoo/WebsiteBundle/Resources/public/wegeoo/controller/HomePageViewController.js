@@ -568,7 +568,7 @@ Wegeoo.HomePageViewController.prototype.displayClassifieds = function(pClassifie
         this.mIsFirstSearch = false;
     }else{
 
-        var lScrollDestinationY = $("#mapLayout").offset().top;
+        var lScrollDestinationY = $("#bannerLayout").offset().top - 5;
         if ( $("#sideMenu").is(":visible"))
         {
             lScrollDestinationY -= $("#sideMenu").height();

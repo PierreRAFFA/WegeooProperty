@@ -2,3 +2,8 @@ imports:
     - { resource: config.yml }
     - { resource: parameters_dev.yml }
     - { resource: security.yml }
+
+monolog:
+    handlers:
+        main:
+            action_level : INFO
