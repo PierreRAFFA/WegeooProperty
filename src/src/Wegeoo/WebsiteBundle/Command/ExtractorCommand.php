@@ -254,12 +254,19 @@ abstract class ExtractorCommand extends ContainerAwareCommand
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////  INSERT
-    protected function insert($classified)
+    protected function insert(Classified $classified)
     {
         if (self::$DEBUG === FALSE)
         {
-            $this->getDoctrine()->persist($classified);
-            $this->getDoctrine()->flush();
+            //check if already exists.
+            //second check because from the beginning to the insert, it is possible that the reference was just created by another rightMove Process
+            //because the process can take more than 24h.
+            $lFoundClassifieds = $this->getDoctrine()->getRepository("WegeooDataLayerBundle:Classified")->findByReference($classified->getReference());
+            if ( count($lFoundClassifieds) == 0)
+            {
+                $this->getDoctrine()->persist($classified);
+                $this->getDoctrine()->flush();
+            }
         }
         $this->mNumClassifiedsAdded++;
     }

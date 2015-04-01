@@ -39,7 +39,6 @@ class DatabaseCleanCommand extends ContainerAwareCommand
 
 
         //to remove duplicatas
-        //DELETE FROM classified USING classified ua2
-        //WHERE classified.reference = ua2.reference AND classified.id < ua2.id;
+        //DELETE FROM classified USING classified ua2 WHERE classified.reference = ua2.reference AND classified.id < ua2.id;
     }
 }
