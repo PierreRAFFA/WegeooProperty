@@ -1,0 +1,9 @@
+npm install -g mean-cli
+npm install -g generator-meanjs
+cd your_project_folder
+yo meanjs
+yo doctor
+
+
+http://ifrederik.com/blog/2014/06/generating-css-into-mean-js-using-sass/
+
