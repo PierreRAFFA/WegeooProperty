@@ -36,16 +36,19 @@
 
 	<!--Application CSS Files-->
 	<!--{% for cssFile in cssFiles %}<link rel="stylesheet" href="{{cssFile}}">{% endfor %}-->
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/core.css">
 
 	<!-- HTML5 Shim -->
 	<!--[if lt IE 9]>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
+
+    <!--Force all resources to get this prefix (because of $locationProvider.html5Mode(true)) -->
+    <base href="/"/>
 </head>
 
-<body class="ng-cloak">
-	<header data-ng-include="'/modules/core/views/header.client.view.html'" class="navbar navbar-fixed-top navbar-inverse"></header>
+<body class="ng-cloak" data-ng-controller="CoreController">
+	<!--<header data-ng-include="'/modules/core/views/header.client.view.html'" class="navbar navbar-fixed-top navbar-inverse"></header>-->
 	<section class="content">
 		<section class="container">
 			{% block content %}{% endblock %}
@@ -58,7 +61,7 @@
 	</script>
 
 	<!--Application JavaScript Files-->
-	{% for jsFile in jsFiles %}<script type="text/javascript" src="/{{jsFile}}"></script>{% endfor %}
+	{% for jsFile in jsFiles %}<script type="text/javascript" src="{{jsFile}}"></script>{% endfor %}
 
 	{% if process.env.NODE_ENV === 'development' %}
 	<!--Livereload script rendered -->

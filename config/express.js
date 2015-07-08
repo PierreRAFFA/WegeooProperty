@@ -21,6 +21,7 @@ var fs = require('fs'),
 	flash = require('connect-flash'),
 	config = require('./config'),
 	consolidate = require('consolidate'),
+    i18n = require('i18n'),
 	path = require('path');
 
 module.exports = function(db) {
@@ -39,6 +40,14 @@ module.exports = function(db) {
 	app.locals.facebookAppId = config.facebook.clientID;
 	app.locals.jsFiles = config.getJavaScriptAssets();
 	app.locals.cssFiles = config.getCSSAssets();
+
+    //i18n
+    i18n.configure({
+        locales:['en_GB', 'fr_FR'],
+        defaultLocale: 'en_GB',
+        directory: './app/locales'
+    });
+    app.use(i18n.init);
 
 	// Passing the request url to environment locals
 	app.use(function(req, res, next) {

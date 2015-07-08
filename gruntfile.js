@@ -9,7 +9,8 @@ module.exports = function(grunt) {
         clientJS: ['public/js/*.js', 'public/modules/**/*.js'],
         clientCSS: ['public/modules/**/*.css'],
         mochaTests: ['app/tests/**/*.js'],
-        sass: 'style/{,*/}*.{scss,sass}'
+        sass: ['public/modules/common/sass/{,*/}*.{scss,sass}', 'public/modules/**/*.sass' ],
+        locales: ['app/locales/*.json']
     };
 
     // Project Configuration
@@ -52,6 +53,12 @@ module.exports = function(grunt) {
             sass: {
                 files: watchFiles.sass,
                 tasks: ['sass:dev'],
+                options: {
+                    livereload: true
+                }
+            },
+            locales: {
+                files: watchFiles.locales,
                 options: {
                     livereload: true
                 }
@@ -150,7 +157,8 @@ module.exports = function(grunt) {
         sass: {
             dev: {
                 files: {
-                    'public/css/style.css': 'style/{,*/}*.{scss,sass}',
+                    'public/css/core.css': 'public/modules/core/sass/core.sass',
+                    //'public/css/style.css': 'style/{,*/}*.{scss,sass}',
                     //next line is not necessary if you include your bootstrap into the *.scss files
                     //'public/css/bootstrap.css': 'public/lib/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap.scss'
                 }
@@ -165,7 +173,7 @@ module.exports = function(grunt) {
                     'public/dist/style.min.css': 'style/{,*/}*.{scss,sass}'
                 }
             }
-        }
+        },
     });
 
     // Load NPM tasks

@@ -1,3 +1,11 @@
 <section data-ng-controller="CityController">
-	This is the City view
+    <!--test-->
+    <a href="#/contacts/1"
+       ui-sref="home.city({ theme: 'property', category: 'rent', cityPostcode: 'city', cityName: 'london' })"
+       ui-sref-opts="{reload: true}">
+        Show List
+    </a>
+
+    <input type="text" id="text1" ng-model="name">
+    <input type="text" id="text2" ng-model="name">
 </section>

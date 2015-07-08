@@ -8,13 +8,23 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
 
 		// Home state routing
 		$stateProvider.
-		//state('city', {
-		//	url: '/themecategorycitypostcode-cityname',
-		//	templateUrl: 'modules/core/views/city.client.view.html'
-		//}).
-		state('home', {
-			url: '/',
-			templateUrl: 'modules/core/views/home.client.view.html'
-		});
+            state('home', {
+                url: '/',
+                templateUrl: 'modules/core/views/city.client.view.html',
+                controller: function($scope)
+                {
+                    //alert('ok1');
+                }
+            }).
+            state('home.city', {
+                url: ':theme/:category/:cityPostcode-:cityName',
+                templateUrl: 'modules/core/views/city.client.view.html',
+                controller: function($scope, $stateParams) {
+                    //$scope.name = 'bla';
+                    //alert('ok2');
+                }
+            });
+
+        //$stateProvider.html5Mode(true);
 	}
 ]);

@@ -1,5 +1,22 @@
+<!--basis -->
 {% extends 'layout.server.view.html' %}
 
+<!--override of the block content-->
 {% block content %}
-	<section data-ui-view></section>
+
+    <!--header-->
+    {% include 'templates/header.server.view.html' %}
+
+    <!-- SEARCH -->
+    <div id="mapLayout" class="row show-grid row-margin row-colored row-search">
+        <ui-gmap-google-map
+                center='map.center' zoom='map.zoom'>
+
+        </ui-gmap-google-map>
+    </div>
+
+    <section id="section" data-ui-view>
+
+    </section>
+
 {% endblock %}

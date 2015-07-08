@@ -18,15 +18,18 @@ module.exports = {
 			],
 			js: [
 				'public/lib/angular/angular.js',
-				'public/lib/angular-resource/angular-resource.js', 
-				'public/lib/angular-cookies/angular-cookies.js', 
-				'public/lib/angular-animate/angular-animate.js', 
-				'public/lib/angular-touch/angular-touch.js', 
-				'public/lib/angular-sanitize/angular-sanitize.js', 
+				'public/lib/angular-resource/angular-resource.js',
+				'public/lib/angular-cookies/angular-cookies.js',
+				'public/lib/angular-animate/angular-animate.js',
+				'public/lib/angular-touch/angular-touch.js',
+				'public/lib/angular-sanitize/angular-sanitize.js',
 				'public/lib/angular-ui-router/release/angular-ui-router.js',
 				'public/lib/angular-ui-utils/ui-utils.js',
-				'public/lib/angular-bootstrap/ui-bootstrap-tpls.js'
-			]
+				'public/lib/angular-bootstrap/ui-bootstrap-tpls.js',
+                //'http://maps.googleapis.com/maps/api/js?sensor=false&language=en',
+                'public/lib/lodash/lodash.js',
+                'public/lib/angular-google-maps/dist/angular-google-maps_dev_mapped.js'
+            ]
 		},
 		css: [
 			'public/modules/**/css/*.css'
