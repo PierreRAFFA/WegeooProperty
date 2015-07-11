@@ -1,0 +1,48 @@
+<section class="sideMenu">
+
+    <!-- HEADER LOGO -->
+    <div class="sideMenuHeader">
+        <img class="logo" src="/modules/core/img/menuLogo.png" width="285" height="40" alt="Wegeoo" title="Wegeoo" />
+    </div>
+
+    <!-- MENU BUTTON -->
+    <a id="menuLink" href="#menu" class="menuButton">
+        <img class="menuIcon" src="/modules/core/img/search.png" width="23" height="23" alt="Wegeoo Search" title="Wegeoo Search"/>
+    </a>
+
+    <!-- POST BUTTON -->
+    <a href="{{baseURL}}/{{ __('wegeoo.property') }}/{{ __('wegeoo.post') }}" class="postButton">
+        <img src="/modules/core/img/post.png" width="23" height="23" alt="Wegeoo Post" title="Wegeoo Post" />
+    </a>
+
+    <div id="menu">
+
+        <!-- SEARCH -->
+        <div class="row show-grid searchCategoryRow">
+
+            <!-- CATEGORY SELECTION -->
+            <div class="searchCategoryContainer">
+                <ul class="nav nav-tabs searchCategory" data-wegeoo-slug="categoryLocaleName" data-wegeoo-component="tabs">
+                    <li class="searchCategoryLi">
+                        <a href="#"  		data-value="sale" data-toggle="tab" rel="nofollow">{{ __('classified.category.sale') }}</a></li>
+                    <li class="searchCategoryLi active">
+                        <a href="#" 		data-value="rent" data-toggle="tab" rel="nofollow">{{ __('classified.category.rent') }}</a></li>
+                </ul>
+
+                <!-- CATEGORY CONTENTS -->
+                <div class="tab-content">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div data-ng-include="'/modules/core/views/partials/sideMenuProperty.client.view.html'" class="navbar navbar-fixed-top navbar-inverse"></header>
+
+        <div class="sideMenuShadow"></div>
+    </div>
+
+</section>
+
+
+<div class="overlay"></div>

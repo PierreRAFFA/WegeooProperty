@@ -7,13 +7,17 @@
     <!--header-->
     {% include 'templates/header.server.view.html' %}
 
-    <!-- SEARCH -->
-    <div id="mapLayout" class="row show-grid row-margin row-colored row-search">
+    <!-- SEARCH & MAP-->
+    <section class="row show-grid row-margin row-colored row-search map">
         <ui-gmap-google-map
                 center='map.center' zoom='map.zoom'>
 
         </ui-gmap-google-map>
-    </div>
+
+        <div class="scroll">
+            <img src="/modules/core/img/scroll.png" width="15" height="30">
+        </div>
+    </section>
 
     <section id="section" data-ui-view>
 

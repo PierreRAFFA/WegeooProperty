@@ -1,0 +1,89 @@
+<div class="searchForm">
+
+    <!-- LOCATION-->
+    <div class="searchParameterContainer searchLocation">
+        <div class="searchParameterTitle">Location</div>
+
+        <!-- LOCATION -->
+        <input id="search_town_input" class="searchTownInput" type="text" placeholder="{{ __('search.city.placeholder') }}"
+               data-cityName="{%  if cityName is defined %}{{ cityName }}{% endif %}"
+               data-cityPostCode="{%  if cityPostCode is defined %}{{ cityPostCode }}{% endif %}"/>
+    </div>
+
+    <!-- MIN PRICE-->
+    <div class="searchParameterContainer searchMinPrice">
+
+        <div class="searchParameterTitle">{% trans %}search.minPrice{% endtrans %}</div>
+
+        <div class="input-group searchPriceInputContainer">
+            <span class="input-group-addon searchPriceAddon">£</span>
+            <input id="priceMin" class="form-control searchPriceInput searchPriceMinInput" type="number" pattern="\d*" placeholder="min"
+                   value="{% if filters is defined and filters.price is defined %}{{filters.price[0]}}{% endif %}">
+        </div>
+
+    </div>
+
+    <!-- MAX PRICE-->
+    <div class="searchParameterContainer searchMinPrice">
+
+        <div class="searchParameterTitle">{% trans %}search.maxPrice{% endtrans %}</div>
+
+        <div class="input-group searchPriceInputContainer searchPriceInputContainerRight">
+            <span class="input-group-addon searchPriceAddon">£</span>
+            <input id="priceMax" class="form-control searchPriceInput searchPriceMaxInput" type="number" pattern="\d*" placeholder="max"
+                   value="{% if filters is defined and filters.price is defined and filters.price|length > 1 %}{{filters.price[1]}}{% endif %}">
+        </div>
+    </div>
+
+    <!-- MAX PRICE-->
+    <div class="searchParameterContainer searchPropertyTypeContainer">
+
+        <div class="searchParameterTitle">{% trans %}search.propertyType{% endtrans %}</div>
+
+        <!-- TYPE -->
+        <select id="searchPropertyType" class="selectpicker searchPropertyTypeSelect"
+                multiple data-style="searchPropertyType"
+                title='{% trans %} search.any {% endtrans %}'>
+            {#<option value="apartment" {% if filters.propertyType is not defined or "apartment" in filters.propertyType %} selected {% endif %}>Appartement</option>#}
+            {#<option value="house" {% if filters.propertyType is not defined or  "house" in filters.propertyType %} selected {% endif %}>Maison, villa</option>#}
+            <option value="apartment" {% if filters.propertyType is defined and "apartment" in filters.propertyType %} selected {% endif %}>{% trans %} classified.details.property_type.0 {% endtrans %}</option>
+            <option value="house" {% if filters.propertyType is defined and  "house" in filters.propertyType %} selected {% endif %}>{% trans %} classified.details.property_type.1 {% endtrans %}</option>
+            <option value="land" {% if filters is defined and filters.propertyType is defined and  "land" in filters.propertyType %} selected {% endif %}>{% trans %} classified.details.property_type.2 {% endtrans %}</option>
+            <option value="commercial-space" {% if filters is defined and filters.propertyType is defined and  "commercial-space" in filters.propertyType %} selected {% endif %}>{% trans %} classified.details.property_type.3 {% endtrans %}</option>
+            <option value="parking" {% if filters is defined and filters.propertyType is defined and  "parking" in filters.propertyType %} selected {% endif %}>{% trans %} classified.details.property_type.4 {% endtrans %}</option>
+            <option value="shop" {% if filters is defined and filters.propertyType is defined and  "shop" in filters.propertyType %} selected {% endif %}>{% trans %} classified.details.property_type.5 {% endtrans %}</option>
+            <option value="building" {% if filters is defined and filters.propertyType is defined and  "building" in filters.propertyType %} selected {% endif %}>{% trans %} classified.details.property_type.6 {% endtrans %}</option>
+            <option value="residential-building" {% if filters is defined and filters.propertyType is defined and  "residential-building" in filters.propertyType %} selected {% endif %}>{% trans %} classified.details.property_type.7 {% endtrans %}</option>
+            <option value="office" {% if filters is defined and filters.propertyType is defined and  "office" in filters.propertyType %} selected {% endif %}>{% trans %} classified.details.property_type.8 {% endtrans %}</option>
+            <option value="loft" {% if filters is defined and filters.propertyType is defined and  "loft" in filters.propertyType %} selected {% endif %}>{% trans %} classified.details.property_type.9 {% endtrans %}</option>
+            <option value="castle" {% if filters is defined and filters.propertyType is defined and  "castle" in filters.propertyType %} selected {% endif %}>{% trans %} classified.details.property_type.10 {% endtrans %}</option>
+            <option value="others" {% if filters is defined and filters.propertyType is defined and  "others" in filters.propertyType %} selected {% endif %}>{% trans %} classified.details.property_type.11 {% endtrans %}</option>
+        </select>
+    </div>
+
+    <!-- MAX PRICE-->
+    <div class="searchParameterContainer searchNumRoomsContainer">
+
+        <div class="searchParameterTitle">{% trans %}search.numRooms{% endtrans %}</div>
+
+        <select id="searchNumRooms" class="selectpicker searchNumRoomsSelect"
+                multiple data-style="searchNumRooms"
+                data-wegeoo-slug="filters" data-wegeoo-key="nr"
+                data-wegeoo-component="selectpicker"
+                title='{% trans %} search.any {% endtrans %}'>
+            <option value="1" {% if filters.numRooms is defined and 1 in filters.numRooms %} selected {% endif %}>1</option>
+            <option value="2" {% if filters.numRooms is defined and 2 in filters.numRooms %} selected {% endif %}>2</option>
+            <option value="3" {% if filters.numRooms is defined and 3 in filters.numRooms %} selected {% endif %}>3</option>
+            <option value="4" {% if filters.numRooms is defined and 4 in filters.numRooms %} selected {% endif %}>4</option>
+            <option value="5%2B" {% if filters.numRooms is defined and "5+" in filters.numRooms %} selected {% endif %}>{% trans %}search.numRooms.5more{% endtrans %}</option>
+        </select>
+
+    </div>
+
+    <!-- SUBMIT BUTTON -->
+    <button id="searchButtonSubmit" class="btn btn-primary btn-large searchButtonSubmit" type="submit">
+        <img class="searchIcon" src="{{ asset('bundles/wegeoowebsite/images/searchIcon.png') }}" width="23" height="23"/>
+        <div class="searchText">{% trans %}search.button.title {% endtrans %}</div>
+    </button>
+
+</div>
