@@ -42,10 +42,10 @@ var ClassifiedSchema = new Schema({
         type: String,
         default: ''
     },
-    //city: {
-    //    type: Schema.ObjectId,
-    //    ref: 'City'
-    //},
+    city: {
+        type: Schema.ObjectId,
+        ref: 'City'
+    },
     countryCode: {
         type: String,
         default: ''

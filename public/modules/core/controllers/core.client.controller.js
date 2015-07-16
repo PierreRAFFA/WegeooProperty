@@ -3,20 +3,53 @@
 
 angular.module('core')
 
-    //.config(['uiGmapGoogleMapApiProvider', function(GoogleMapApiProviders) {
-    //    GoogleMapApiProviders.configure({
-    //        //    key: 'your api key',
-    //        v: '3.19.20',
-    //        libraries: 'weather,geometry,visualization'
-    //    });
-    //}])
-
-    .controller('CoreController', ['$scope', '$location', '$stateParams', 'Authentication', 'uiGmapGoogleMapApi', 'uiGmapIsReady',
-	function($scope, $location, $stateParams, Authentication, uiGmapGoogleMapApi, uiGmapIsReady) {
+    .controller('CoreController', ['$scope', '$resource', '$location', '$stateParams', 'Authentication', 'Classifieds', 'uiGmapGoogleMapApi', 'uiGmapIsReady',
+	function($scope, $resource, $location, $stateParams, Authentication, Classifieds, uiGmapGoogleMapApi, uiGmapIsReady) {
 		// This provides Authentication context.
 		$scope.authentication = Authentication;
+        //$scope.city = {name:'London'};
+        //$scope.test = 'ok';
+        //$scope.title3 = 'ok';
 
-        $scope.map = { center: { latitude: 51.5, longitude: -0.2 }, zoom: 12 };
+        $scope.map =
+        {
+            center: {
+                latitude: 51.5,
+                longitude: -0.2
+            },
+            zoom: 15,
+            markers: [
+                {
+                    id: 1,
+                    latitude: 51.5,
+                    longitude: -0.2,
+                    showWindow: false,
+                },
+                {
+                    id: 2,
+                    latitude: 51.5,
+                    longitude: -0.21,
+                    showWindow: false,
+                }],
+            clusterOptions:{
+                title: 'Click to get more details', //@Todo
+                gridSize: 60,
+                ignoreHidden: true,
+                minimumClusterSize: 1,
+                enableRetinaIcons: true,
+                styles: [{
+                    url: 'modules/core/img/multimarker.png',
+                    textColor: '#333',
+                    textSize: 20,
+                    anchorText: [-39,1],
+                    width: 54,
+                    height: 63,
+                    fontFamily: 'FuturaStd-Book',
+                    backgroundPosition: '1 -30'
+                }]
+            }
+        };
+
         //$scope.name = 'hello';
 
         //$scope.name = $stateParams.theme;
@@ -40,6 +73,8 @@ angular.module('core')
 
             $scope.googleVersion = maps.version;
             maps.visualRefresh = true;
+
+
         });
         //uiGmapGoogleMapApi.then(function(maps) {
         //        $scope.googleVersion = maps.version;
@@ -109,5 +144,19 @@ angular.module('core')
         //                visible: true
         //            }];
         //});
+
+        //get latest classifieds of the current city
+        var cityPostcode = 3;
+        var cityName = 3;
+        var lClassifieds = Classifieds.getLatestClassifiedsFromCity(cityPostcode,cityName).query(function()
+        {
+            $scope.classifieds = lClassifieds;
+            $scope.numC = $scope.classifieds.length;
+            //alert($scope.numC);
+        });
+
+
+        //$scope.find();
+
 	}
 ]);

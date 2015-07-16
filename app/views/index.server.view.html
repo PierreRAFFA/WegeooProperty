@@ -7,20 +7,13 @@
     <!--header-->
     {% include 'templates/header.server.view.html' %}
 
-    <!-- SEARCH & MAP-->
-    <section class="row show-grid row-margin row-colored row-search map">
-        <ui-gmap-google-map
-                center='map.center' zoom='map.zoom'>
+    {% include 'templates/map.server.view.html' %}
 
-        </ui-gmap-google-map>
+    {% include 'templates/latestClassifieds.server.view.html' %}
 
-        <div class="scroll">
-            <img src="/modules/core/img/scroll.png" width="15" height="30">
-        </div>
-    </section>
+    <input class="tototo" ng-model="numC"></input>
+    <!--<section id="section" data-ui-view>-->
 
-    <section id="section" data-ui-view>
-
-    </section>
+    <!--</section>-->
 
 {% endblock %}

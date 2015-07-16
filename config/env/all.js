@@ -6,6 +6,10 @@ module.exports = {
 		description: 'Full-Stack JavaScript with MongoDB, Express, AngularJS, and Node.js',
 		keywords: 'MongoDB, Express, AngularJS, Node.js'
 	},
+    theme: 'property',
+    defaultCategory: 'rent',
+    defaultCityPostcode: 'city',
+    defaultCityName: 'london',
 	port: process.env.PORT || 3000,
 	templateEngine: 'swig',
 	sessionSecret: 'MEAN',
@@ -44,5 +48,5 @@ module.exports = {
 			'public/lib/angular-mocks/angular-mocks.js',
 			'public/modules/*/tests/*.js'
 		]
-	}
+	},
 };

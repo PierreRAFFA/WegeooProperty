@@ -29,7 +29,7 @@
 	<meta name="twitter:title" content="{{title}}">
 	<meta name="twitter:description" content="{{description}}">
 	<meta name="twitter:url" content="{{url}}">
-	<meta name="twitter:image" content="/img/brand/logo.png">
+	<meta name="twitter:image" content="/modules/core/img/logo180px.png">
 
 	<!-- Fav Icon -->
 	<link href="/modules/core/img/favicon32x.ico" rel="shortcut icon" type="image/x-icon">
@@ -40,8 +40,10 @@
 
 	<!-- HTML5 Shim -->
 	<!--[if lt IE 9]>
-		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
+
+    <script type="text/javascript" src="/lib/jquery/dist/jquery.js"></script>
 
     <!--Force all resources to get this prefix (because of $locationProvider.html5Mode(true)) -->
     <base href="/"/>
@@ -54,7 +56,7 @@
 
 	<!--<header data-ng-include="'/modules/core/views/header.client.view.html'" class="navbar navbar-fixed-top navbar-inverse"></header>-->
 	<section class="content">
-		<section class="container">
+		<section class="container" data-toto="{{test}}">
 			{% block content %}{% endblock %}
 		</section>
 	</section>

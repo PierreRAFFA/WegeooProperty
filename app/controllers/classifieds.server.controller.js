@@ -8,6 +8,7 @@ var sha1 = require('sha1');
 var mongoose = require('mongoose'),
 	errorHandler = require('./errors.server.controller'),
 	Classified = mongoose.model('Classified'),
+	CityController = require('./city.server.controller'),
 	_ = require('lodash');
 
 function generateReference(length, prefix)
@@ -26,21 +27,29 @@ function generateReference(length, prefix)
  * Create a classified
  */
 exports.create = function(req, res) {
-	var classified = new Classified(req.body);
-    classified.reference = generateReference(8 , 'wg-');
-	classified.user = req.user;
 
-	classified.save(function(err) {
-		if (err) {
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
-			});
-		} else {
-			res.json(classified);
-		}
-	});
+    //get city
+    CityController.getCityFromSlugName(req.body.city , function(city)
+    {
+        //delete to prevent crash ( city here is actually the slugName value )
+        delete req.body.city;
+
+        var classified = new Classified(req.body);
+        classified.reference    = generateReference(8 , 'wg-');
+        classified.user         = req.user;
+        classified.city         = city;
+
+        classified.save(function(err) {
+            if (err) {
+                return res.status(400).send({
+                    message: errorHandler.getErrorMessage(err)
+                });
+            } else {
+                res.json(classified);
+            }
+        });
+    });
 };
-
 
 
 /**
@@ -93,7 +102,18 @@ exports.delete = function(req, res) {
  * List of Classifieds
  */
 exports.list = function(req, res) {
-	Classified.find().sort('-created').populate('user', 'displayName').exec(function(err, classifieds) {
+    console.log(req.query);
+
+    //for(var lkey in req.query)
+    //{
+    //    console.log(lkey);
+    //}
+	Classified
+        .find(req.query)
+        .select('-_id -__v -clientIp -numMailsReceived -active -password -lostPasswordCode -activationCode -numWarnings -numSeen')
+        .sort('-modificationDate')
+        .populate('user', 'displayName')
+        .exec(function(err, classifieds) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)

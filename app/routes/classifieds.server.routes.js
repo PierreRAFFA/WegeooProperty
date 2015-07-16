@@ -8,12 +8,12 @@ var users = require('../../app/controllers/users.server.controller'),
 
 module.exports = function(app) {
 	// Classified Routes
-	app.route('/classifieds')
+	app.route('/api/v1/classifieds')
 		.get(classifieds.list)
 		//.post(users.requiresLogin, classifieds.create);
 		.post(classifieds.create);//no need to be registered to post a classified
 
-	app.route('/classifieds/:classifiedId')
+	app.route('/api/v1/classifieds/:classifiedId')
 		.get(classifieds.read)
 		.put(users.requiresLogin, classifieds.hasAuthorization, classifieds.update)
 		.delete(users.requiresLogin, classifieds.hasAuthorization, classifieds.delete);

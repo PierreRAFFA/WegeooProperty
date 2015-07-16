@@ -5866,7 +5866,7 @@ section.sideMenu {
     right: 0;
     padding: 8px 13px 8px 8px; }
   section.sideMenu #menu {
-    margin-left: 0;
+    margin-left: -280px;
     width: 280px;
     position: fixed;
     -webkit-transition: all 0.3s ease-in-out;
@@ -5882,6 +5882,52 @@ section.sideMenu {
     -webkit-overflow-scrolling: touch;
     padding: 10px; }
 
+section.map {
+  position: relative;
+  padding: 10px;
+  margin-bottom: 15px; }
+  section.map .angular-google-map-container {
+    width: calc(100% - 30px);
+    height: 300px; }
+    section.map .angular-google-map-container .cluster img {
+      background-position: -54px -79px; }
+  section.map .scroll {
+    position: absolute;
+    top: 10px;
+    right: 13px;
+    box-sizing: border-box;
+    color: #333333;
+    font-family: Arial, "MS Trebuchet", sans-serif;
+    font-size: 14px;
+    height: 30px;
+    line-height: 20px;
+    -webkit-transition-delay: 0s;
+    -moz-transition-delay: 0s;
+    transition-delay: 0s;
+    -webkit-transition-duration: 0.3s;
+    -moz-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-timing-function: ease-in;
+    -moz-transition-timing-function: ease-in;
+    transition-timing-function: ease-in; }
+
+section.latestClassifieds #animatedBanner {
+  padding-left: 10px;
+  padding-right: 10px; }
+  section.latestClassifieds #animatedBanner .bannerTitle {
+    width: 100%;
+    height: 40px;
+    padding-top: 10px; }
+    section.latestClassifieds #animatedBanner .bannerTitle .part1 {
+      font: 1.7rem FuturaStd-Light;
+      color: #333333; }
+    section.latestClassifieds #animatedBanner .bannerTitle .part2 {
+      font: 1.7rem FuturaStd-Medium; }
+  section.latestClassifieds #animatedBanner .bannerContainer {
+    height: 138px;
+    margin-bottom: 10px;
+    overflow: hidden; }
+
 body {
   margin: 0; }
   body .row-colored {
@@ -5895,30 +5941,5 @@ body {
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
     border-top-left-radius: 5px; }
-  body section.map {
-    position: relative;
-    padding: 10px; }
-    body section.map .angular-google-map-container {
-      width: calc(100% - 30px);
-      height: 300px; }
-    body section.map .scroll {
-      position: absolute;
-      top: 10px;
-      right: 13px;
-      box-sizing: border-box;
-      color: #333333;
-      font-family: Arial, "MS Trebuchet", sans-serif;
-      font-size: 14px;
-      height: 30px;
-      line-height: 20px;
-      -webkit-transition-delay: 0s;
-      -moz-transition-delay: 0s;
-      transition-delay: 0s;
-      -webkit-transition-duration: 0.3s;
-      -moz-transition-duration: 0.3s;
-      transition-duration: 0.3s;
-      -webkit-transition-timing-function: ease-in;
-      -moz-transition-timing-function: ease-in;
-      transition-timing-function: ease-in; }
 
 /*# sourceMappingURL=index.css.map */
