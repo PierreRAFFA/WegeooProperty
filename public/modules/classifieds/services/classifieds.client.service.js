@@ -14,11 +14,13 @@ angular.module('classifieds').factory('Classifieds', ['$resource',
                 }
             });
         };
-        lMethods.getLatestClassifiedsFromCity = function(cityPostcode, cityName)
+        lMethods.getLatestClassifiedsIn = function(slugName)
         {
             var lLimit = 15;
 
-            return $resource('/api/v1/classifieds/', {}, {
+            return $resource('/api/v1/classifieds?list=getLatestIn&slugName=:slugName', {
+                slugName : slugName
+            }, {
                 update: {
                     method: 'GET'
                 }

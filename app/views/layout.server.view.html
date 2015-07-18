@@ -64,6 +64,8 @@
 	<!--Embedding The User Object-->
 	<script type="text/javascript">
 		var user = {{ user | json | safe }};
+        var slugName = "{{ slugName }}";
+        var translations = {{ translations | json | safe }};
 	</script>
 
 	<!--Application JavaScript Files-->

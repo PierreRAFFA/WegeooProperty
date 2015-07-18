@@ -10,6 +10,7 @@ module.exports = {
     defaultCategory: 'rent',
     defaultCityPostcode: 'city',
     defaultCityName: 'london',
+    defaultSlugName: 'city-london',
 	port: process.env.PORT || 3000,
 	templateEngine: 'swig',
 	sessionSecret: 'MEAN',

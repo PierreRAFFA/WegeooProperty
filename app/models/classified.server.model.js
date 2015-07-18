@@ -46,6 +46,18 @@ var ClassifiedSchema = new Schema({
         type: Schema.ObjectId,
         ref: 'City'
     },
+    /**
+     * Nested informations to make the 'select' query easier
+     */
+    nCity:{
+        slugName: {
+            type: String,
+            required: 'nCity.slugName cannot be blank'
+        },
+        parentCode: {
+            type: String
+        }
+    },
     countryCode: {
         type: String,
         default: ''

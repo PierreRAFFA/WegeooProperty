@@ -48,7 +48,11 @@ module.exports = function(db) {
         directory: './app/locales'
     });
     app.use(i18n.init);
-
+    //@Todo because not working
+    app.use(function(err, req, res, next) {
+        req.setLocale('fr_FR');
+        next();
+    });
 	// Passing the request url to environment locals
 	app.use(function(req, res, next) {
 		res.locals.url = req.protocol + '://' + req.headers.host + req.url;

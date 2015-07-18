@@ -10,20 +10,40 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
 		$stateProvider.
             state('home', {
                 url: '/',
-                templateUrl: 'modules/core/views/city.client.view.html',
-                controller: function($scope)
-                {
-                    //alert('ok1');
+                views:{
+                    'latest@': {
+                        templateUrl: 'modules/core/views/partials/latestClassifieds.client.view.html',
+                        controller: function($scope, $stateParams) {
+
+                            //update the slugName watched by the latestClassfied View
+                            $scope.slugName = window.slugName;
+                        }
+                    }
                 }
             }).
-            state('home.city', {
-                url: ':theme/:category/:cityPostcode-:cityName',
-                templateUrl: 'modules/core/views/city.client.view.html',
-                controller: function($scope, $stateParams) {
-                    //$scope.name = 'bla';
-                    //alert('ok2');
+            state('citySearch', {
+                url: '/:theme/:category/{cityPostcode:[a-zA-Z0-9]*}-{cityName:[-%a-zA-Z0-9]*}',
+                views:{
+                    'latest@': {
+                        templateUrl: 'modules/core/views/partials/latestClassifieds.client.view.html',
+                        controller: function($scope, $stateParams) {
+
+                            //update the slugName watched by the latestClassfied View
+                            $scope.slugName = $stateParams.cityPostcode + '-' + $stateParams.cityName;
+                        }
+                    }
                 }
+
+                //onEnter: function()
+                //{
+                //
+                //}
             });
+            //.state('advancedSearch' , {
+            //    url: '/:theme/:category/{cityPostcode:[a-zA-Z0-9]*}-{cityName:[-%a-zA-Z0-9]*}/search{map:@[-.0-9]*,[-.0-9]*,[0-9]*}/?priceMin&priceMax&numRooms',
+            //    //url: '^/search{map:@[-.0-9]*,[-.0-9]*,[0-9]*}/{filters:[;+&=,a-zA-Z0-9]*}',
+            //    templateUrl: 'modules/core/views/city2.client.view.html'
+            //});
 
         //$stateProvider.html5Mode(true);
 	}

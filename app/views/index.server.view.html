@@ -9,11 +9,19 @@
 
     {% include 'templates/map.server.view.html' %}
 
-    {% include 'templates/latestClassifieds.server.view.html' %}
+    <!-- include 'templates/latestClassifieds.server.view.html' -->
 
     <input class="tototo" ng-model="numC"></input>
-    <!--<section id="section" data-ui-view>-->
 
-    <!--</section>-->
 
+    <section data-ui-view="latest">
+
+    </section>
+
+    <section data-ui-view="classifiedList">
+
+    </section>
+
+    <a ui-sref="citySearch({theme:'property', category: 'rent', cityPostcode: 'city' , cityName: 'london' })"
+       ui-sref-opts="{reload: false}">London</a>
 {% endblock %}

@@ -14,13 +14,13 @@ var mongoose = require('mongoose'),
 exports.getCityFromSlugName = function(slugName, callback) {
 
     City
-        .find({slugName:slugName})
-        .select('-_id -__v')
-        .exec(function(err, cities) {
+        .findOne({slugName:slugName})
+        .select()
+        .exec(function(err, city) {
             if (err) {
                 callback.call(null,null);
             } else {
-                callback.call(null, new City(cities));
+                callback.call(null, city);
             }
         });
 };

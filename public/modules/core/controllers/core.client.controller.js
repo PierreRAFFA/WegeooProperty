@@ -148,7 +148,7 @@ angular.module('core')
         //get latest classifieds of the current city
         var cityPostcode = 3;
         var cityName = 3;
-        var lClassifieds = Classifieds.getLatestClassifiedsFromCity(cityPostcode,cityName).query(function()
+        var lClassifieds = Classifieds.getLatestClassifiedsIn(cityPostcode,cityName).query(function()
         {
             $scope.classifieds = lClassifieds;
             $scope.numC = $scope.classifieds.length;
