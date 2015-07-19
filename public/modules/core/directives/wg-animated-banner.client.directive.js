@@ -52,7 +52,7 @@ angular.module('core').directive('wgAnimatedBanner', [
                 //set default text (part1)
                 angular.element(element[0]).find('.bannerTitle .part1').text(window.translations.wegeooLastClassifiedsIn);
 
-                //watch the classifieds to update the
+                //watch 'slugName' to update the banner
                 scope.$watch('slugName', function(slugName) {
 
                     scope.updateBanner(slugName);

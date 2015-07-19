@@ -1,8 +1,6 @@
 'use strict';
 
-var sha1 = require('sha1');
-
-/**
+/*
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
@@ -10,6 +8,9 @@ var mongoose = require('mongoose'),
 	Classified = mongoose.model('Classified'),
 	CityController = require('./city.server.controller'),
 	_ = require('lodash');
+
+var sha1 = require('sha1');
+var md5 = require('md5');
 
 function generateReference(length, prefix)
 {
@@ -117,12 +118,12 @@ exports.list = function(req, res) {
         var lListName = req.query.list;
         switch(lListName)
         {
-            case 'getLatestIn':
-                exports._getLatestIn(req, res);
+            case 'latestInCity':
+                exports._getLatestInCity(req, res);
                 break;
 
-            case 'getLatestAround':
-                exports._getLatestAround(req, res);
+            case 'mapBounds':
+                exports._getFromMapBounds(req, res);
                 break;
 
             default:
@@ -137,13 +138,13 @@ exports.list = function(req, res) {
     }
 };
 /**
- * Returns the latest classifieds in a specific city as postcode + cityName
+ * Returns the latest classifieds in a specific city as slugName
  *
  * @param req
  * @param res
  * @private
  */
-exports._getLatestIn = function (req, res)
+exports._getLatestInCity = function (req, res)
 {
     if ( req.query.slugName)
     {
@@ -165,14 +166,91 @@ exports._getLatestIn = function (req, res)
             });
     }else{
         return res.status(400).send({
-            message: 'Incorrect Parameters in getLatestIn List'
+            message: 'Incorrect Parameters in _getLatestInCity List'
         });
     }
-
 };
-exports._getLatestAround = function(req,res)
+/**
+ * Returns Classified Ad from filter.
+ * This method can be called each time the map position has changed,
+ * so there is a filter by reference to avoid sending the references already sent (session)
+ *
+ * @param req
+ * @param res
+ * @returns {*}
+ * @private
+ */
+exports._getFromMapBounds = function(req,res)
 {
+    //compute search id based on all queries except the mapBounds
+    var lQuery = _.clone(req.query);
+    delete lQuery.mapBounds;
+    var lSearchId = md5(lQuery);
+    if ( req.session.searchId === undefined || req.session.searchId !== lSearchId)
+    {
+        //init session variables
+        req.session.searchId = lSearchId;
+        req.session.references = [];
+    }
+    if ( req.session.references.length === 4)
+        req.session.references = [];
 
+    if ( req.query.mapBounds)
+    {
+        var lMatches = req.query.mapBounds.match(/@\(\(([-.0-9]*),([-.0-9]*)\),\(([-.0-9]*),([-.0-9]*)\)\)/);
+        if (lMatches.length === 5 )
+        {
+            var lClauses = { $and: [ {latitude : { $gt: lMatches[1], $lt: lMatches[3] }} , {longitude : { $gt: lMatches[2], $lt: lMatches[4] }} ] };
+
+            //ignore references already sent
+            console.log('req.session.references.length:' + req.session.references.length);
+            if (req.session.references.length )
+            {
+                _.forIn(req.session.references, function(reference, iR)
+                {
+                    var lReference = {reference: {$ne:reference}};
+                    lClauses.$and.push(lReference);
+
+                    console.log('ignore reference:' + reference);
+                });
+            }
+
+            console.log(lClauses);
+            Classified
+                .find( lClauses)
+                .select('-_id reference latitude longitude')
+                .sort('-modificationDate')
+                //.populate('user', 'displayName')
+                .populate('city', '-_id -id -__v -googleLocalized -pop -division -division2')
+                .exec(function(err, classifieds) {
+                    if (err) {
+                        return res.status(400).send({
+                            message: errorHandler.getErrorMessage(err)
+                        });
+                    } else {
+
+
+                        //store references in session to prevent to send again these ones when only 'mapBounds' query changed
+                        _.forIn(classifieds, function(classified, iC)
+                        {
+                            req.session.references.push(classified.reference);
+                            console.log('store reference:' + classified.reference);
+                        });
+
+                        res.json(classifieds);
+                    }
+                });
+        }else{
+            return res.status(400).send({
+                message: 'Incorrect Parameters in _getFromMapBounds List'
+            });
+        }
+
+    }else{
+        return res.status(400).send({
+            message: 'Incorrect Parameters in _getFromMapBounds List'
+        });
+    }
 };
 ////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////// SELECT CLASSIFIED

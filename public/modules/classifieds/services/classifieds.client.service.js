@@ -6,20 +6,33 @@ angular.module('classifieds').factory('Classifieds', ['$resource',
 
         var lMethods = {};
 
-        lMethods.getClassifieds = function()
-        {
-            return $resource('/api/v1/classifieds', {}, {
-                update: {
-                    method: 'GET'
-                }
-            });
-        };
+        //lMethods.getClassifieds = function()
+        //{
+        //    return $resource('/api/v1/classifieds', {}, {
+        //        update: {
+        //            method: 'GET'
+        //        }
+        //    });
+        //};
         lMethods.getLatestClassifiedsIn = function(slugName)
         {
             var lLimit = 15;
 
-            return $resource('/api/v1/classifieds?list=getLatestIn&slugName=:slugName', {
+            return $resource('/api/v1/classifieds?list=latestInCity&slugName=:slugName', {
                 slugName : slugName
+            }, {
+                update: {
+                    method: 'GET'
+                }
+            });
+
+        };
+        lMethods.getClassifiedsInMap = function(mapBounds)
+        {
+            var lLimit = 15;
+
+            return $resource('/api/v1/classifieds?list=mapBounds&bounds=:mapBounds', {
+                mapBounds : mapBounds
             }, {
                 update: {
                     method: 'GET'

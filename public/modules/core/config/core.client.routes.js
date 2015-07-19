@@ -11,11 +11,23 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
             state('home', {
                 url: '/',
                 views:{
-                    'latest@': {
+                    'map@': {
+                        templateUrl: 'modules/core/views/partials/map.client.view.html',
+                        controller: ['$scope' , 'Classifieds', 'uiGmapGoogleMapApi' , function($scope, Classifieds, uiGmapGoogleMapApi) {
+
+                            uiGmapGoogleMapApi.then(function(maps) {
+
+                                //load the classifieds in the map
+                                alert('ok');
+                                //Classifieds.
+                            });
+                        }]
+                    },
+                    'latestClassifieds@': {
                         templateUrl: 'modules/core/views/partials/latestClassifieds.client.view.html',
                         controller: function($scope, $stateParams) {
 
-                            //update the slugName watched by the latestClassfied View
+                            //update the slugName watched by the latestClassifieds View
                             $scope.slugName = window.slugName;
                         }
                     }
@@ -24,14 +36,22 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
             state('citySearch', {
                 url: '/:theme/:category/{cityPostcode:[a-zA-Z0-9]*}-{cityName:[-%a-zA-Z0-9]*}',
                 views:{
-                    'latest@': {
+                    'latestClassifieds@': {
                         templateUrl: 'modules/core/views/partials/latestClassifieds.client.view.html',
                         controller: function($scope, $stateParams) {
 
-                            //update the slugName watched by the latestClassfied View
+                            //update the slugName watched by the latestClassifieds View
                             $scope.slugName = $stateParams.cityPostcode + '-' + $stateParams.cityName;
                         }
-                    }
+                    },
+                    //'classifiedList@': {
+                    //    templateUrl: 'modules/core/views/partials/latestClassifieds.client.view.html',
+                    //    controller: function($scope, $stateParams) {
+                    //
+                    //        //update the slugName watched by the latestClassfied View
+                    //        $scope.slugName = $stateParams.cityPostcode + '-' + $stateParams.cityName;
+                    //    }
+                    //}
                 }
 
                 //onEnter: function()

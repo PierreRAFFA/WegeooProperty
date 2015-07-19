@@ -7,21 +7,17 @@
     <!--header-->
     {% include 'templates/header.server.view.html' %}
 
-    {% include 'templates/map.server.view.html' %}
+    <!-- include 'templates/map.server.view.html' -->
 
-    <!-- include 'templates/latestClassifieds.server.view.html' -->
+    <section data-ui-view="map"></section>
 
-    <input class="tototo" ng-model="numC"></input>
+    <section data-ui-view="latestClassifieds"></section>
 
-
-    <section data-ui-view="latest">
-
-    </section>
-
-    <section data-ui-view="classifiedList">
-
-    </section>
+    <section data-ui-view="classifiedList"></section>
 
     <a ui-sref="citySearch({theme:'property', category: 'rent', cityPostcode: 'city' , cityName: 'london' })"
        ui-sref-opts="{reload: false}">London</a>
+
+<a ui-sref="home"
+   ui-sref-opts="{reload: false}">Home</a>
 {% endblock %}
