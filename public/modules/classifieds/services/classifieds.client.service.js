@@ -14,11 +14,11 @@ angular.module('classifieds').factory('Classifieds', ['$resource',
         //        }
         //    });
         //};
-        lMethods.getLatestClassifiedsIn = function(slugName)
+        lMethods.getMostRecentfromCity = function(slugName)
         {
             var lLimit = 15;
 
-            return $resource('/api/v1/classifieds?list=latestInCity&slugName=:slugName', {
+            return $resource('/api/v1/classifieds?list=cityMostRecent&slugName=:slugName', {
                 slugName : slugName
             }, {
                 update: {
@@ -27,12 +27,21 @@ angular.module('classifieds').factory('Classifieds', ['$resource',
             });
 
         };
-        lMethods.getClassifiedsInMap = function(mapBounds)
+        lMethods.getClassifiedsFromCity = function(slugName,filters)
         {
-            var lLimit = 15;
+            return $resource('/api/v1/classifieds?list=fromCity&slugName=:slugName', {
+                slugName : slugName
+            }, {
+                update: {
+                    method: 'GET'
+                }
+            });
 
-            return $resource('/api/v1/classifieds?list=mapBounds&bounds=:mapBounds', {
-                mapBounds : mapBounds
+        };
+        lMethods.getClassifiedsFromMapBounds = function(mapBounds,filters)
+        {
+            return $resource('/api/v1/classifieds?list=fromMapBounds&mapBounds=:bounds', {
+                bounds : mapBounds
             }, {
                 update: {
                     method: 'GET'

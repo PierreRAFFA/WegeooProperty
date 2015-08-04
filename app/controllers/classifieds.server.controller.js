@@ -6,6 +6,7 @@
 var mongoose = require('mongoose'),
 	errorHandler = require('./errors.server.controller'),
 	Classified = mongoose.model('Classified'),
+	City = mongoose.model('City'),
 	CityController = require('./city.server.controller'),
 	_ = require('lodash');
 
@@ -118,14 +119,15 @@ exports.list = function(req, res) {
         var lListName = req.query.list;
         switch(lListName)
         {
-            case 'latestInCity':
-                exports._getLatestInCity(req, res);
+            case 'cityMostRecent':
+                exports._getCityMostRecent(req, res);
                 break;
 
-            case 'mapBounds':
-                exports._getFromMapBounds(req, res);
+            case 'fromCity':
+            case 'fromMapBounds':
+                exports._getFromCityOrFromMapBounds(req, res);
                 break;
-
+            
             default:
                 return res.status(400).send({
                     message: 'Incorrect Parameters'
@@ -144,34 +146,30 @@ exports.list = function(req, res) {
  * @param res
  * @private
  */
-exports._getLatestInCity = function (req, res)
+exports._getCityMostRecent = function (req, res)
 {
     if ( req.query.slugName)
     {
-        var lCityName = req.query.slugName.substring(req.query.slugName.indexOf('-') + 1);
-        Classified
-            .find( { $or: [ {'nCity.slugName' : req.query.slugName} , {'nCity.parentCode' : lCityName}] })
-            .select('-_id -__v -clientIp -numMailsReceived -active -password -lostPasswordCode -activationCode -numWarnings -numSeen')
-            .sort('-modificationDate')
-            //.populate('user', 'displayName')
-            .populate('city', '-_id -id -__v -googleLocalized -pop -division -division2')
-            .exec(function(err, classifieds) {
-                if (err) {
-                    return res.status(400).send({
-                        message: errorHandler.getErrorMessage(err)
-                    });
-                } else {
-                    res.json(classifieds);
-                }
-            });
+        Classified.findMostRecent(req.query.slugName, function(err, classifieds) {
+            if (err) {
+                return res.status(400).send({
+                    message: errorHandler.getErrorMessage(err)
+                });
+            } else {
+
+                res.json(classifieds);
+            }
+        });
     }else{
         return res.status(400).send({
-            message: 'Incorrect Parameters in _getLatestInCity List'
+            message: 'Incorrect Parameters in _getCityMostRecent List'
         });
     }
 };
 /**
- * Returns Classified Ad from filter.
+ * Returns :
+ *  - the Classified List from filter
+ *  - the city geolocation just the first time of a search
  * This method can be called each time the map position has changed,
  * so there is a filter by reference to avoid sending the references already sent (session)
  *
@@ -180,7 +178,7 @@ exports._getLatestInCity = function (req, res)
  * @returns {*}
  * @private
  */
-exports._getFromMapBounds = function(req,res)
+exports._getFromCityOrFromMapBounds = function(req,res)
 {
     //compute search id based on all queries except the mapBounds
     var lQuery = _.clone(req.query);
@@ -192,63 +190,119 @@ exports._getFromMapBounds = function(req,res)
         req.session.searchId = lSearchId;
         req.session.references = [];
     }
-    if ( req.session.references.length === 4)
+    if ( req.session.references.length >= 0)
         req.session.references = [];
 
-    if ( req.query.mapBounds)
+
+    if ( req.query.mapBounds || req.query.slugName)
     {
-        var lMatches = req.query.mapBounds.match(/@\(\(([-.0-9]*),([-.0-9]*)\),\(([-.0-9]*),([-.0-9]*)\)\)/);
-        if (lMatches.length === 5 )
+        this._convertQueryToClauses(req , function(clauses, city)
         {
-            var lClauses = { $and: [ {latitude : { $gt: lMatches[1], $lt: lMatches[3] }} , {longitude : { $gt: lMatches[2], $lt: lMatches[4] }} ] };
+            console.log(JSON.stringify(clauses));
 
-            //ignore references already sent
-            console.log('req.session.references.length:' + req.session.references.length);
-            if (req.session.references.length )
-            {
-                _.forIn(req.session.references, function(reference, iR)
-                {
-                    var lReference = {reference: {$ne:reference}};
-                    lClauses.$and.push(lReference);
-
-                    console.log('ignore reference:' + reference);
-                });
-            }
-
-            console.log(lClauses);
             Classified
-                .find( lClauses)
+                .find(clauses)
                 .select('-_id reference latitude longitude')
                 .sort('-modificationDate')
-                //.populate('user', 'displayName')
                 .populate('city', '-_id -id -__v -googleLocalized -pop -division -division2')
-                .exec(function(err, classifieds) {
+                .exec(function (err, classifieds) {
                     if (err) {
                         return res.status(400).send({
                             message: errorHandler.getErrorMessage(err)
                         });
                     } else {
 
+                        var lResponse = {};
+                        if ( req.query.slugName && req.session.references.length === 0)
+                        {
+                            lResponse.city = {latitude:city.latitude, longitude:city.longitude};
+                        }
 
                         //store references in session to prevent to send again these ones when only 'mapBounds' query changed
-                        _.forIn(classifieds, function(classified, iC)
-                        {
+                        //and remove useless fields ( virtual fields per exemple )
+                        var lClassifieds = [];
+                        _.forIn(classifieds, function (classified, iC) {
                             req.session.references.push(classified.reference);
                             console.log('store reference:' + classified.reference);
+
+                            classified = classified.toObject();
+                            delete classified.url;
+                            delete classified.id;
+
+                            lClassifieds.push(classified);
                         });
 
-                        res.json(classifieds);
+                        lResponse.classifieds = lClassifieds;
+
+                        res.json([lResponse]);
                     }
                 });
-        }else{
-            return res.status(400).send({
-                message: 'Incorrect Parameters in _getFromMapBounds List'
-            });
-        }
+        });
 
     }else{
         return res.status(400).send({
-            message: 'Incorrect Parameters in _getFromMapBounds List'
+            message: 'Incorrect Parameters in _getFromCityOrFromMapBounds List'
+        });
+    }
+};
+/**
+ * Returns the 'find' clauses depend on the req.query
+ *
+ * @param req
+ * @param callback
+ * @returns {{$and: Array}}
+ * @private
+ */
+exports._convertQueryToClauses = function(req, callback)
+{
+    //define clauses
+    var lClauses = { $and: [] };
+
+    //ignore references already sent
+    console.log('req.session.references.length:' + req.session.references.length);
+    if (req.session.references.length )
+    {
+        _.forIn(req.session.references, function(reference, iR)
+        {
+            var lReference = {reference: {$ne:reference}};
+            //lClauses.$and.push(lReference);
+
+            console.log('ignore reference:' + reference);
+        });
+    }
+
+    //latitude, longitude clauses
+    if (req.query.mapBounds)
+    {
+        var lMatches = req.query.mapBounds.match(/@\(\(([-.0-9]*),([-.0-9]*)\),\(([-.0-9]*),([-.0-9]*)\)\)/);
+        if (lMatches.length === 5 )
+        {
+            lClauses.$and.push({latitude  : { $gt: lMatches[1], $lt: lMatches[3] }});
+            lClauses.$and.push({longitude : { $gt: lMatches[2], $lt: lMatches[4] }});
+        }
+
+        //return value in callback
+        callback(lClauses,null);
+    }else if (req.query.slugName)
+    {
+        City.findOneBySlugName(req.query.slugName, function(err, city) {
+            //if (err) {
+            //    err;
+                //@Todo Something to do here
+                //return res.status(400).send({
+                //    message: errorHandler.getErrorMessage(err)
+                //});
+            //} else {
+
+                var ldLat = 0.1;
+                var ldLng = ldLat * 7;
+
+                lClauses.$and.push({latitude  : { $gt: city.latitude - ldLat/2 , $lt: city.latitude + ldLat/2}});
+                lClauses.$and.push({longitude : { $gt: city.longitude - ldLng/2 , $lt: city.longitude + ldLng/2}});
+
+                //return value in callback
+                callback(lClauses,city);
+            //}
         });
     }
 };
@@ -260,21 +314,27 @@ exports._getFromMapBounds = function(req,res)
  * @Todo By reference
  */
 exports.classifiedByID = function(req, res, next, id) {
-	Classified.findById(id).populate('user', 'displayName').exec(function(err, classified) {
-		if (err) return next(err);
-		if (!classified) return next(new Error('Failed to load classified ' + id));
-		req.classified = classified;
-		next();
-	});
+	Classified
+        .findById(id)
+        .populate('user', 'displayName')
+        .exec(function(err, classified) {
+            if (err) return next(err);
+            if (!classified) return next(new Error('Failed to load classified ' + id));
+            req.classified = classified;
+            next();
+        });
 };
 
 exports.classifiedByReference = function(req, res, next, reference) {
-    Classified.findByReference(reference).populate('user', 'displayName').exec(function(err, classified) {
-        if (err) return next(err);
-        if (!classified) return next(new Error('Failed to load classified ' + reference));
-        req.classified = classified;
-        next();
-    });
+    Classified
+        .findOneByReference(reference)
+        .populate('user', 'displayName')
+        .exec(function(err, classified) {
+            if (err) return next(err);
+            if (!classified) return next(new Error('Failed to load classified ' + reference));
+            req.classified = classified;
+            next();
+        });
 };
 
 /**

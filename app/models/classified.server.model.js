@@ -5,14 +5,17 @@
  */
 var mongoose = require('mongoose'),
 	Schema = mongoose.Schema;
+var i18n = require('i18n');
+var config = require('../../config/config');
 
 /**
- * Article Schema
+ * Classified Schema
  */
 var ClassifiedSchema = new Schema({
     reference: {
         type: String,
-        required: 'reference cannot be blank'
+        required: 'reference cannot be blank',
+        unique:true
     },
     category: {
         type: Number,
@@ -28,19 +31,17 @@ var ClassifiedSchema = new Schema({
 	},
 	title: {
 		type: String,
-		default: ''
+		default: '',
+        trim: true
 	},
     description: {
         type: String,
         default: ''
     },
-    details: {
-        type: String,
-        default: ''
-    },
+    details: config.classifiedDetails,
     optionss: {
         type: String,
-        default: ''
+        default: null
     },
     city: {
         type: Schema.ObjectId,
@@ -58,9 +59,9 @@ var ClassifiedSchema = new Schema({
             type: String
         }
     },
-    countryCode: {
+    countryLocale: {
         type: String,
-        default: ''
+        required: 'countryLocale cannot be blank'
     },
     geolocalized: {
         type: Boolean,
@@ -118,6 +119,32 @@ var ClassifiedSchema = new Schema({
         type: Array,
         default: []
     }
+},{
+    toObject: { virtuals: true },
+    toJSON: { virtuals: true }
+});
+
+ClassifiedSchema.statics.findOneByReference = function(reference,callback)
+{
+    this.findOne({reference:reference}, callback);
+};
+ClassifiedSchema.statics.findMostRecent = function(slugName,callback)
+{
+    var lCityName = slugName.substring(slugName.indexOf('-') + 1);
+    return this
+        .find( { $or: [ {'nCity.slugName' : slugName} , {'nCity.parentCode' : lCityName}] })
+        .select('-_id medias reference title price category nCity.slugName countryLocale')
+        .sort('-modificationDate')
+        .limit(15)
+        .exec(callback);
+};
+
+ClassifiedSchema.virtual('url').get(function()
+{
+    var lTheme      = i18n.__({phrase: 'wegeoo.' + config.theme , locale: this.countryLocale} );
+    var lCategory   = i18n.__({phrase: 'classified.category' + this.category, locale: this.countryLocale} );
+
+    return '/' + lTheme + '/' + lCategory + '/' + this.nCity.slugName + '/' + this.reference;
 });
 
 mongoose.model('Classified', ClassifiedSchema);

@@ -1,10 +1,13 @@
 'use strict';
 
+/**
+ * This config is used for Wegeoo Property
+ */
 module.exports = {
 	app: {
 		title: 'Wegeoo',
 		description: 'Full-Stack JavaScript with MongoDB, Express, AngularJS, and Node.js',
-		keywords: 'MongoDB, Express, AngularJS, Node.js'
+		keywords: 'Wegeoo Property Sale Rent Flat House Apartment'
 	},
     theme: 'property',
     defaultCategory: 'rent',
@@ -31,7 +34,6 @@ module.exports = {
 				'public/lib/angular-ui-router/release/angular-ui-router.js',
 				'public/lib/angular-ui-utils/ui-utils.js',
 				'public/lib/angular-bootstrap/ui-bootstrap-tpls.js',
-                //'http://maps.googleapis.com/maps/api/js?sensor=false&language=en',
                 'public/lib/lodash/lodash.js',
                 'public/lib/angular-google-maps/dist/angular-google-maps_dev_mapped.js'
             ]
@@ -50,4 +52,17 @@ module.exports = {
 			'public/modules/*/tests/*.js'
 		]
 	},
+    /**
+     * Configure the classified details for 'property' theme
+     */
+    classifiedDetails:{
+        price: {
+            type: Number,
+            required: 'price cannot be blank'
+        },
+        propertyType:{
+            type: String,
+            required: 'propertyType cannot be blank'
+        }
+    }
 };

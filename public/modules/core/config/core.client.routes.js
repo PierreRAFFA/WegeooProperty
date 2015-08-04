@@ -13,37 +13,35 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
                 views:{
                     'map@': {
                         templateUrl: 'modules/core/views/partials/map.client.view.html',
-                        controller: ['$scope' , 'Classifieds', 'uiGmapGoogleMapApi' , function($scope, Classifieds, uiGmapGoogleMapApi) {
-
-                            uiGmapGoogleMapApi.then(function(maps) {
-
-                                //load the classifieds in the map
-                                alert('ok');
-                                //Classifieds.
-                            });
-                        }]
+                        controller: 'MapController'
                     },
                     'latestClassifieds@': {
                         templateUrl: 'modules/core/views/partials/latestClassifieds.client.view.html',
-                        controller: function($scope, $stateParams) {
+                        controller: ['$scope' , function($scope) {
 
                             //update the slugName watched by the latestClassifieds View
                             $scope.slugName = window.slugName;
-                        }
-                    }
+                        }]
+                    },
+                    'classifiedList@' : 'ClassifiedListController'
                 }
             }).
-            state('citySearch', {
-                url: '/:theme/:category/{cityPostcode:[a-zA-Z0-9]*}-{cityName:[-%a-zA-Z0-9]*}',
+            state('home.citySearch', {
+                url: ':theme/:category/{cityPostcode:[a-zA-Z0-9]*}-{cityName:[-%a-zA-Z0-9]*}',
                 views:{
+                    'map@': {
+                        templateUrl: 'modules/core/views/partials/map.client.view.html',
+                        controller: 'MapController'
+                    },
                     'latestClassifieds@': {
                         templateUrl: 'modules/core/views/partials/latestClassifieds.client.view.html',
-                        controller: function($scope, $stateParams) {
+                        controller: ['$scope','$stateParams' , function($scope,$stateParams) {
 
                             //update the slugName watched by the latestClassifieds View
                             $scope.slugName = $stateParams.cityPostcode + '-' + $stateParams.cityName;
-                        }
+                        }]
                     },
+                    'classifiedList@' : 'ClassifiedListController'
                     //'classifiedList@': {
                     //    templateUrl: 'modules/core/views/partials/latestClassifieds.client.view.html',
                     //    controller: function($scope, $stateParams) {
@@ -67,4 +65,86 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
 
         //$stateProvider.html5Mode(true);
 	}
-]);
+])
+.controller('MapController' , ['$scope' , '$stateParams' , 'Classifieds', 'uiGmapGoogleMapApi' , function($scope, $stateParams, Classifieds, uiGmapGoogleMapApi) {
+
+        console.log('home map@');
+
+        //map configuration
+        $scope.map =
+        {
+            center: {
+                latitude: 51.5,
+                longitude: -0.2
+            },
+            zoom: 12,
+            markers: [],
+            clusterOptions:{
+                title: 'Click to get more details', //@Todo
+                gridSize: 60,
+                ignoreHidden: true,
+                minimumClusterSize: 1,
+                enableRetinaIcons: true,
+                styles: [{
+                    url: 'modules/core/img/multimarker.png',
+                    textColor: '#333',
+                    textSize: 20,
+                    anchorText: [-39,1],
+                    width: 54,
+                    height: 63,
+                    fontFamily: 'FuturaStd-Book',
+                    backgroundPosition: '1 -30'
+                }]
+            }
+        };
+
+
+        uiGmapGoogleMapApi.then(function(maps) {
+
+            var lSlugName = window.slugName;
+            if ( $stateParams.cityPostcode && $stateParams.cityName)
+                lSlugName = $stateParams.cityPostcode + '-' + $stateParams.cityName;
+
+            //load the classifieds in the map
+            var lClassifiedResponse = Classifieds.getClassifiedsFromCity(lSlugName).query(function()
+            {
+                var lMarkers = [];
+
+                var lClassifieds    = lClassifiedResponse[0].classifieds;
+                var lCity           = lClassifiedResponse[0].city;
+
+                for (var iC=0; iC < lClassifieds.length; iC++)
+                {
+                    var lClassified = lClassifieds[iC];
+                    lMarkers.push({
+                        id: lClassified.reference,
+                        latitude: lClassified.latitude,
+                        longitude: lClassified.longitude,
+                        showWindow: false
+                    });
+                }
+
+                //$scope.map = lMapConfiguration;
+
+                //add markers
+                $scope.map.markers = lMarkers;
+
+                //center the map to the city if information is present
+                if ( lCity )
+                {
+                    $scope.map.center = {
+                        latitude: lCity.latitude,
+                        longitude: lCity.longitude
+                    };
+                }
+
+
+            });
+        });
+    }]
+)
+.controller('ClassifiedListController' , ['$scope' , '$stateParams' , 'Classifieds' , function($scope, $stateParams, Classifieds) {
+
+
+    }]
+);

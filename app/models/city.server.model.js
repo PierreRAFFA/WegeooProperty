@@ -63,4 +63,9 @@ var CitySchema = new Schema({
     }
 });
 
+
+CitySchema.statics.findOneBySlugName = function(slugName, callback)
+{
+    return this.findOne({slugName:slugName} , callback);
+};
 mongoose.model('City', CitySchema , 'cities');

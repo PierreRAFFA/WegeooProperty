@@ -43,6 +43,8 @@
     "classified.details.heating.1":"Gaz",
     "classified.details.heating.2":"Fuel",
     "classified.category":"Categorie",
+    "classified.category0":"vente",
+    "classified.category1":"location",
     "classified.category.sale":"Vente",
     "classified.category.rent":"Location",
     "classified.category.holidayRentals":"Location saisonni\u00e8re",

@@ -21,7 +21,7 @@ angular.module('core').directive('wgAnimatedBanner', [
             {
                 $scope.updateBanner = function(slugName)
                 {
-                    var lClassifieds = Classifieds.getLatestClassifiedsIn(slugName).query(function()
+                    var lClassifieds = Classifieds.getMostRecentfromCity(slugName).query(function()
                     {
                         $scope.classifieds = lClassifieds;
 
