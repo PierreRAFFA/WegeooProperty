@@ -15,17 +15,21 @@ angular.module('core').directive('wgAnimatedBanner', [
             replace: true,
             transclude: true,
             scope:{
-                'slugName': '='
+                'slugName': '@'
             },
-            controller: ['$scope','$element', 'Classifieds', function($scope, $element, Classifieds)
+            controller: ['$scope','$element', '$attrs', 'Classifieds', 'Search', function BannerCtrl($scope, $element, $attrs, Classifieds, Search)
             {
-                $scope.updateBanner = function(slugName)
+                console.log('banner controller Function');
+
+                this.updateBanner = function(slugName)
                 {
                     var lClassifieds = Classifieds.getMostRecentfromCity(slugName).query(function()
                     {
                         $scope.classifieds = lClassifieds;
 
                         var lImages = [];
+
+                        console.log('classifieds found:' + lClassifieds.length);
 
                         for (var iC=0; iC < lClassifieds.length; iC++)
                         {
@@ -43,20 +47,48 @@ angular.module('core').directive('wgAnimatedBanner', [
                     });
                 };
 
-            }],
-			link: function postLink(scope, element, attrs) {
 
+
+                //$scope.updateBanner = function(slugName)
+                //{
+                //    var lClassifieds = Classifieds.getMostRecentfromCity($attrs.slugName).query(function()
+                //    {
+                //        $scope.classifieds = lClassifieds;
+                //
+                //        var lImages = [];
+                //
+                //        for (var iC=0; iC < lClassifieds.length; iC++)
+                //        {
+                //            var lClassified = lClassifieds[iC];
+                //            var lImage = {};
+                //            lImage.caption = lClassified.title.substr(0,30) + '...' + '<br/>' + lClassified.price;
+                //            lImage.href = '/property/sale/city-london/rm-34964157';
+                //            lImage.src = lClassified.medias[0];
+                //            lImages.push(lImage);
+                //        }
+                //
+                //        angular.element($element[0]).displayImages(lImages,true);
+                //        angular.element($element[0]).find('.bannerTitle .part2').text(slugName.substr(slugName.indexOf('-') +1));
+                //
+                //    });
+                //};
+
+            }],
+			link: function postLink(scope, element, attrs , BannerCtrl) {
+
+                console.log('banner link Function');
 				// instanciate the jquery banner
                 angular.element(element[0]).banner();
 
                 //set default text (part1)
                 angular.element(element[0]).find('.bannerTitle .part1').text(window.translations.wegeooLastClassifiedsIn);
 
+                BannerCtrl.updateBanner(attrs.slugName);
                 //watch 'slugName' to update the banner
-                scope.$watch('slugName', function(slugName) {
-
-                    scope.updateBanner(slugName);
-                });
+                //scope.$watch('slugName', function(slugName) {
+                //
+                //    scope.updateBanner(slugName);
+                //});
 
                 //var lImages = [];
                 //var lImage = {};

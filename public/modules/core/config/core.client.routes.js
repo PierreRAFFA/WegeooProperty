@@ -17,14 +17,24 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
                     },
                     'latestClassifieds@': {
                         templateUrl: 'modules/core/views/partials/latestClassifieds.client.view.html',
-                        controller: ['$scope' , function($scope) {
+                        controller: ['$scope' , 'Search' , function($scope, Search) {
+
+                            Search.setSlugName(window.slugName);
+
+                            this.Search = Search;
 
                             //update the slugName watched by the latestClassifieds View
-                            $scope.slugName = window.slugName;
-                        }]
+
+
+                        }],
+                        controllerAs: 'vm'
                     },
                     'classifiedList@' : 'ClassifiedListController'
-                }
+                },
+                controller: function(){
+                    this.sll = 'My Contacts';
+                },
+                controllerAs: 'contact'
             }).
             state('home.citySearch', {
                 url: ':theme/:category/{cityPostcode:[a-zA-Z0-9]*}-{cityName:[-%a-zA-Z0-9]*}',
@@ -145,6 +155,9 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
 )
 .controller('ClassifiedListController' , ['$scope' , '$stateParams' , 'Classifieds' , function($scope, $stateParams, Classifieds) {
 
-
+        //var lClassifiedResponse = Classifieds.getClassifiedsFromCity(lSlugName).query(function()
+        //{
+        //
+        //});
     }]
 );

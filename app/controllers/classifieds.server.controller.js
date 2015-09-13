@@ -127,7 +127,11 @@ exports.list = function(req, res) {
             case 'fromMapBounds':
                 exports._getFromCityOrFromMapBounds(req, res);
                 break;
-            
+
+            case 'fromReferences':
+                exports._getFromReferences(req, res);
+                break;
+
             default:
                 return res.status(400).send({
                     message: 'Incorrect Parameters'
@@ -202,7 +206,7 @@ exports._getFromCityOrFromMapBounds = function(req,res)
 
             Classified
                 .find(clauses)
-                .select('-_id reference latitude longitude')
+                .select('-_id reference latitude longitude modificationDate details.price')
                 .sort('-modificationDate')
                 .populate('city', '-_id -id -__v -googleLocalized -pop -division -division2')
                 .exec(function (err, classifieds) {
@@ -245,6 +249,12 @@ exports._getFromCityOrFromMapBounds = function(req,res)
         });
     }
 };
+
+exports._getFromReferences = function(req,res)
+{
+
+};
+
 /**
  * Returns the 'find' clauses depend on the req.query
  *

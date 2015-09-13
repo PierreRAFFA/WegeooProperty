@@ -145,6 +145,10 @@
             {
                 lThis.loadImageFromSize(pImageURL,pHref,this.width,this.height,caption);
             };
+            lImage.onerror = function()
+            {
+                lThis.loadImage('/modules/core/img/defaultPreviewClassifiedPhoto218.jpg',pHref, null, null, caption);
+            };
         }
     };
     $.Banner.prototype.loadImageFromSize = function(pImageURL,pHref,pWidth,pHeight,caption)
