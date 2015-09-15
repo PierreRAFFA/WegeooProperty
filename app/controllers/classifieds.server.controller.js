@@ -227,7 +227,7 @@ exports._getFromCityOrFromMapBounds = function(req,res)
                         var lClassifieds = [];
                         _.forIn(classifieds, function (classified, iC) {
                             req.session.references.push(classified.reference);
-                            console.log('store reference:' + classified.reference);
+                            //console.log('store reference:' + classified.reference);
 
                             classified = classified.toObject();
                             delete classified.url;
@@ -284,6 +284,8 @@ exports._convertQueryToClauses = function(req, callback)
     //latitude, longitude clauses
     if (req.query.mapBounds)
     {
+
+
         var lMatches = req.query.mapBounds.match(/@\(\(([-.0-9]*),([-.0-9]*)\),\(([-.0-9]*),([-.0-9]*)\)\)/);
         if (lMatches.length === 5 )
         {
@@ -304,6 +306,7 @@ exports._convertQueryToClauses = function(req, callback)
                 //});
             //} else {
 
+                // This sould depend also on map zoom
                 var ldLat = 0.1;
                 var ldLng = ldLat * 7;
 

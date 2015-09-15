@@ -6,10 +6,16 @@ var parseString = require('xml2js').parseString;
 var xml2js = require('xml2js');
 var parser = new xml2js.Parser();
 var http = require('http');
+var moment = require('moment');
+var async = require('async');
 
 var mongoose = require('mongoose');
 require('../models/classified.server.model');
+require('../models/city.server.model');
+require('../models/contact.server.model');
 var Classified = mongoose.model('Classified');
+var City = mongoose.model('City');
+
 
 var Crawler = require('crawler');
 
@@ -25,6 +31,7 @@ function ExtractorCommand() {
     this.rssItems           = [];
     this.currentCategory    = '';
     this.crawler            = null;
+    this.crawlerInfos       = null;
 }
 ExtractorCommand.DEBUG = false;
 ExtractorCommand.GOOGLE_GEOCODE_URL = 'http://maps.google.com/maps/api/geocode/json?sensor=false&address=%s';
@@ -104,9 +111,7 @@ ExtractorCommand.prototype.parseRss = function(url, category)
         res.on('data', function (chunk) {
 
             if (chunk)
-            {
                 xml += chunk;
-            }
         });
         res.on('end', function(){
 
@@ -135,7 +140,7 @@ ExtractorCommand.prototype.getItems = function(rss)
 //////////////////////////////////////////////////////////////////////////////////// PARSE ITEM
 ExtractorCommand.prototype.parseNextItem = function()
 {
-    console.log('this.rssItems.length:' + this.rssItems.length);
+    //console.log('this.rssItems.length:' + this.rssItems.length);
 
     if ( this.rssItems.length)
     {
@@ -143,6 +148,7 @@ ExtractorCommand.prototype.parseNextItem = function()
         this.parseItem(item);
     }else{
         this.displayResult();
+        this.parseNextRss();
     }
 };
 
@@ -155,7 +161,7 @@ ExtractorCommand.prototype.parseItem = function(item)
     //get reference
     var reference = this.getItemReference(item);
 
-    console.log('reference:' + reference);
+    //console.log('reference:' + reference);
 
     if (reference)
     {
@@ -167,19 +173,68 @@ ExtractorCommand.prototype.parseItem = function(item)
                 }else{
                    if(classified){
                        self.numClassifiedsAlreadyExists++;
+
+                       self.parseNextItem();
                    }else{
 
-                       self.crawlLink(item);
+                       self.doParseItem(item);
+
                    }
                 }
         });
     }else{
-        this.warn('No Id found.');
+        this.warn('No Reference found.');
+        self.parseNextItem();
     }
+};
+ExtractorCommand.prototype.doParseItem = function(item)
+{
+    var self = this;
+
+    async.series({
+            crawlerInfos: function(callback){
+                self.crawlLink(item,callback);
+            },
+            title: function(callback){
+                self.getItemTitle(item,callback);
+            },
+            description: function(callback){
+                self.getItemDescription(item,callback);
+            },
+            link: function(callback){
+                self.getItemLink(item,callback);
+            },
+            reference:function(callback){
+                self.getItemReference(item,callback);
+            },
+            //city: function(callback){
+            //    self.getItemCity(item, callback);
+            //},
+            contact:function(callback){
+                self.getItemContact(item, callback);
+            },
+            creationDate: function(callback){
+                self.getItemCreationDate(item, callback);
+            },
+            countryCode: function(callback){
+                self.getItemCountryCode(item, callback);
+            },
+            propertyType: function(callback){
+                self.getItemPropertyType(item, callback);
+            },
+
+        },
+        function(err, results) {
+            // results is now equal to: {one: 1, two: 2}
+            //console.dir(results);
+
+            self.createClassified(results);
+        }
+    );
 };
 ///////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////// CRAWLER
-ExtractorCommand.prototype.crawlLink = function(item)
+ExtractorCommand.prototype.crawlLink = function(item,callback)
 {
     var self = this;
 
@@ -189,10 +244,7 @@ ExtractorCommand.prototype.crawlLink = function(item)
     var c = new Crawler({
         maxConnections : 10,
         callback : function(error, result, $){
-            self.onLinkCrawled(error, result, $, function()
-            {
-                self.parseItem2(item);
-            });
+            self.onLinkCrawled(error, result, $, callback);
         }
     });
 
@@ -205,24 +257,104 @@ ExtractorCommand.prototype.onLinkCrawled = function(error, result, $, callback)
 };
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
-ExtractorCommand.prototype.parseItem2 = function(item)
+ExtractorCommand.prototype.createClassified = function(infos)
 {
-    var city = this.getCity(item);
+    var self = this;
+
+    if (infos)
+    {
+        if ( infos.crawlerInfos.hasOwnProperty('price')) {
+
+            infos.contact.logo = infos.crawlerInfos.contact.logo;
+
+            var details = {};
+            if (infos.crawlerInfos.price)
+                details.price = infos.crawlerInfos.price;
+            if (infos.crawlerInfos.weekPrice)
+                details.price = infos.crawlerInfos.weekPrice;
+            if (infos.crawlerInfos.monthPrice)
+                details.price = infos.crawlerInfos.monthPrice;
+            if (infos.propertyType)
+                details.propertyType = infos.propertyType;
+
+            var classified = new Classified();
+            classified.reference = infos.reference;
+            classified.active = true;
+            classified.external = true;
+            classified.externalLink = infos.link;
+            classified.category = this.currentCategory;
+            classified.clientIp = 'REMOTE_ADDR';
+            classified.contactType = '1';
+            classified.contact = infos.contact;
+            classified.nContact = {name: infos.contact.name, address: infos.contact.address};
+            classified.creationDate = infos.creationDate;
+            //classified.modificationDate = Date.now;
+            classified.title = infos.title;
+            classified.description = infos.description;
+            classified.details = details;
+            classified.countryCode = infos.countryCode;
+            //classified.nCity = {slugName:infos.city.slugName, parentCode: infos.city.parentCode};
+            classified.latitude = infos.crawlerInfos.latitude;
+            classified.longitude = infos.crawlerInfos.longitude;
+            classified.medias = infos.crawlerInfos.medias;
+            classified.geolocalized = true;
+
+            //console.dir(classified);
+
+            classified.save(function (err) {
+                if (err) {
+                    console.log('Error when trying to save the classified');
+                    console.dir(err);
+                } else {
+
+                    self.numClassifiedsAdded++;
+                    self.parseNextItem();
+                    console.log('SAAAAAVVVVEEEEE');
+                }
+            });
+        }else{
+            self.parseNextItem();
+        }
+    }
 };
 ///////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////// ITEM PROPERTIES
-ExtractorCommand.prototype.getItemReference = function(item)
+ExtractorCommand.prototype.getItemReference = function(item,callback)
 {
     return '';
     //return 'wg-e98db88df';
 };
-ExtractorCommand.prototype.getItemLink = function(item)
+ExtractorCommand.prototype.getItemTitle = function(item, callback)
 {
     return '';
 };
-ExtractorCommand.prototype.getCity = function(item)
+ExtractorCommand.prototype.getItemDescription = function(item, callback)
+{
+    return '';
+};
+ExtractorCommand.prototype.getItemLink = function(item, callback)
+{
+    return '';
+};
+ExtractorCommand.prototype.getItemCity = function(item, callback)
 {
     return null;
+};
+ExtractorCommand.prototype.getItemContact = function(item, callback)
+{
+    return null;
+};
+ExtractorCommand.prototype.getItemCountryCode = function(item, callback)
+{
+    return null;
+};
+ExtractorCommand.prototype.getItemPropertyType = function(item, callback)
+{
+    return null;
+};
+ExtractorCommand.prototype.getItemCreationDate = function(item, callback)
+{
+    return callback(null, new Date(item.pubDate[0]).toUTCString());
 };
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////// RESULT
@@ -232,7 +364,7 @@ ExtractorCommand.prototype.displayResult = function()
     this.notice('===============================================');
     if ( this.numClassifiedsFound)
     {
-        this.notice('RESULT: '+this.numClassifiedsAdded+'/'+ this.numClassifiedsFound +' classified(s) added (' + this.numClassifiedsAdded / this.numClassifiedsFound * 100 + '%)');
+        this.notice('RESULT: '+this.numClassifiedsAdded +'/'+ this.numClassifiedsFound +' classified(s) added (' + this.numClassifiedsAdded / this.numClassifiedsFound * 100 + '%)');
         this.notice('        ' + this.numClassifiedsAlreadyExists + '/' + this.numClassifiedsFound + ' classified(s) already exists (' + this.numClassifiedsAlreadyExists / this.numClassifiedsFound * 100 + '%)');
     }else{
         this.notice('RESULT: 0 classified found in the rss');

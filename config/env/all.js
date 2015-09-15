@@ -60,9 +60,24 @@ module.exports = {
             type: Number,
             required: 'price cannot be blank'
         },
+        weekPrice: {
+            type: Number
+        },
+        monthPrice: {
+            type: Number
+        },
+        deposit: {
+            type: Number
+        },
         propertyType:{
             type: String,
             required: 'propertyType cannot be blank'
+        },
+        furnishing:{
+            type: String
+        },
+        lettingType:{
+            type: String
         }
     }
 };

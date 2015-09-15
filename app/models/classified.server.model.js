@@ -18,7 +18,7 @@ var ClassifiedSchema = new Schema({
         unique:true
     },
     category: {
-        type: Number,
+        type: String,
         required: 'category cannot be blank'
     },
     creationDate: {
@@ -47,21 +47,41 @@ var ClassifiedSchema = new Schema({
         type: Schema.ObjectId,
         ref: 'City'
     },
+    availability:{
+        type: Date,
+        default: Date.now
+    },
     /**
      * Nested informations to make the 'select' query easier
      */
-    nCity:{
-        slugName: {
+    //nCity:{
+    //    slugName: {
+    //        type: String,
+    //        required: 'nCity.slugName cannot be blank'
+    //    },
+    //    parentCode: {
+    //        type: String
+    //    }
+    //},
+    contact: {
+        type: Schema.ObjectId,
+        ref: 'Contact'
+    },
+    /**
+     * Nested informations to make the 'select' query easier
+     */
+    nContact:{
+        name: {
             type: String,
-            required: 'nCity.slugName cannot be blank'
+            required: 'nContact.name cannot be blank'
         },
-        parentCode: {
+        address: {
             type: String
         }
     },
-    countryLocale: {
+    countryCode: {
         type: String,
-        required: 'countryLocale cannot be blank'
+        required: 'countryCode cannot be blank'
     },
     geolocalized: {
         type: Boolean,
@@ -144,7 +164,16 @@ ClassifiedSchema.virtual('url').get(function()
     var lTheme      = i18n.__({phrase: 'wegeoo.' + config.theme , locale: this.countryLocale} );
     var lCategory   = i18n.__({phrase: 'classified.category' + this.category, locale: this.countryLocale} );
 
-    return '/' + lTheme + '/' + lCategory + '/' + this.nCity.slugName + '/' + this.reference;
+    return '/' + lTheme + '/' + lCategory + '/' + this.reference;
+});
+
+ClassifiedSchema.pre('save', function preSave(next){
+    var now = new Date();
+    this.modificationDate = now;
+    // if ( !this.created_at ) {
+    //    this.created_at = now;
+    // }
+    next();
 });
 
 mongoose.model('Classified', ClassifiedSchema);
