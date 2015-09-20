@@ -17,6 +17,8 @@ exports.index = function(req, res) {
     if ( req.params.cityPostcode && req.params.cityName)
         lSlugName       = req.params.cityPostcode + '-' + req.params.cityName;
 
+    req.session.references = [];
+
 	res.render('index', {
 		user: req.user || null,
 		request: req,

@@ -17,11 +17,12 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
                     },
                     'latestClassifieds@': {
                         templateUrl: 'modules/core/views/partials/latestClassifieds.client.view.html',
-                        controller: ['$scope' , 'Search' , function($scope, Search) {
+                        controller: ['$scope' , 'SearchService' , function($scope, SearchService) {
 
-                            Search.setSlugName(window.slugName);
+                            this.SearchService = SearchService;
+                            SearchService.setSlugName(window.slugName);
+                            console.log(SearchService.getSlugName());
 
-                            this.Search = Search;
 
                             //update the slugName watched by the latestClassifieds View
 
@@ -76,83 +77,6 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
         //$stateProvider.html5Mode(true);
 	}
 ])
-.controller('MapController' , ['$scope' , '$stateParams' , 'Classifieds', 'uiGmapGoogleMapApi' , function($scope, $stateParams, Classifieds, uiGmapGoogleMapApi) {
-
-        console.log('home map@');
-
-        //map configuration
-        $scope.map =
-        {
-            center: {
-                latitude: 51.5,
-                longitude: -0.2
-            },
-            zoom: 12,
-            markers: [],
-            clusterOptions:{
-                title: 'Click to get more details', //@Todo
-                gridSize: 60,
-                ignoreHidden: true,
-                minimumClusterSize: 1,
-                enableRetinaIcons: true,
-                styles: [{
-                    url: 'modules/core/img/multimarker.png',
-                    textColor: '#333',
-                    textSize: 20,
-                    anchorText: [-39,1],
-                    width: 54,
-                    height: 63,
-                    fontFamily: 'FuturaStd-Book',
-                    backgroundPosition: '1 -30'
-                }]
-            }
-        };
-
-
-        uiGmapGoogleMapApi.then(function(maps) {
-
-            var lSlugName = window.slugName;
-            if ( $stateParams.cityPostcode && $stateParams.cityName)
-                lSlugName = $stateParams.cityPostcode + '-' + $stateParams.cityName;
-
-            //load the classifieds in the map
-            var lClassifiedResponse = Classifieds.getClassifiedsFromCity(lSlugName).query(function()
-            {
-                var lMarkers = [];
-
-                var lClassifieds    = lClassifiedResponse[0].classifieds;
-                var lCity           = lClassifiedResponse[0].city;
-
-                for (var iC=0; iC < lClassifieds.length; iC++)
-                {
-                    var lClassified = lClassifieds[iC];
-                    lMarkers.push({
-                        id: lClassified.reference,
-                        latitude: lClassified.latitude,
-                        longitude: lClassified.longitude,
-                        showWindow: false
-                    });
-                }
-
-                //$scope.map = lMapConfiguration;
-
-                //add markers
-                $scope.map.markers = lMarkers;
-
-                //center the map to the city if information is present
-                if ( lCity )
-                {
-                    $scope.map.center = {
-                        latitude: lCity.latitude,
-                        longitude: lCity.longitude
-                    };
-                }
-
-
-            });
-        });
-    }]
-)
 .controller('ClassifiedListController' , ['$scope' , '$stateParams' , 'Classifieds' , function($scope, $stateParams, Classifieds) {
 
         //var lClassifiedResponse = Classifieds.getClassifiedsFromCity(lSlugName).query(function()

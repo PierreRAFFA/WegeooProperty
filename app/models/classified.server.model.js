@@ -54,15 +54,14 @@ var ClassifiedSchema = new Schema({
     /**
      * Nested informations to make the 'select' query easier
      */
-    //nCity:{
-    //    slugName: {
-    //        type: String,
-    //        required: 'nCity.slugName cannot be blank'
-    //    },
-    //    parentCode: {
-    //        type: String
-    //    }
-    //},
+    nCity:{
+        slugName: {
+            type: String,
+        },
+        parentCode: {
+            type: String
+        }
+    },
     contact: {
         type: Schema.ObjectId,
         ref: 'Contact'

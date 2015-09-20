@@ -188,21 +188,24 @@ exports._getFromCityOrFromMapBounds = function(req,res)
     var lQuery = _.clone(req.query);
     delete lQuery.mapBounds;
     var lSearchId = md5(lQuery);
+    console.log(lSearchId);
     if ( req.session.searchId === undefined || req.session.searchId !== lSearchId)
     {
         //init session variables
         req.session.searchId = lSearchId;
         req.session.references = [];
     }
-    if ( req.session.references.length >= 0)
-        req.session.references = [];
 
+    //@DEBUG
+    //if ( req.session.references.length >= 0)
+    //    req.session.references = [];
+    //@DEBUG
 
     if ( req.query.mapBounds || req.query.slugName)
     {
-        this._convertQueryToClauses(req , function(clauses, city)
+        this._convertQueryToClauses(req , res, function(clauses, city)
         {
-            console.log(JSON.stringify(clauses));
+            //console.log(JSON.stringify(clauses));
 
             Classified
                 .find(clauses)
@@ -263,7 +266,7 @@ exports._getFromReferences = function(req,res)
  * @returns {{$and: Array}}
  * @private
  */
-exports._convertQueryToClauses = function(req, callback)
+exports._convertQueryToClauses = function(req, res, callback)
 {
     //define clauses
     var lClauses = { $and: [] };
@@ -275,18 +278,16 @@ exports._convertQueryToClauses = function(req, callback)
         _.forIn(req.session.references, function(reference, iR)
         {
             var lReference = {reference: {$ne:reference}};
-            //lClauses.$and.push(lReference);
+            lClauses.$and.push(lReference);
 
-            console.log('ignore reference:' + reference);
+            //console.log('ignore reference:' + reference);
         });
     }
 
     //latitude, longitude clauses
     if (req.query.mapBounds)
     {
-
-
-        var lMatches = req.query.mapBounds.match(/@\(\(([-.0-9]*),([-.0-9]*)\),\(([-.0-9]*),([-.0-9]*)\)\)/);
+        var lMatches = req.query.mapBounds.match(/\(\(([-.0-9]*),([-.0-9]*)\),\(([-.0-9]*),([-.0-9]*)\)\)/);
         if (lMatches.length === 5 )
         {
             lClauses.$and.push({latitude  : { $gt: lMatches[1], $lt: lMatches[3] }});
@@ -298,24 +299,26 @@ exports._convertQueryToClauses = function(req, callback)
     }else if (req.query.slugName)
     {
         City.findOneBySlugName(req.query.slugName, function(err, city) {
-            //if (err) {
-            //    err;
+            if (err) {
                 //@Todo Something to do here
-                //return res.status(400).send({
-                //    message: errorHandler.getErrorMessage(err)
-                //});
-            //} else {
+                return res.status(400).send({
+                    message: errorHandler.getErrorMessage(err)
+                });
+            } else {
+                if (city)
+                {
+                    // This sould depend also on map zoom
+                    var ldLat = 0.1;
+                    var ldLng = ldLat * 7;
 
-                // This sould depend also on map zoom
-                var ldLat = 0.1;
-                var ldLng = ldLat * 7;
+                    lClauses.$and.push({latitude  : { $gt: city.latitude - ldLat/2 , $lt: city.latitude + ldLat/2}});
+                    lClauses.$and.push({longitude : { $gt: city.longitude - ldLng/2 , $lt: city.longitude + ldLng/2}});
 
-                lClauses.$and.push({latitude  : { $gt: city.latitude - ldLat/2 , $lt: city.latitude + ldLat/2}});
-                lClauses.$and.push({longitude : { $gt: city.longitude - ldLng/2 , $lt: city.longitude + ldLng/2}});
+                    //return value in callback
+                    callback(lClauses,city);
+                }
 
-                //return value in callback
-                callback(lClauses,city);
-            //}
+            }
         });
     }
 };

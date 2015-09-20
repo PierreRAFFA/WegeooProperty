@@ -222,7 +222,7 @@ RightmoveExtractorCommand.prototype.onLinkCrawled = function(error, result, $, c
     //process.exit();
 
     this.crawlerInfos = crawlerInfos;
-    callback(null, crawlerInfos);
+    return callback(null, crawlerInfos);
 
 };
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -240,7 +240,7 @@ RightmoveExtractorCommand.prototype.getItemReference = function(item, callback)
         reference = RightmoveExtractorCommand.PREFIX + matches[1];
 
     if ( callback)
-        callback(null, reference);
+        return callback(null, reference);
     else
         return reference;
 };
@@ -256,7 +256,7 @@ RightmoveExtractorCommand.prototype.getItemTitle = function(item, callback)
         title = _.trim(exploded[1]) + ', ' + _.trim(exploded[2]);
 
     if ( callback)
-        callback(null, title);
+        return callback(null, title);
     else
         return title;
 
@@ -271,7 +271,7 @@ RightmoveExtractorCommand.prototype.getItemDescription = function(item, callback
 RightmoveExtractorCommand.prototype.getItemLink = function(item, callback)
 {
     if ( callback)
-        callback(null, item.link[0]);
+        return callback(null, item.link[0]);
     else
         return item.link[0];
 
@@ -279,7 +279,7 @@ RightmoveExtractorCommand.prototype.getItemLink = function(item, callback)
 RightmoveExtractorCommand.prototype.getItemCountryCode = function(item, callback)
 {
     if ( callback)
-        callback(null, 'GB');
+        return callback(null, 'GB');
     else
         return 'GB';
 
@@ -326,6 +326,7 @@ RightmoveExtractorCommand.prototype.getItemPropertyType = function(item, callbac
         case 'coach house':
         case 'ground maisonette':
         case 'house of multiple occupation':
+        case 'sheltered housing':
             propertyType = 'house';
             break;
 
@@ -423,38 +424,37 @@ RightmoveExtractorCommand.prototype.getItemCity = function(item, callback)
 
 
             //Create all possible clauses to find the city
-            var clauses = [
-                { code: infoLast1, name: infoLast2 },
-                { code: infoLast1, name: infoLast3.toUpperCase() },
-                { uppercaseName: infoLast1.toUpperCase() },
-                { code: infoLast1.toUpperCase(), division: infoLast2.toUpperCase() }
-            ];
+            var clauses = {
+                $or:[
+                    { $and: [ { code: infoLast1 }, { name: infoLast2 }]},
+                    { $and: [ { code: infoLast1 }, {name: infoLast3.toUpperCase() }]},
+                    { $and: [ { uppercaseName: infoLast1.toUpperCase() }]},
+                    { $and: [ { code: infoLast1.toUpperCase() }, { division: infoLast2.toUpperCase() }]}
+                ]
+            };
 
             //execute the queries until a city is found
-            clauses.forEach(function(clause,index) {
-                City.findOne(clause,
-                    function (err, city) {
-                        if (err) {
-                            self.error('Error when trying to get city');
-                        } else {
-                            if (city) {
-                                return callback(null, city._doc);
-                            }
-
-                            if ( index === clauses.length - 1)
-                            {
-                                return callback(null, null);
-                            }
+            City.findOne(clauses,
+                function (err, city) {
+                    if (err) {
+                        self.error('Error when trying to get city');
+                        return callback('Error when trying to get city');
+                    } else {
+                        if (city) {
+                            return callback(null, city._doc);
+                        }else{
+                            return callback(null, null);
                         }
                     }
-                );
-            });
+                }
+            );
         }else{
 
             City.findOne({uppercaseName: infoLast1.toUpperCase()},
                 function(err, city) {
                     if (err){
                         self.error('Error when trying to get city by code/name');
+                        return callback('Error when trying to get city by code/name');
                     }else{
                         if(city){
                             return callback(null, city._doc);
@@ -462,13 +462,17 @@ RightmoveExtractorCommand.prototype.getItemCity = function(item, callback)
                             return callback(null, null);
                         }
                     }
-                });
+                }
+            );
         }
+    }else{
+        return callback(null, null);
     }
 };
 
 RightmoveExtractorCommand.prototype.getItemContact = function(item, callback)
 {
+    //console.dir('getItemContact');
     var self = this;
 
     var itemContact = {};
@@ -498,16 +502,33 @@ RightmoveExtractorCommand.prototype.getItemContact = function(item, callback)
         this.warn('No Contact Name in the description');
     }
 
+
+
     //overrided by the crawler
-    itemContact.name = this.crawlerInfos.contact.name;
-    itemContact.address = this.crawlerInfos.contact.address;
-    itemContact.postcode = this.crawlerInfos.contact.postcode;
-    itemContact.city = this.crawlerInfos.contact.city;
+    itemContact.name = _.trim(this.crawlerInfos.contact.name);
+    itemContact.address = _.trim(this.crawlerInfos.contact.address);
+    itemContact.postcode = _.trim(this.crawlerInfos.contact.postcode);
+    itemContact.city = _.trim(this.crawlerInfos.contact.city);
+
+    //itemContact.name = 'ok';
+    //itemContact.address = 'ok';
+    //itemContact.postcode = 'ok';
+    //itemContact.city = 'ok';
+    //itemContact.phone = 'ok';
+
+    //console.dir(itemContact);
+
 
     Contact.findOne(itemContact,
         function (err, contact) {
+
+            //console.log(err);
+            //console.log(contact);
+            //console.log(!contact);
+
             if (err) {
                 self.error('Error when trying to get contact');
+                console.log('Error when trying to get contact');
             } else {
                 if (!contact) {
 
@@ -521,14 +542,15 @@ RightmoveExtractorCommand.prototype.getItemContact = function(item, callback)
                     newContact.city = itemContact.city;
 
                     newContact.save(function (err) {
-                        if (err){
+                        if (err) {
                             console.log('Error when trying to save the contact');
-                            console.dir(err);
-                        }else{
+                        } else {
+                            console.log('contact created');
                             return callback(null, newContact);
                         }
                     });
-                }else{
+                } else {
+                    console.log('contact found');
                     return callback(null, contact);
                 }
             }

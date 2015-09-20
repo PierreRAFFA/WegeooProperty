@@ -166,17 +166,21 @@ ExtractorCommand.prototype.parseItem = function(item)
     if (reference)
     {
         //check if reference already exists.
+        //console.log('reference:' + reference);
+
         Classified.findOne({reference:reference},
             function(err, classified) {
                 if (err){
                     self.error('Error when trying to get classifieds by reference');
                 }else{
+
                    if(classified){
+                       //console.log('classified found => go to the next');
                        self.numClassifiedsAlreadyExists++;
 
                        self.parseNextItem();
                    }else{
-
+                       //console.log('classified not found => creation');
                        self.doParseItem(item);
 
                    }
@@ -192,8 +196,12 @@ ExtractorCommand.prototype.doParseItem = function(item)
     var self = this;
 
     async.series({
+
             crawlerInfos: function(callback){
                 self.crawlLink(item,callback);
+            },
+            contact:function(callback){
+                self.getItemContact(item, callback);
             },
             title: function(callback){
                 self.getItemTitle(item,callback);
@@ -207,12 +215,10 @@ ExtractorCommand.prototype.doParseItem = function(item)
             reference:function(callback){
                 self.getItemReference(item,callback);
             },
-            //city: function(callback){
-            //    self.getItemCity(item, callback);
-            //},
-            contact:function(callback){
-                self.getItemContact(item, callback);
+            city: function(callback){
+                self.getItemCity(item, callback);
             },
+
             creationDate: function(callback){
                 self.getItemCreationDate(item, callback);
             },
@@ -221,13 +227,13 @@ ExtractorCommand.prototype.doParseItem = function(item)
             },
             propertyType: function(callback){
                 self.getItemPropertyType(item, callback);
-            },
+            }
 
         },
         function(err, results) {
             // results is now equal to: {one: 1, two: 2}
             //console.dir(results);
-
+            console.log('onAsyncFinished:' + results.reference);
             self.createClassified(results);
         }
     );
@@ -265,7 +271,11 @@ ExtractorCommand.prototype.createClassified = function(infos)
     {
         if ( infos.crawlerInfos.hasOwnProperty('price')) {
 
-            infos.contact.logo = infos.crawlerInfos.contact.logo;
+            //console.dir('contact:' + infos.contact);
+            if ( infos.crawlerInfos.contact && infos.crawlerInfos.contact.logo)
+                infos.contact.logo = infos.crawlerInfos.contact.logo;
+
+            //process.exit();
 
             var details = {};
             if (infos.crawlerInfos.price)
@@ -277,8 +287,10 @@ ExtractorCommand.prototype.createClassified = function(infos)
             if (infos.propertyType)
                 details.propertyType = infos.propertyType;
 
+
             var classified = new Classified();
             classified.reference = infos.reference;
+            console.log('createClassified with reference:' + classified.reference);
             classified.active = true;
             classified.external = true;
             classified.externalLink = infos.link;
@@ -293,23 +305,29 @@ ExtractorCommand.prototype.createClassified = function(infos)
             classified.description = infos.description;
             classified.details = details;
             classified.countryCode = infos.countryCode;
-            //classified.nCity = {slugName:infos.city.slugName, parentCode: infos.city.parentCode};
             classified.latitude = infos.crawlerInfos.latitude;
             classified.longitude = infos.crawlerInfos.longitude;
             classified.medias = infos.crawlerInfos.medias;
             classified.geolocalized = true;
 
+            if ( infos.city )
+            {
+                console.log('city !!');
+                classified.nCity = {slugName:infos.city.slugName, parentCode: infos.city.parentCode};
+            }
             //console.dir(classified);
 
             classified.save(function (err) {
+
+                console.log('on Save:' + classified.reference);
                 if (err) {
                     console.log('Error when trying to save the classified');
                     console.dir(err);
                 } else {
 
+                    console.log('SAAAAAVVVVEEEEED ' + classified.reference);
                     self.numClassifiedsAdded++;
                     self.parseNextItem();
-                    console.log('SAAAAAVVVVEEEEE');
                 }
             });
         }else{

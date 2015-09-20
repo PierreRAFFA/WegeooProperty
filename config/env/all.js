@@ -45,6 +45,7 @@ module.exports = {
 			'public/config.js',
 			'public/application.js',
 			'public/modules/*/*.js',
+			'public/modules/*/directives/*/*.js',
 			'public/modules/*/*[!tests]*/*.js'
 		],
 		tests: [
@@ -55,7 +56,7 @@ module.exports = {
     /**
      * Configure the classified details for 'property' theme
      */
-    classifiedDetails:{
+    classifiedDetails: {
         price: {
             type: Number,
             required: 'price cannot be blank'
