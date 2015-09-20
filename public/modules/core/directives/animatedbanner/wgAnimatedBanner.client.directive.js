@@ -18,7 +18,7 @@ angular.module('core').directive('wgAnimatedBanner', [
                 'slugName': '@'
             },
             controller: 'AnimatedBannerController',
-            //controller: ['$scope','$element', '$attrs', 'Classifieds', 'SearchService', function BannerCtrl($scope, $element, $attrs, Classifieds, SearchService)
+            //controller: ['$scope','$element', '$attrs', 'Classifieds', 'WegeooService', function BannerCtrl($scope, $element, $attrs, Classifieds, WegeooService)
             //{
             //    console.log('banner controller Function');
             //

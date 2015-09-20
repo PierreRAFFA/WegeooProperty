@@ -7,6 +7,7 @@ var mongoose = require('mongoose'),
 	Schema = mongoose.Schema;
 var i18n = require('i18n');
 var config = require('../../config/config');
+var _ = require('lodash');
 
 /**
  * Classified Schema
@@ -146,6 +147,22 @@ var ClassifiedSchema = new Schema({
 ClassifiedSchema.statics.findOneByReference = function(reference,callback)
 {
     this.findOne({reference:reference}, callback);
+};
+ClassifiedSchema.statics.findByReferenceLightResult = function(references,callback)
+{
+    var clauses = { $or:[] };
+    _.forIn(references , function(reference)
+    {
+        clauses.$or.push({reference:reference});
+    });
+
+    console.dir(clauses);
+
+    return this
+        .find( clauses )
+        .select('-_id medias reference title price description')
+        .sort('-modificationDate')
+        .exec(callback);
 };
 ClassifiedSchema.statics.findMostRecent = function(slugName,callback)
 {

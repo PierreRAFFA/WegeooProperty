@@ -1,0 +1,18 @@
+<div class="classified" data-ng-repeat="classified in vm.wegeooService.getLoadedClassifieds()">
+    <a href="{{classified.url}}" target="_self">
+
+        <!-- PHOTO -->
+        <div class="media premium">
+
+            <img ng-if="classified.medias.length" class="annonce_preview_image premiumClassifiedAdPreviewImage" src="{{classified.medias[0]}}" alt="{{classified.title}}"></img>
+
+            <img ng-if="classified.medias.length == 0" class="annonce_preview_image premiumClassifiedAdPreviewImage" src="modules/core/img/defaultPreviewClassifiedPhoto218.jpg" alt="Wegeoo No Image"></img>
+        </div>
+
+        <!-- DETAILS -->
+        <div class="details">
+
+        </div>
+
+    </a>
+</div>

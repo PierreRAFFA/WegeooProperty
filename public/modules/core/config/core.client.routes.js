@@ -17,20 +17,18 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
                     },
                     'latestClassifieds@': {
                         templateUrl: 'modules/core/views/partials/latestClassifieds.client.view.html',
-                        controller: ['$scope' , 'SearchService' , function($scope, SearchService) {
+                        controller: ['$scope' , 'WegeooService' , function($scope, WegeooService) {
 
-                            this.SearchService = SearchService;
-                            SearchService.setSlugName(window.slugName);
-                            console.log(SearchService.getSlugName());
-
-
-                            //update the slugName watched by the latestClassifieds View
-
+                            this.WegeooService = WegeooService;
+                            WegeooService.setSlugName(window.slugName);
+                            console.log(WegeooService.getSlugName());
 
                         }],
                         controllerAs: 'vm'
                     },
-                    'classifiedList@' : 'ClassifiedListController'
+                    'classifiedList@' : {
+                        templateUrl: 'modules/core/views/partials/classifiedList.client.view.html',
+                    }
                 },
                 controller: function(){
                     this.sll = 'My Contacts';
@@ -40,27 +38,26 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
             state('home.citySearch', {
                 url: ':theme/:category/{cityPostcode:[a-zA-Z0-9]*}-{cityName:[-%a-zA-Z0-9]*}',
                 views:{
-                    'map@': {
-                        templateUrl: 'modules/core/views/partials/map.client.view.html',
-                        controller: 'MapController'
-                    },
+                    //'map@': {
+                    //    templateUrl: 'modules/core/views/partials/map.client.view.html',
+                    //    controller: 'MapController'
+                    //},
                     'latestClassifieds@': {
                         templateUrl: 'modules/core/views/partials/latestClassifieds.client.view.html',
-                        controller: ['$scope','$stateParams' , function($scope,$stateParams) {
+                        controller: ['$scope' , 'WegeooService' , function($scope, WegeooService) {
 
-                            //update the slugName watched by the latestClassifieds View
-                            $scope.slugName = $stateParams.cityPostcode + '-' + $stateParams.cityName;
-                        }]
+                            this.WegeooService = WegeooService;
+                            WegeooService.setSlugName(window.slugName);
+                            console.log(WegeooService.getSlugName());
+
+                        }],
+                        controllerAs: 'vm'
                     },
-                    'classifiedList@' : 'ClassifiedListController'
-                    //'classifiedList@': {
-                    //    templateUrl: 'modules/core/views/partials/latestClassifieds.client.view.html',
-                    //    controller: function($scope, $stateParams) {
-                    //
-                    //        //update the slugName watched by the latestClassfied View
-                    //        $scope.slugName = $stateParams.cityPostcode + '-' + $stateParams.cityName;
-                    //    }
-                    //}
+                    'classifiedList@' : {
+                        templateUrl: 'modules/core/views/partials/classifiedList.client.view.html',
+                        controller: 'ClassifiedListController',
+                        controllerAs: 'vm'
+                    }
                 }
 
                 //onEnter: function()
@@ -76,12 +73,4 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
 
         //$stateProvider.html5Mode(true);
 	}
-])
-.controller('ClassifiedListController' , ['$scope' , '$stateParams' , 'Classifieds' , function($scope, $stateParams, Classifieds) {
-
-        //var lClassifiedResponse = Classifieds.getClassifiedsFromCity(lSlugName).query(function()
-        //{
-        //
-        //});
-    }]
-);
+]);

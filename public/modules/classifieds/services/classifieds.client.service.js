@@ -49,10 +49,19 @@ angular.module('classifieds').factory('Classifieds', ['$resource',
             });
 
         };
-        lMethods.getClassifiedByReference = function()
+        lMethods.getClassifiedFromReference = function()
         {
             return $resource('/api/v1/classifieds/:reference', {
                 articleId: '@reference'
+            }, {
+                update: {
+                    method: 'GET'
+                }
+            });
+        };
+        lMethods.getClassifiedsFromLastSearch = function()
+        {
+            return $resource('/api/v1/classifieds?list=lastSearch', {
             }, {
                 update: {
                     method: 'GET'

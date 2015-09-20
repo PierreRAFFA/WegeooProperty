@@ -13,6 +13,8 @@ var mongoose = require('mongoose'),
 var sha1 = require('sha1');
 var md5 = require('md5');
 
+var maxClassifiedsLoadInARow = 20;
+
 function generateReference(length, prefix)
 {
     var lReference = (prefix  || '') + sha1(String(Math.random())).substring( 0, length);
@@ -132,6 +134,10 @@ exports.list = function(req, res) {
                 exports._getFromReferences(req, res);
                 break;
 
+            case 'lastSearch':
+                exports._getFromLastSearch(req, res);
+                break;
+
             default:
                 return res.status(400).send({
                     message: 'Incorrect Parameters'
@@ -141,6 +147,29 @@ exports.list = function(req, res) {
         return res.status(400).send({
             message: 'Incorrect Parameters'
         });
+    }
+};
+
+exports._getFromLastSearch = function(req, res)
+{
+    //take the first references
+    //console.dir(req.session);
+    if ( req.session.hasOwnProperty('references') && req.session.references.length )
+    {
+        var references = req.session.references.splice(0,10);
+        //console.dir(references);
+        Classified.findByReferenceLightResult(references, function(err, classifieds)
+        {
+            if (err) {
+                return res.status(400).send({
+                    message: errorHandler.getErrorMessage(err)
+                });
+            } else {
+                res.json(classifieds);
+            }
+        });
+    }else{
+        res.json([]);
     }
 };
 /**
@@ -195,6 +224,8 @@ exports._getFromCityOrFromMapBounds = function(req,res)
         req.session.searchId = lSearchId;
         req.session.references = [];
     }
+
+    req.session.references = [];
 
     //@DEBUG
     //if ( req.session.references.length >= 0)
@@ -278,7 +309,7 @@ exports._convertQueryToClauses = function(req, res, callback)
         _.forIn(req.session.references, function(reference, iR)
         {
             var lReference = {reference: {$ne:reference}};
-            lClauses.$and.push(lReference);
+            //lClauses.$and.push(lReference);
 
             //console.log('ignore reference:' + reference);
         });

@@ -1,0 +1,55 @@
+section.classifiedList
+
+  margin-top: $sectionMarginTop
+
+  div.classifiedList
+
+    .classified
+
+      position: relative
+      clear: both
+      float: left
+      margin-top: 0px
+      width: 100%
+      cursor: pointer
+      border: 1px solid $classifiedListStrokeColor
+      margin-bottom: 10px
+
+      a
+        text-decoration: none
+
+        &:hover
+          background: $classifiedListHover
+
+        .media
+          position: relative
+          float: left
+          clear: left
+          border: 2px solid
+          border-color: #424242
+          height: 76px
+          width: 101px
+          overflow: hidden
+          margin: 10px
+
+          &.premium
+            position: relative
+            float: left
+            max-width: 195px
+            width: 195px
+            height: 146px
+
+            img
+              max-width: 195px
+
+          img
+            overflow: hidden
+            max-width: 101px
+            margin: auto
+            display: block
+            height: 100%
+            object-fit: cover
+            width: 101% /* 101% to prevent liseret */
+
+
+

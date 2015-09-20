@@ -4,9 +4,9 @@
 {
     ///////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////  CONSTRUCTOR
-    function MapController($scope, Classifieds, SearchService)
+    function MapController($scope, Classifieds, WegeooService)
     {
-        this.searchService = SearchService;
+        this.wegeooService = WegeooService;
         this.Classifieds = Classifieds;
         this.$scope = $scope;
 
@@ -28,7 +28,7 @@
             zoom: 12,
             markers: [],
             typeOptions:{
-                title: 'Click to get more details', //@Todo
+                title: 'Click to display the classified list', //@Todo
                 gridSize: 60,
                 ignoreHidden: true,
                 zoomOnClick: false,
@@ -67,7 +67,7 @@
     ///////////////////////////////////////////////////////////  ON MAP DRAG END/ ZOOM END
     MapController.prototype.onMapIdle = function (mapModel, eventName, originalEventArgs) {
 
-        this.searchService.setMapBounds(mapModel.getBounds().toString());
+        this.wegeooService.setMapBounds(mapModel.getBounds().toString());
         this.updateClassifieds();
 
         // mapModel.getBounds().getSouthWest()
@@ -79,13 +79,13 @@
     ///////////////////////////////////////////////////////////  UPDATE CLASSIFIEDS
     MapController.prototype.updateClassifieds = function()
     {
-        console.log(this.searchService.getSlugName());
+        console.log(this.wegeooService.getSlugName());
 
-        if ( this.searchService.getSearchType() === 'bySlugName' )
+        if ( this.wegeooService.getSearchType() === 'bySlugName' )
         {
-            this.Classifieds.getClassifiedsFromCity(this.searchService.getSlugName()).query(this.onClassifiedsLoadComplete.bind(this));
+            this.Classifieds.getClassifiedsFromCity(this.wegeooService.getSlugName()).query(this.onClassifiedsLoadComplete.bind(this));
         }else{
-            this.Classifieds.getClassifiedsFromMapBounds(this.searchService.getMapBounds()).query(this.onClassifiedsLoadComplete.bind(this));
+            this.Classifieds.getClassifiedsFromMapBounds(this.wegeooService.getMapBounds()).query(this.onClassifiedsLoadComplete.bind(this));
         }
     };
 
@@ -95,9 +95,10 @@
 
         var lMarkers = [];
 
+        //prepare an array of references to be stored in the searchModel
+        var references = [];
+
         var lClassifieds    = event[0].classifieds;
-
-
         for (var iC=0; iC < lClassifieds.length; iC++)
         {
             var lClassified = lClassifieds[iC];
@@ -107,12 +108,12 @@
                 longitude: lClassified.longitude,
                 showWindow: false
             });
+
+            references.push(lClassified.reference);
         }
 
-        //$scope.map = lMapConfiguration;
-
         //add markers
-        this.$scope.map.markers = this.$scope.map.markers.concat(lMarkers);
+        this.$scope.map.markers = lMarkers;//this.$scope.map.markers.concat(lMarkers);
 
         //center the map to the city if information is present
         if (event[0].hasOwnProperty('city'))
@@ -124,8 +125,10 @@
                 longitude: lCity.longitude
             };
 
-            this.searchService.setSearchType('byMapBounds');
+            this.wegeooService.setSearchType('byMapBounds');
         }
+
+        this.wegeooService.loadReferences(references);
     };
     ///////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////  ON MARKER CLICKED
@@ -135,7 +138,7 @@
 
     ///////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////// ANGULAR REGISTERING
-    MapController.$inject = ['$scope', 'Classifieds', 'SearchService'];
+    MapController.$inject = ['$scope', 'Classifieds', 'WegeooService'];
     angular.module('core').controller('MapController', MapController);
 
 })(angular);
