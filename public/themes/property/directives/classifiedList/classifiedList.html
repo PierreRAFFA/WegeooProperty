@@ -13,24 +13,50 @@
         <div class="details">
 
              <!--PRICE -->
-            <div class="">
+            <div class="priceContainer">
 
                 <!--SALE-->
-                <span ng-if="classified.category == 'sale' && classified.details.price"
+                <span ng-if="classified.category == 'sale' && classified.details.price && classified.details.price != -1"
                       class="price">{{ classified.details.price | formatPrice:classified.details.currency }} </span>
 
                 <!--RENT-->
-                <span ng-if="classified.category == 'rent' && classified.details.weekPrice"
+                <span ng-if="classified.category == 'rent' && classified.details.weekPrice && classified.details.weekPrice != -1"
                       class="price">{{ classified.details.weekPrice | formatPrice:classified.details.currency }} {{vm.I18n.t('classifiedPerWeek')}}</span>
 
-                 <span ng-if="classified.category == 'rent' && classified.details.monthPrice"
+                <span ng-if="classified.category == 'rent' && classified.details.monthPrice && classified.details.weekPrice != -1"
                        class="price">{{ classified.details.monthPrice | formatPrice:classified.details.currency }} {{vm.I18n.t('classifiedPerMonth')}}</span>
+
+                <!--DEFINED BUT ON APPLICATION-->
+                <span ng-if="classified.category == 'rent' && classified.details.weekPrice && classified.details.weekPrice == -1"
+                      class="price">{{vm.I18n.t('classifiedPricePoa')}}</span>
 
                 <!--NOT DEFINED-->
                 <span ng-if="classified.details.price == null"
                       class="price">classified.details.price.notProvided</span>
-
             </div>
+
+
+            <!-- LOCATION -->
+            <!--<div class="location">-->
+                <!--<span class="postcode" id="postal_code">{{classified.nCity.postcode}}</span>-->
+                <!--<span class="town" id="town">{{classified.nCity.name}}</span>-->
+            <!--</div>-->
+
+            <!-- TITLE -->
+            <div class="title">
+                <span id="title">{{classified.title}}</span><br/>
+            </div>
+
+            <!-- DESCRIPTION -->
+            <div class="description">
+                <h2 id="description" ng-bind-html='classified.description'></h2>
+            </div>
+
+            <!-- EXTERNAL LOGO -->
+            <div ng-if="classified.externalLogo" class="externalLogo">
+                <img src="{{classified.externalLogo}}"/>
+            </div>
+
         </div>
 
     </a>

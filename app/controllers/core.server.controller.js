@@ -19,6 +19,8 @@ exports.index = function(req, res) {
 
     req.session.references = [];
 
+    console.dir(res.__('classified.price.poa'));
+
 	res.render('index', {
 		user: req.user || null,
 		request: req,
@@ -30,8 +32,8 @@ exports.index = function(req, res) {
         translations: {
             wegeooLastClassifiedsIn : res.__('wegeoo.lastClassifiedsIn'),
             classifiedPerWeek: res.__('classified.perWeek'),
-            classifiedPerMonth: res.__('classified.perMonth')
-        },
-
+            classifiedPerMonth: res.__('classified.perMonth'),
+            classifiedPricePoa: res.__('classified.price.poa')
+        }
 	});
 };

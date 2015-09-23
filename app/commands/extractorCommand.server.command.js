@@ -29,6 +29,7 @@ function ExtractorCommand() {
 
     this.rssUrls            = [];
     this.rssItems           = [];
+    this.rssLogo            = '';
     this.currentCategory    = '';
     this.crawler            = null;
     this.crawlerInfos       = null;
@@ -118,6 +119,7 @@ ExtractorCommand.prototype.parseRss = function(url, category)
             parser.parseString(xml.substring(0, xml.length), function (err, json) {
                 //console.dir(json.rss.channel[0].item.length);
                 self.rssItems = self.getItems(json);
+                self.rssLogo = self.getRssLogo(json);
 
                 self.parseNextItem();
             });
@@ -135,6 +137,18 @@ ExtractorCommand.prototype.parseRss = function(url, category)
 ExtractorCommand.prototype.getItems = function(rss)
 {
     return [];
+};
+///////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////// GET RSS LOGO
+/**
+ * The parsing depends on the structure of the rss
+ * That's why this method has to be overrided by specific rss extractors.
+ * @param rss
+ * @param category
+ */
+ExtractorCommand.prototype.getRssLogo = function(rss)
+{
+    return '';
 };
 ///////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////// PARSE ITEM
@@ -294,6 +308,7 @@ ExtractorCommand.prototype.createClassified = function(infos)
             classified.active = true;
             classified.external = true;
             classified.externalLink = infos.link;
+            classified.externalLogo = this.rssLogo;
             classified.category = this.currentCategory;
             classified.clientIp = 'REMOTE_ADDR';
             classified.contactType = '1';
@@ -313,7 +328,12 @@ ExtractorCommand.prototype.createClassified = function(infos)
             if ( infos.city )
             {
                 console.log('city !!');
-                classified.nCity = {slugName:infos.city.slugName, parentCode: infos.city.parentCode};
+                classified.nCity = {
+                    slugName:infos.city.slugName,
+                    parentCode: infos.city.parentCode,
+                    postcode: infos.city.postcode,
+                    name: infos.city.name
+                };
             }
             //console.dir(classified);
 

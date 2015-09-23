@@ -61,6 +61,12 @@ var ClassifiedSchema = new Schema({
         },
         parentCode: {
             type: String
+        },
+        name: {
+            type: String
+        },
+        postcode: {
+            type: String
         }
     },
     contact: {
@@ -127,6 +133,9 @@ var ClassifiedSchema = new Schema({
         type: Boolean,
         default: false
     },
+    externalLogo: {
+        type: String
+    },
     numMailsReceived: {
         type: Number,
         default: 0
@@ -160,7 +169,7 @@ ClassifiedSchema.statics.findByReferenceLightResult = function(references,callba
 
     return this
         .find( clauses )
-        .select('-_id medias reference title category details description')
+        .select('-_id medias reference title category details description nCity externalLogo')
         .sort('-modificationDate')
         .exec(callback);
 };
@@ -177,8 +186,8 @@ ClassifiedSchema.statics.findMostRecent = function(slugName,callback)
 
 ClassifiedSchema.virtual('url').get(function()
 {
-    var lTheme      = i18n.__({phrase: 'wegeoo.' + config.theme , locale: this.countryLocale} );
-    var lCategory   = i18n.__({phrase: 'classified.category' + this.category, locale: this.countryLocale} );
+    var lTheme      = i18n.__({phrase: 'wegeoo.' + config.theme , locale: config.countryCode} );
+    var lCategory   = i18n.__({phrase: 'wegeoo.' + this.category, locale: config.countryCode} );
 
     return '/' + lTheme + '/' + lCategory + '/' + this.reference;
 });

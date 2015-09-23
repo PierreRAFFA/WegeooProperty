@@ -5844,6 +5844,7 @@ header {
 
 section.sideMenu {
   position: fixed;
+  z-index: 1;
   width: 100vw;
   background: #52AAD1;
   height: 40px;
@@ -5988,11 +5989,11 @@ section.classifiedList {
         section.classifiedList div.classifiedList .classified a .media.premium {
           position: relative;
           float: left;
-          max-width: 195px;
-          width: 195px;
-          height: 146px; }
+          max-width: 127px;
+          width: 127px;
+          height: 95px; }
           section.classifiedList div.classifiedList .classified a .media.premium img {
-            max-width: 195px; }
+            max-width: 127px; }
         section.classifiedList div.classifiedList .classified a .media img {
           overflow: hidden;
           max-width: 101px;
@@ -6001,6 +6002,49 @@ section.classifiedList {
           height: 100%;
           object-fit: cover;
           width: 101%; }
+    section.classifiedList div.classifiedList .classified .details {
+      overflow: hidden;
+      margin-top: 10px; }
+      section.classifiedList div.classifiedList .classified .details .priceContainer {
+        width: 154px;
+        position: relative;
+        float: left;
+        font: 0.875em FuturaStd-Bold;
+        color: #52AAD1; }
+      section.classifiedList div.classifiedList .classified .details .title {
+        position: relative;
+        float: left;
+        clear: left;
+        margin-top: 5px;
+        font: 0.875em FuturaStd-Bold;
+        width: 100%;
+        overflow: hidden;
+        color: #000000;
+        text-overflow: ellipsis;
+        overflow: hidden; }
+      section.classifiedList div.classifiedList .classified .details .description {
+        display: none;
+        position: relative;
+        float: left;
+        clear: left;
+        height: 64px;
+        overflow: hidden;
+        margin-top: 10px; }
+        section.classifiedList div.classifiedList .classified .details .description h2 {
+          font: 1em FuturaStd-Light;
+          line-height: 1.5em;
+          position: relative;
+          color: #3D3D3D;
+          margin-top: 15px;
+          text-align: justify;
+          text-overflow: ellipsis;
+          overflow: hidden; }
+        section.classifiedList div.classifiedList .classified .details .description img {
+          display: none; }
+      section.classifiedList div.classifiedList .classified .details .externalLogo {
+        position: relative;
+        float: right;
+        margin-top: 10px; }
 
 body {
   margin: 0; }

@@ -1,11 +1,9 @@
 section.classifiedList
-
   margin-top: $sectionMarginTop
 
   div.classifiedList
 
     .classified
-
       position: relative
       clear: both
       float: left
@@ -35,12 +33,12 @@ section.classifiedList
           &.premium
             position: relative
             float: left
-            max-width: 195px
-            width: 195px
-            height: 146px
+            max-width: 127px
+            width: 127px
+            height: 95px
 
             img
-              max-width: 195px
+              max-width: 127px
 
           img
             overflow: hidden
@@ -51,5 +49,54 @@ section.classifiedList
             object-fit: cover
             width: 101% /* 101% to prevent liseret */
 
+      .details
+        overflow: hidden
+        margin-top: 10px
 
+        .priceContainer
+          width: 154px
+          position: relative
+          float: left
+          font: 0.875em FuturaStd-Bold
+          color: $blue
+
+        .title
+          position: relative
+          float: left
+          clear: left
+          margin-top: 5px
+          font: 0.875em FuturaStd-Bold
+          width: 100%
+          overflow: hidden
+          color: #000000
+          text-overflow: ellipsis
+          overflow: hidden
+
+        .description
+          display: none
+          position: relative
+          float: left
+          clear: left
+          height: 64px
+          overflow: hidden
+          margin-top: 10px
+
+          h2
+            font: 1em FuturaStd-Light
+            line-height: 1.5em
+            position: relative
+            color: $grey
+            margin-top: 15px
+            text-align: justify
+            text-overflow: ellipsis
+            overflow: hidden
+
+
+          img
+            display: none
+
+        .externalLogo
+          position: relative
+          float: right
+          margin-top: 10px
 

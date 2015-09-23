@@ -115,6 +115,7 @@
 	"classified.seeMore": "See more on this classified",
 	"classified.perWeek": "pw",
 	"classified.perMonth": "pcm",
+    "classified.price.poa": "Price on Application",
 	"search.city.placeholder": "Please Enter a City",
 	"search.propertyTypes.placeholder": "Property Type",
 	"search.numRooms.placeholder": "Number of Rooms",
@@ -157,5 +158,10 @@
 	"post.title": "Post a classified",
 	"activation.success": "Classified Activation",
 	"activation.error": "Classified Activation Error",
-	"property": "property"
+	"property": "property",
+	"classified.categoryrent": "classified.categoryrent",
+	"classified.categoryundefined": "classified.categoryundefined",
+	"classified.rent": "classified.rent",
+	"classified.undefined": "classified.undefined",
+	"wegeoo.undefined": "wegeoo.undefined"
 }

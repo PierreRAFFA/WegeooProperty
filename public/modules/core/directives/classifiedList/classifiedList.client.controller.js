@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('core').controller('ClassifiedListController', [ 'WegeooService', 'Classifieds', 'I18n',
+angular.module('core').controller('ClassifiedListController', [ 'WegeooService', 'Classifieds', 'I18n', '$sce', '$compile',
 
-    function( WegeooService, Classifieds, I18n) {
+    function( WegeooService, Classifieds, I18n, $sce, $compile) {
 
         ///////////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////  CONSTRUCTOR
@@ -11,18 +11,17 @@ angular.module('core').controller('ClassifiedListController', [ 'WegeooService',
             this.wegeooService = WegeooService;
             this.Classifieds = Classifieds;
             this.I18n = I18n;
-
-            //this.loadClassifieds();
+            this.$sce = $sce;
+            this.$compile = $compile;
         };
         ///////////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////  LOAD CLASSIFIEDS
-        ClassifiedListController.prototype.loadClassifieds = function()
+        ClassifiedListController.prototype.toHTML = function(contentHTML)
         {
-            //Classifieds.getClassifiedsFromLastSearch().query(this.onClassifiedsLoadComplete.bind(this));
+            return this.$compile(contentHTML);
 
+            //return angular.element(contentHTML).html();
         };
-
-
 
         return new ClassifiedListController();
 

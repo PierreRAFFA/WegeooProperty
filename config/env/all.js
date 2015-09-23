@@ -10,6 +10,7 @@ module.exports = {
 		keywords: 'Wegeoo Property Sale Rent Flat House Apartment'
 	},
     theme: 'property',
+    countryCode: 'en_GB',
     defaultCategory: 'rent',
     defaultCityPostcode: 'city',
     defaultCityName: 'london',

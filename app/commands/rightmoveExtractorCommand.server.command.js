@@ -14,7 +14,6 @@ function RightmoveExtractorCommand() {
     ExtractorCommand.call(this);
     ExtractorCommand.DEBUG = true;
 
-
     this.logo = null;
 }
 
@@ -69,6 +68,18 @@ RightmoveExtractorCommand.prototype.getItems = function(rss)
     }
 
 };
+///////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////// GET RSS LOGO
+ExtractorCommand.prototype.getRssLogo = function(rss)
+{
+    if (rss)
+    {
+        return rss.rss.channel[0].image[0].url[0];
+    }else{
+        return [];
+    }
+};
+
 ///////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////// CRAWLER
 RightmoveExtractorCommand.prototype.onLinkCrawled = function(error, result, $, callback)
@@ -482,7 +493,7 @@ RightmoveExtractorCommand.prototype.getItemContact = function(item, callback)
     var matches = description.match(/Telephone: ([ 0-9]*)/);
 
     //this.notice(var_export($lMatches,true));
-    if ( matches.length === 2)
+    if ( matches && matches.length === 2)
     {
         itemContact.phone = matches[1];
     }
