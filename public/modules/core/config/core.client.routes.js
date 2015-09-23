@@ -27,7 +27,7 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
                         controllerAs: 'vm'
                     },
                     'classifiedList@' : {
-                        templateUrl: 'modules/core/views/partials/classifiedList.client.view.html',
+                        templateUrl: 'modules/core/views/partials/classifiedList.client.view.html'
                     }
                 },
                 controller: function(){
@@ -54,9 +54,7 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
                         controllerAs: 'vm'
                     },
                     'classifiedList@' : {
-                        templateUrl: 'modules/core/views/partials/classifiedList.client.view.html',
-                        controller: 'ClassifiedListController',
-                        controllerAs: 'vm'
+                        templateUrl: 'modules/core/views/partials/classifiedList.client.view.html'
                     }
                 }
 

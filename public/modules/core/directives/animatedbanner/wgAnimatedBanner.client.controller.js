@@ -26,7 +26,7 @@
             {
                 var lClassified = lClassifieds[iC];
                 var lImage = {};
-                lImage.caption = lClassified.title.substr(0,30) + '...' + '<br/>' + lClassified.price;
+                lImage.caption = lClassified.title.substr(0,30) + '...' + '<br/>' + lClassified.details.price;
                 lImage.href = '/property/sale/city-london/rm-34964157';
                 lImage.src = lClassified.medias[0];
                 lImages.push(lImage);

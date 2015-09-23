@@ -113,6 +113,8 @@
 	"classified.advertiser_action.urgent": "Mark as urgent",
 	"classified.advertiser_action.delete": "Delete this classified",
 	"classified.seeMore": "See more on this classified",
+	"classified.perWeek": "pw",
+	"classified.perMonth": "pcm",
 	"search.city.placeholder": "Please Enter a City",
 	"search.propertyTypes.placeholder": "Property Type",
 	"search.numRooms.placeholder": "Number of Rooms",

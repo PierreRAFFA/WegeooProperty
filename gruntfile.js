@@ -1,15 +1,36 @@
 'use strict';
 
+var args = process.argv;
+var theme = null;
+if ( args.length > 2)
+{
+    theme = args[2];
+}else{
+    console.error('A theme name is expected (per exemple: \'property\')');
+    process.exit();
+}
+
+
+
+
 module.exports = function(grunt) {
+
+    var theme = grunt.option('theme');
+    if (!theme)
+    {
+        console.error('A theme name is expected (per exemple: \'property\')');
+        process.exit();
+    }
+
     // Unified Watch Object
     var watchFiles = {
         serverViews: ['app/views/**/*.*'],
         serverJS: ['gruntfile.js', 'server.js', 'config/**/*.js', 'app/**/*.js'],
-        clientViews: ['public/modules/**/views/*.html'],
+        clientViews: ['public/modules/**/views/**.html', 'public/themes/**/views/**.html'],
         clientJS: ['public/js/*.js', 'public/modules/**/*.js'],
         clientCSS: ['public/modules/**/*.css'],
         mochaTests: ['app/tests/**/*.js'],
-        sass: ['public/modules/**/*.sass' ],
+        sass: ['public/modules/**/*.sass', 'public/themes/**/*.sass' ],
         locales: ['app/locales/*.json']
     };
 
@@ -157,7 +178,7 @@ module.exports = function(grunt) {
         sass: {
             dev: {
                 files: {
-                    'public/modules/core/css/index.css': 'public/modules/core/sass/index.sass',
+                    'public/modules/core/css/index.css': 'public/themes/' + theme + '/sass/index.sass'
                     //'public/css/style.css': 'style/{,*/}*.{scss,sass}',
                     //next line is not necessary if you include your bootstrap into the *.scss files
                     //'public/css/bootstrap.css': 'public/lib/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap.scss'

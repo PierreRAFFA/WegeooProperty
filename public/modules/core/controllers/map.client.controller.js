@@ -21,6 +21,9 @@
         //map configuration
         this.$scope.map =
         {
+            options: {
+                scrollwheel: false
+            },
             center: {
                 latitude: 51.5,
                 longitude: -0.2

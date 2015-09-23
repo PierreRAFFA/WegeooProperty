@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('core').controller('ClassifiedListController', [ 'WegeooService', 'Classifieds',
+angular.module('core').controller('ClassifiedListController', [ 'WegeooService', 'Classifieds', 'I18n',
 
-    function( WegeooService, Classifieds) {
+    function( WegeooService, Classifieds, I18n) {
 
         ///////////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////  CONSTRUCTOR
@@ -10,6 +10,7 @@ angular.module('core').controller('ClassifiedListController', [ 'WegeooService',
             // Define a set of default roles
             this.wegeooService = WegeooService;
             this.Classifieds = Classifieds;
+            this.I18n = I18n;
 
             //this.loadClassifieds();
         };
@@ -20,6 +21,8 @@ angular.module('core').controller('ClassifiedListController', [ 'WegeooService',
             //Classifieds.getClassifiedsFromLastSearch().query(this.onClassifiedsLoadComplete.bind(this));
 
         };
+
+
 
         return new ClassifiedListController();
 

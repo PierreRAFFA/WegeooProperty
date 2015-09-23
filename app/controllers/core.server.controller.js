@@ -27,6 +27,11 @@ exports.index = function(req, res) {
         cityPostcode: lCityPostCode,
         cityName: lCityName,
         slugName: lSlugName,
-        translations: { wegeooLastClassifiedsIn : res.__('wegeoo.lastClassifiedsIn')}
+        translations: {
+            wegeooLastClassifiedsIn : res.__('wegeoo.lastClassifiedsIn'),
+            classifiedPerWeek: res.__('classified.perWeek'),
+            classifiedPerMonth: res.__('classified.perMonth')
+        },
+
 	});
 };

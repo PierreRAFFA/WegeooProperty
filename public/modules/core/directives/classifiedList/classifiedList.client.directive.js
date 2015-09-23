@@ -2,7 +2,7 @@
 angular.module('core').directive('wgClassifiedList', [
     function() {
         return {
-            templateUrl: 'modules/core/directives/classifiedList/classifiedList.html',
+            templateUrl: 'themes/' + ApplicationConfiguration.theme + '/directives/classifiedList/classifiedList.html',
             restrict: 'E',
             replace: true,
             transclude: true,

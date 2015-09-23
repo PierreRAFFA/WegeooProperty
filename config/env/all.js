@@ -71,6 +71,10 @@ module.exports = {
         deposit: {
             type: Number
         },
+        currency: {
+            type: String,
+            default: '£'
+        },
         propertyType:{
             type: String,
             required: 'propertyType cannot be blank'

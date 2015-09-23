@@ -1,0 +1,37 @@
+<div class="classified" data-ng-repeat="classified in vm.wegeooService.getLoadedClassifieds()">
+    <a href="{{classified.url}}" target="_self">
+
+        <!-- PHOTO -->
+        <div class="media premium">
+
+            <img ng-if="classified.medias.length" class="annonce_preview_image premiumClassifiedAdPreviewImage" src="{{classified.medias[0]}}" alt="{{classified.title}}"></img>
+
+            <img ng-if="classified.medias.length == 0" class="annonce_preview_image premiumClassifiedAdPreviewImage" src="modules/core/img/defaultPreviewClassifiedPhoto218.jpg" alt="Wegeoo No Image"></img>
+        </div>
+
+        <!-- DETAILS -->
+        <div class="details">
+
+             <!--PRICE -->
+            <div class="">
+
+                <!--SALE-->
+                <span ng-if="classified.category == 'sale' && classified.details.price"
+                      class="price">{{ classified.details.price | formatPrice:classified.details.currency }} </span>
+
+                <!--RENT-->
+                <span ng-if="classified.category == 'rent' && classified.details.weekPrice"
+                      class="price">{{ classified.details.weekPrice | formatPrice:classified.details.currency }} {{vm.I18n.t('classifiedPerWeek')}}</span>
+
+                 <span ng-if="classified.category == 'rent' && classified.details.monthPrice"
+                       class="price">{{ classified.details.monthPrice | formatPrice:classified.details.currency }} {{vm.I18n.t('classifiedPerMonth')}}</span>
+
+                <!--NOT DEFINED-->
+                <span ng-if="classified.details.price == null"
+                      class="price">classified.details.price.notProvided</span>
+
+            </div>
+        </div>
+
+    </a>
+</div>

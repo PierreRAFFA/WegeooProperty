@@ -281,9 +281,9 @@ ExtractorCommand.prototype.createClassified = function(infos)
             if (infos.crawlerInfos.price)
                 details.price = infos.crawlerInfos.price;
             if (infos.crawlerInfos.weekPrice)
-                details.price = infos.crawlerInfos.weekPrice;
+                details.weekPrice = infos.crawlerInfos.weekPrice;
             if (infos.crawlerInfos.monthPrice)
-                details.price = infos.crawlerInfos.monthPrice;
+                details.monthPrice = infos.crawlerInfos.monthPrice;
             if (infos.propertyType)
                 details.propertyType = infos.propertyType;
 

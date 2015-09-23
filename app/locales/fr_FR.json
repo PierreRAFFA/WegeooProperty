@@ -113,6 +113,8 @@
     "classified.advertiser_action.urgent":"Marquer cette annonce comme urgente",
     "classified.advertiser_action.delete":"Supprimer cette annonce",
     "classified.seeMore":"Voir plus d'infos sur cette annonce",
+    "classified.perWeek": "/semaine",
+    "classified.perMonth": "/mois",
     "search.city.placeholder":"Veuillez saisir une ville",
     "search.propertyTypes.placeholder":"les types de propri\u00e9t\u00e9",
     "search.numRooms.placeholder":"Nombre de pi\u00e8ces",
