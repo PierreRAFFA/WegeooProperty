@@ -133,6 +133,9 @@ var ClassifiedSchema = new Schema({
         type: Boolean,
         default: false
     },
+    externalLink: {
+        type: String
+    },
     externalLogo: {
         type: String
     },
@@ -169,7 +172,7 @@ ClassifiedSchema.statics.findByReferenceLightResult = function(references,callba
 
     return this
         .find( clauses )
-        .select('-_id medias reference title category details description nCity externalLogo')
+        .select('-_id medias reference title category details description nCity external externalLink externalLogo')
         .sort('-modificationDate')
         .exec(callback);
 };
@@ -186,10 +189,18 @@ ClassifiedSchema.statics.findMostRecent = function(slugName,callback)
 
 ClassifiedSchema.virtual('url').get(function()
 {
-    var lTheme      = i18n.__({phrase: 'wegeoo.' + config.theme , locale: config.countryCode} );
-    var lCategory   = i18n.__({phrase: 'wegeoo.' + this.category, locale: config.countryCode} );
+    var url = '';
+    if ( this.external)
+    {
+        url = this.externalLink;
+    }else{
+        var lTheme      = i18n.__({phrase: 'wegeoo.' + config.theme , locale: config.countryCode} );
+        var lCategory   = i18n.__({phrase: 'wegeoo.' + this.category, locale: config.countryCode} );
+        url = '/' + lTheme + '/' + lCategory + '/' + this.reference;
+    }
 
-    return '/' + lTheme + '/' + lCategory + '/' + this.reference;
+    return url;
+
 });
 
 ClassifiedSchema.pre('save', function preSave(next){

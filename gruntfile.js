@@ -1,18 +1,5 @@
 'use strict';
 
-var args = process.argv;
-var theme = null;
-if ( args.length > 2)
-{
-    theme = args[2];
-}else{
-    console.error('A theme name is expected (per exemple: \'property\')');
-    process.exit();
-}
-
-
-
-
 module.exports = function(grunt) {
 
     var theme = grunt.option('theme');
@@ -21,6 +8,9 @@ module.exports = function(grunt) {
         console.error('A theme name is expected (per exemple: \'property\')');
         process.exit();
     }
+
+    //define the theme environnement
+    process.env.THEME = theme;
 
     // Unified Watch Object
     var watchFiles = {
