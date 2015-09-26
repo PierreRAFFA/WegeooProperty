@@ -5961,6 +5961,18 @@ header {
         font: 3.2rem FuturaStd-Heavy;
         color: #52AAD1; }
 
+.newSearch {
+  display: none;
+  position: fixed;
+  background: #E0E0E0;
+  padding: 10px;
+  bottom: 0;
+  right: 10px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px; }
+  .newSearch.active {
+    display: block; }
+
 section.classifiedList {
   margin-top: 15px; }
   section.classifiedList div.classifiedList .classified {

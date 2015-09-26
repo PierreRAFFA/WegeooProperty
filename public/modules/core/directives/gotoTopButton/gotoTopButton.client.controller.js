@@ -1,31 +1,41 @@
 'use strict';
 
-angular.module('core').controller('ClassifiedListController', [ 'WegeooService', 'Classifieds', 'I18n', '$sce', '$compile',
+angular.module('core').controller('GotoTopButtonController', [ 'WegeooService', 'Classifieds', 'I18n',
 
-    function( WegeooService, Classifieds, I18n, $sce, $compile) {
+    function( WegeooService, Classifieds, I18n) {
 
+        var $ = window.$;
         ///////////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////  CONSTRUCTOR
-        var ClassifiedListController = function() {
+        var GotoTopButtonController = function() {
             // Define a set of default roles
             this.wegeooService = WegeooService;
             this.Classifieds = Classifieds;
             this.I18n = I18n;
-            this.$sce = $sce;
-            this.$compile = $compile;
 
-            this.classifieds = [];
+            this.active = false;
+
         };
         ///////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////  LOAD CLASSIFIEDS
-        ClassifiedListController.prototype.toHTML = function(contentHTML)
+        /////////////////////////////////////////////////////////// LINK
+        GotoTopButtonController.prototype.onLink = function()
         {
-            return this.$compile(contentHTML);
+            console.log('onLink');
+        };
+        ///////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////  SCROLL TO TOP
+        GotoTopButtonController.prototype.scrollToTop = function(contentHTML)
+        {
 
-            //return angular.element(contentHTML).html();
+            $('html,body').animate({
+                'scrollTop' : 0
+            }, {
+                duration : 250,
+                easing : 'swing'
+            });
         };
 
-        return new ClassifiedListController();
+        return new GotoTopButtonController();
 
     }
 ]);
@@ -37,7 +47,7 @@ angular.module('core').controller('ClassifiedListController', [ 'WegeooService',
 //{
 //    ///////////////////////////////////////////////////////////////////////////
 //    ///////////////////////////////////////////////////////////  CONSTRUCTOR
-//    function ClassifiedListController($scope, Classifieds, WegeooService)
+//    function GotoTopButtonController($scope, Classifieds, WegeooService)
 //    {
 //        this.wegeooService = WegeooService;
 //        this.Classifieds = Classifieds;
@@ -49,8 +59,8 @@ angular.module('core').controller('ClassifiedListController', [ 'WegeooService',
 //
 //    ///////////////////////////////////////////////////////////////////////////
 //    /////////////////////////////////////////////////////////// ANGULAR REGISTERING
-//    ClassifiedListController.$inject = ['$scope', 'Classifieds', 'WegeooService'];
-//    angular.module('core').controller('ClassifiedListController', ClassifiedListController);
+//    GotoTopButtonController.$inject = ['$scope', 'Classifieds', 'WegeooService'];
+//    angular.module('core').controller('GotoTopButtonController', GotoTopButtonController);
 //
 //})(angular);
 

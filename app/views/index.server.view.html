@@ -9,14 +9,16 @@
 
     <!-- include 'templates/map.server.view.html' -->
 
-    <section data-ui-view="map"></section>
+        <section data-ui-view="map"></section>
 
-    <section data-ui-view="latestClassifieds"></section>
+        <section data-ui-view="latestClassifieds"></section>
 
-    <section data-ui-view="classifiedList" class="classifiedList"></section>
+        <section data-ui-view="classifiedList" class="classifiedList"></section>
 
-    <a ui-sref="home.citySearch({theme:'property', category: 'rent', cityPostcode: 'city' , cityName: 'london' })"
-       ui-sref-opts="{reload: false}">London</a>
+        <wg-goto-top-button active="main.mapVisible"></wg-goto-top-button>
+
+        <a ui-sref="home.citySearch({theme:'property', category: 'rent', cityPostcode: 'city' , cityName: 'london' })"
+            ui-sref-opts="{reload: false}">London</a>
 
 <a ui-sref="home"
    ui-sref-opts="{reload: false}">Home</a>
