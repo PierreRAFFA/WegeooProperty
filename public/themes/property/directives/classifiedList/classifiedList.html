@@ -1,6 +1,6 @@
 <div>
 
-    <div class="classified" data-ng-repeat="classified in vm.classifieds">
+    <div class="classified" data-ng-repeat="classified in vm.classifieds track by classified.reference">
         <a href="{{classified.url}}" target="_self">
 
             <!-- PHOTO -->
@@ -64,6 +64,8 @@
         </a>
     </div>
 
-    <span>Load More...</span>
+    <div class="loadMore" data-ng-click="vm.loadMore()">
+        Load More...
+    </div>
 
 </div>

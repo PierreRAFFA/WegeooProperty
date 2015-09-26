@@ -1,21 +1,28 @@
 'use strict';
 
-angular.module('core').controller('ClassifiedListController', [ 'WegeooService', 'I18n', '$sce', '$compile',
+angular.module('core').controller('ClassifiedListController', [ '$scope', 'WegeooService', 'I18n', '$sce', '$compile',
 
-    function( WegeooService, I18n, $sce, $compile) {
+    function( $scope, WegeooService, I18n, $sce, $compile) {
 
         ///////////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////  CONSTRUCTOR
         var ClassifiedListController = function() {
-            // Define a set of default roles
+            this.$scope = $scope;
             this.wegeooService = WegeooService;
-            //this.Classifieds = Classifieds;
             this.I18n = I18n;
             this.$sce = $sce;
             this.$compile = $compile;
 
             this.classifieds = [];
+
         };
+        ///////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////  ON SCROLL
+        ClassifiedListController.prototype.loadMore = function(contentHTML)
+        {
+            this.$scope.$emit('classifiedListLoadMore');
+        };
+
         ///////////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////  LOAD CLASSIFIEDS
         ClassifiedListController.prototype.toHTML = function(contentHTML)

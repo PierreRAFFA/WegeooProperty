@@ -21,6 +21,16 @@
             self.$scope.$apply();
         });
 
+        this.$scope.$on('classifiedListLoadMore' , function(event)
+        {
+            self.wegeooService.loadNextClassifieds();
+
+            //force to refresh
+            //self.$scope.$apply();
+        });
+
+
+
 
 
     }

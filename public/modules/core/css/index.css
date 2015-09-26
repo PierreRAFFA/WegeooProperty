@@ -5969,9 +5969,9 @@ header {
   right: 10px;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
-  -webkit-transition-duration: 0.25s;
-  -moz-transition-duration: 0.25s;
-  transition-duration: 0.25s;
+  -webkit-transition-duration: 250ms;
+  -moz-transition-duration: 250ms;
+  transition-duration: 250ms;
   -webkit-transition-timing-function: ease-out;
   -moz-transition-timing-function: ease-out;
   transition-timing-function: ease-out; }
@@ -6063,9 +6063,17 @@ section.classifiedList {
         position: relative;
         float: right;
         margin-top: 10px; }
+  section.classifiedList div.classifiedList .loadMore {
+    background: #0086b3;
+    padding: 10px;
+    position: relative;
+    float: left;
+    width: 100%;
+    text-align: center; }
 
 body {
-  margin: 0; }
+  margin: 0;
+  padding-bottom: 20px; }
   body .row-colored {
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
     background: #FFFFFF;
