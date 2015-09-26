@@ -2,18 +2,44 @@
 
 (function(angular)
 {
+    var $ = window.$;
+
     ///////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////  CONSTRUCTOR
-    function MapController($scope, Classifieds, WegeooService)
+    function MapController($scope, Classifieds, WegeooService , $window)
     {
-        this.wegeooService = WegeooService;
-        this.Classifieds = Classifieds;
-        this.$scope = $scope;
+        this.wegeooService      = WegeooService;
+        this.Classifieds        = Classifieds;
+        this.$scope             = $scope;
+        this.$window            = $window;
+
+        this.lastVisibility     = true;
 
         this.initMap();
+
+        this.addEvents();
     }
     ///////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////   EVENT TO BROADCAST
+    MapController.prototype.addEvents = function()
+    {
+        var self = this;
+        angular.element(this.$window).on('scroll', function() {
+
+            var mapElement = angular.element('div.angular-google-map');
+            var mapPositionBottom = mapElement.offset().top + mapElement.outerHeight();
+
+            var isMapVisible = this.scrollY < mapPositionBottom;
+            if (self.lastVisibility !== isMapVisible )
+            {
+                self.lastVisibility = isMapVisible;
+                self.$scope.$emit('mapEventVisible' , isMapVisible);
+            }
+        });
+    };
+    ///////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////   INIT MAP
+
     MapController.prototype.initMap = function()
     {
         var self = this;
@@ -54,7 +80,6 @@
             markersEvents: {
                 click: self.onMarkerClicked.bind(self)
             }
-
         };
         //uiGmapGoogleMapApi.then(function(maps) {
         //
@@ -141,7 +166,7 @@
 
     ///////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////// ANGULAR REGISTERING
-    MapController.$inject = ['$scope', 'Classifieds', 'WegeooService'];
+    MapController.$inject = ['$scope', 'Classifieds', 'WegeooService','$window'];
     angular.module('core').controller('MapController', MapController);
 
 })(angular);

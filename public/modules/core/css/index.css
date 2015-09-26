@@ -5962,16 +5962,22 @@ header {
         color: #52AAD1; }
 
 .newSearch {
-  display: none;
   position: fixed;
   background: #E0E0E0;
   padding: 10px;
-  bottom: 0;
+  bottom: -50px;
   right: 10px;
   border-top-left-radius: 5px;
-  border-top-right-radius: 5px; }
+  border-top-right-radius: 5px;
+  -webkit-transition-duration: 0.25s;
+  -moz-transition-duration: 0.25s;
+  transition-duration: 0.25s;
+  -webkit-transition-timing-function: ease-out;
+  -moz-transition-timing-function: ease-out;
+  transition-timing-function: ease-out; }
   .newSearch.active {
-    display: block; }
+    display: block;
+    bottom: 0; }
 
 section.classifiedList {
   margin-top: 15px; }

@@ -1,15 +1,15 @@
 'use strict';
 
-angular.module('core').controller('ClassifiedListController', [ 'WegeooService', 'Classifieds', 'I18n', '$sce', '$compile',
+angular.module('core').controller('ClassifiedListController', [ 'WegeooService', 'I18n', '$sce', '$compile',
 
-    function( WegeooService, Classifieds, I18n, $sce, $compile) {
+    function( WegeooService, I18n, $sce, $compile) {
 
         ///////////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////  CONSTRUCTOR
         var ClassifiedListController = function() {
             // Define a set of default roles
             this.wegeooService = WegeooService;
-            this.Classifieds = Classifieds;
+            //this.Classifieds = Classifieds;
             this.I18n = I18n;
             this.$sce = $sce;
             this.$compile = $compile;

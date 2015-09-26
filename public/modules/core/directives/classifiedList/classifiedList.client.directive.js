@@ -4,8 +4,6 @@ angular.module('core').directive('wgClassifiedList', [
         return {
             templateUrl: 'themes/' + ApplicationConfiguration.theme + '/directives/classifiedList/classifiedList.html',
             restrict: 'E',
-            replace: true,
-            transclude: true,
             scope: {},
             bindToController: {
                 classifieds: '='

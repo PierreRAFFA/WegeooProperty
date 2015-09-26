@@ -4,8 +4,6 @@ angular.module('core').directive('wgGotoTopButton', [
         return {
             templateUrl: 'modules/core/directives/gotoTopButton/gotoTopButton.html',
             restrict: 'E',
-            replace: true,
-            transclude: true,
             scope: {},
             bindToController: {
                 active: '='

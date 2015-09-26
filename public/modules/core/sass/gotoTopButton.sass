@@ -1,11 +1,13 @@
 .newSearch
-  display: none
   position: fixed
   background: $greyIndicator
   padding: 10px
-  bottom: 0
+  bottom: -50px
   right: $marginH
   @include border-top-radius(5px)
+  @include transition-duration(250ms)
+  @include transition-timing-function(ease-out)
 
   &.active
     display: block
+    bottom: 0

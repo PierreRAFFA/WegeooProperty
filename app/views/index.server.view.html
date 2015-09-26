@@ -15,7 +15,7 @@
 
         <section data-ui-view="classifiedList" class="classifiedList"></section>
 
-        <wg-goto-top-button active="main.mapVisible"></wg-goto-top-button>
+        <wg-goto-top-button active="!main.getMapVisible()"></wg-goto-top-button>
 
         <a ui-sref="home.citySearch({theme:'property', category: 'rent', cityPostcode: 'city' , cityName: 'london' })"
             ui-sref-opts="{reload: false}">London</a>

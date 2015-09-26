@@ -29,11 +29,7 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
                     'classifiedList@' : {
                         templateUrl: 'modules/core/views/partials/classifiedList.client.view.html'
                     }
-                },
-                controller: function(){
-                    this.sll = 'My Contacts';
-                },
-                controllerAs: 'contact'
+                }
             }).
             state('home.citySearch', {
                 url: ':theme/:category/{cityPostcode:[a-zA-Z0-9]*}-{cityName:[-%a-zA-Z0-9]*}',
