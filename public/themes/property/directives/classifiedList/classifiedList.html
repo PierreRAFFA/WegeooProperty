@@ -64,8 +64,9 @@
         </a>
     </div>
 
-    <div class="loadMore" data-ng-click="vm.loadMore()">
-        Load More...
+    <div ng-if="vm.classifieds.length" class="loadMore" data-ng-click="vm.loadMore()">
+        <div class="icon"/>
+        <div class="buttonLabel">{{vm.I18n.t('classifiedListLoadMore')}}</div>
     </div>
 
 </div>

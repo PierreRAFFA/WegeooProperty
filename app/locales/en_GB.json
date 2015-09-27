@@ -136,6 +136,7 @@
 	"classifiedList.sortBy.leastExpensive": "Least Expensive Classified",
 	"classifiedList.sortBy.mostExpensive": "Most Expensive Classified",
 	"classifiedList.sortBy.mostRecent": "Most Recent Classified",
+    "classifiedList.loadMore":"Load More...",
 	"footer.followus": "Follow News About Properties",
 	"footer.classified.sale": "Sale",
 	"footer.classified.rent": "Rent",

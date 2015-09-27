@@ -24,3 +24,22 @@ exports.getCityFromSlugName = function(slugName, callback) {
             }
         });
 };
+
+/**
+ * List of City
+ */
+exports.getMostPopulatedCities = function(limit, callback) {
+
+    City
+        .find({parentCode: { $eq: null }})
+        .select('-_id slugName name')
+        .sort('-pop')
+        .limit(limit)
+        .exec(function(err, cities) {
+            if (err) {
+                callback.call(null,[]);
+            } else {
+                callback.call(null, cities);
+            }
+        });
+};

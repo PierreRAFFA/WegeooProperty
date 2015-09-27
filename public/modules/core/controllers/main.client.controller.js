@@ -5,10 +5,11 @@
     var $ = window.$;
     ///////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////  CONSTRUCTOR
-    function MainController($scope, Classifieds, WegeooService) {
+    function MainController($scope, Classifieds, WegeooService, I18n) {
         this.wegeooService = WegeooService;
         this.Classifieds = Classifieds;
         this.$scope = $scope;
+        this.I18n = I18n;
 
         this.mapVisible = true;
 
@@ -42,7 +43,7 @@
 
     ///////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////// ANGULAR REGISTERING
-    MainController.$inject = ['$scope', 'Classifieds', 'WegeooService'];
+    MainController.$inject = ['$scope', 'Classifieds', 'WegeooService', 'I18n'];
     angular.module('core').controller('MainController', MainController);
 
 })(angular);

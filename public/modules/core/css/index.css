@@ -5961,23 +5961,83 @@ header {
         font: 3.2rem FuturaStd-Heavy;
         color: #52AAD1; }
 
-.newSearch {
+.gotoTop {
   position: fixed;
-  background: #E0E0E0;
-  padding: 10px;
+  z-index: 1;
+  background: #F0F0F0;
+  padding: 5px 10px 5px 10px;
   bottom: -50px;
   right: 10px;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-  -webkit-transition-duration: 250ms;
-  -moz-transition-duration: 250ms;
-  transition-duration: 250ms;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  -webkit-transition-duration: 150ms;
+  -moz-transition-duration: 150ms;
+  transition-duration: 150ms;
   -webkit-transition-timing-function: ease-out;
   -moz-transition-timing-function: ease-out;
-  transition-timing-function: ease-out; }
-  .newSearch.active {
+  transition-timing-function: ease-out;
+  -webkit-filter: drop-shadow(0px 0px 3px #333);
+  filter: drop-shadow(0px 0px 3px #333);
+  font: 1.6em FuturaStd-Light;
+  cursor: pointer; }
+  .gotoTop.active {
     display: block;
     bottom: 0; }
+  .gotoTop img {
+    width: 32px;
+    height: 40px;
+    position: relative;
+    float: left;
+    display: inline-block; }
+
+footer .news {
+  position: relative;
+  clear: left;
+  background: #B1D4E7;
+  margin-top: 10px;
+  padding-bottom: 10px; }
+  footer .news .title {
+    font: 1.5em FuturaStd-Medium;
+    color: #FFF;
+    position: relative;
+    float: left;
+    margin-right: 20px;
+    margin-top: 12px; }
+  footer .news .facebookLogo {
+    position: relative;
+    float: left;
+    background-image: url("/modules/core/img/facebook3.png");
+    width: 35px;
+    height: 35px;
+    margin: 8px 10px 0px 0px; }
+  footer .news .twitterLogo {
+    position: relative;
+    float: left;
+    background-image: url("/modules/core/img/twitter2.png");
+    width: 35px;
+    height: 35px;
+    margin: 8px 10px 0px 0px; }
+footer .cityLinks {
+  position: relative;
+  clear: left;
+  padding-bottom: 30px;
+  background: #B1D4E7;
+  margin-top: 10px; }
+  footer .cityLinks .title {
+    position: relative;
+    padding-top: 10px;
+    font: 1.5em FuturaStd-Medium;
+    color: #FFF; }
+  footer .cityLinks .cityLink {
+    position: relative;
+    width: 100%;
+    margin-top: 10px;
+    font: 0.875em FuturaStd-Book;
+    color: #353535;
+    line-height: 1.5em;
+    -webkit-columns: 3;
+    -moz-columns: 3;
+    columns: 3; }
 
 section.classifiedList {
   margin-top: 15px; }
@@ -6064,16 +6124,28 @@ section.classifiedList {
         float: right;
         margin-top: 10px; }
   section.classifiedList div.classifiedList .loadMore {
-    background: #0086b3;
-    padding: 10px;
+    background: #F0F0F0;
     position: relative;
+    font: 1.2em FuturaStd-Light;
+    cursor: pointer;
     float: left;
     width: 100%;
-    text-align: center; }
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+    margin-bottom: 10px; }
+    section.classifiedList div.classifiedList .loadMore .icon {
+      position: absolute;
+      float: left;
+      top: 0px;
+      background-image: url("/modules/core/img/loadMoreIcon.png");
+      background-size: 72px 40px;
+      background-repeat: no-repeat;
+      width: 72px;
+      height: 40px; }
 
 body {
-  margin: 0;
-  padding-bottom: 20px; }
+  margin: 0; }
   body .row-colored {
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
     background: #FFFFFF;

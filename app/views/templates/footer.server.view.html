@@ -1,0 +1,41 @@
+<!-- NEWS -->
+<footer>
+    <div class ="row show-grid news">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="newsLayoutTextContainer">
+                <div class="title" data-ng-bind="main.I18n.t('footerFollowus')"></div>
+                <a href="https://www.facebook.com/wegeoo">
+                    <div class="facebookLogo"></div>
+                </a>
+                <div class="twitterLogo"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEARCH SHORTCUTS -->
+    <div class ="row show-grid cityLinks">
+        <div class="col-xs-12 col-sm-6 col-md-6 searchShortcutsContainers">
+            <div class="title">
+                <span>{{ __('footer.classified.sale') }}</span>
+            </div>
+
+            <div class="cityLink">
+                {% for city in cities %}
+                    <a href="/{{theme}}/{{ __('wegeoo.sale') }}/{{city.slugName}}">{{city.name}}</a><br/>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-6 col-md-6 cityLinks">
+            <div class="title">
+                <span>{{ __('footer.classified.rent') }}</span>
+            </div>
+            <div class="cityLink">
+                {% for city in cities %}
+                <a href="/{{theme}}/{{ __('wegeoo.rent') }}/{{city.slugName}}">{{city.name}}</a><br/>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+</footer>

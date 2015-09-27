@@ -17,9 +17,11 @@
 
         <wg-goto-top-button active="!main.getMapVisible()"></wg-goto-top-button>
 
-        <a ui-sref="home.citySearch({theme:'property', category: 'rent', cityPostcode: 'city' , cityName: 'london' })"
-            ui-sref-opts="{reload: false}">London</a>
+        {% include 'templates/footer.server.view.html' %}
 
-<a ui-sref="home"
-   ui-sref-opts="{reload: false}">Home</a>
+        <!--<a ui-sref="home.citySearch({theme:'property', category: 'rent', cityPostcode: 'city' , cityName: 'london' })"-->
+            <!--ui-sref-opts="{reload: false}">London</a>-->
+
+<!--<a ui-sref="home"-->
+   <!--ui-sref-opts="{reload: false}">Home</a>-->
 {% endblock %}

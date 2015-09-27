@@ -156,7 +156,7 @@ exports._getFromLastSearch = function(req, res)
     //console.dir(req.session);
     if ( req.session.hasOwnProperty('references') && req.session.references.length )
     {
-        var references = req.session.references.splice(0,10);
+        var references = req.session.references.splice(0,maxClassifiedsLoadInARow);
         //console.dir(references);
         Classified.findByReferenceLightResult(references, function(err, classifieds)
         {
