@@ -1,0 +1,23 @@
+@import "../../../lib/bootstrap-sass-official/assets/stylesheets/bootstrap"
+@import "../../../modules/core/sass/bourbon/bourbon"
+
+@import "_mixins"
+@import "../../../modules/core/sass/_fonts"
+@import "../../../modules/core/sass/header"
+@import "../../../modules/core/sass/sideMenu"
+@import "../../../modules/core/sass/map"
+@import "../../../modules/core/sass/latestClassifieds"
+@import "../../../modules/core/sass/header"
+@import "../../../modules/core/sass/gotoTopButton"
+@import "../../../modules/core/sass/footer"
+
+body
+  margin: 0
+
+  .row-colored
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5)
+    background: #FFFFFF
+    @include border-top-radius($radius)
+    @include border-right-radius($radius)
+    @include border-bottom-radius($radius)
+    @include border-left-radius($radius)

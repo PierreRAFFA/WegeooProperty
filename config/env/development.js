@@ -1,9 +1,9 @@
 'use strict';
 
 module.exports = {
-	db: 'mongodb://localhost/wegeoo-dev',
+	db: 'mongodb://localhost/wegeoo-' + process.env.THEME + '-dev',
 	app: {
-		title: 'Wegeoo - Development Environment'
+		title: 'Wegeoo ' + process.env.THEME + ' [DEV]'
 	},
 	facebook: {
 		clientID: process.env.FACEBOOK_ID || 'APP_ID',

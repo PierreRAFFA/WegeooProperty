@@ -5837,16 +5837,16 @@ header {
           color: #444; }
       header .slogan h1 .brandNamePart1 {
         font: 3.2rem FuturaStd-Light;
-        color: #52AAD1; }
+        color: #FFC145; }
       header .slogan h1 .brandNamePart2 {
         font: 3.2rem FuturaStd-Heavy;
-        color: #52AAD1; }
+        color: #FFC145; }
 
 section.sideMenu {
   position: fixed;
   z-index: 1;
   width: 100vw;
-  background: #52AAD1;
+  background: #FFC145;
   height: 40px;
   padding-left: 0;
   top: 0px;
@@ -5956,10 +5956,10 @@ header {
           color: #444; }
       header .slogan h1 .brandNamePart1 {
         font: 3.2rem FuturaStd-Light;
-        color: #52AAD1; }
+        color: #FFC145; }
       header .slogan h1 .brandNamePart2 {
         font: 3.2rem FuturaStd-Heavy;
-        color: #52AAD1; }
+        color: #FFC145; }
 
 .gotoTop {
   position: fixed;
@@ -6038,111 +6038,6 @@ footer .cityLinks {
     -webkit-columns: 3;
     -moz-columns: 3;
     columns: 3; }
-
-section.classifiedList {
-  margin-top: 15px; }
-  section.classifiedList div.classifiedList .classified {
-    position: relative;
-    clear: both;
-    float: left;
-    margin-top: 0;
-    width: 100%;
-    cursor: pointer;
-    border: 1px solid #E0E0E0;
-    margin-bottom: 10px; }
-    section.classifiedList div.classifiedList .classified a {
-      text-decoration: none; }
-      section.classifiedList div.classifiedList .classified a:hover {
-        background: #CEE0EE; }
-      section.classifiedList div.classifiedList .classified a .media {
-        position: relative;
-        float: left;
-        clear: left;
-        border: 2px solid;
-        border-color: #424242;
-        height: 76px;
-        width: 101px;
-        overflow: hidden;
-        margin: 10px; }
-        section.classifiedList div.classifiedList .classified a .media.premium {
-          position: relative;
-          float: left;
-          max-width: 127px;
-          width: 127px;
-          height: 95px; }
-          section.classifiedList div.classifiedList .classified a .media.premium img {
-            max-width: 127px; }
-        section.classifiedList div.classifiedList .classified a .media img {
-          overflow: hidden;
-          max-width: 101px;
-          margin: auto;
-          display: block;
-          height: 100%;
-          object-fit: cover;
-          width: 101%; }
-    section.classifiedList div.classifiedList .classified .details {
-      overflow: hidden;
-      margin-top: 10px; }
-      section.classifiedList div.classifiedList .classified .details .priceContainer {
-        width: 154px;
-        position: relative;
-        float: left;
-        font: 0.875em FuturaStd-Bold;
-        color: #52AAD1; }
-      section.classifiedList div.classifiedList .classified .details .title {
-        position: relative;
-        float: left;
-        clear: left;
-        margin-top: 5px;
-        font: 0.875em FuturaStd-Bold;
-        width: 100%;
-        overflow: hidden;
-        color: #000000;
-        text-overflow: ellipsis;
-        overflow: hidden; }
-      section.classifiedList div.classifiedList .classified .details .description {
-        display: none;
-        position: relative;
-        float: left;
-        clear: left;
-        height: 64px;
-        overflow: hidden;
-        margin-top: 10px; }
-        section.classifiedList div.classifiedList .classified .details .description h2 {
-          font: 1em FuturaStd-Light;
-          line-height: 1.5em;
-          position: relative;
-          color: #3D3D3D;
-          margin-top: 15px;
-          text-align: justify;
-          text-overflow: ellipsis;
-          overflow: hidden; }
-        section.classifiedList div.classifiedList .classified .details .description img {
-          display: none; }
-      section.classifiedList div.classifiedList .classified .details .externalLogo {
-        position: relative;
-        float: right;
-        margin-top: 10px; }
-  section.classifiedList div.classifiedList .loadMore {
-    background: #F0F0F0;
-    position: relative;
-    font: 1.2em FuturaStd-Light;
-    cursor: pointer;
-    float: left;
-    width: 100%;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    text-align: center;
-    margin-bottom: 10px; }
-    section.classifiedList div.classifiedList .loadMore .icon {
-      position: absolute;
-      float: left;
-      top: 0px;
-      background-image: url("/modules/core/img/loadMoreIcon.png");
-      background-size: 72px 40px;
-      background-repeat: no-repeat;
-      width: 72px;
-      height: 40px; }
 
 body {
   margin: 0; }
