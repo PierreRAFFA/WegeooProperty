@@ -115,7 +115,7 @@
 	"classified.seeMore": "See more on this classified",
 	"classified.perWeek": "pw",
 	"classified.perMonth": "pcm",
-    "classified.price.poa": "Price on Application",
+	"classified.price.poa": "Price on Application",
 	"search.city.placeholder": "Please Enter a City",
 	"search.propertyTypes.placeholder": "Property Type",
 	"search.numRooms.placeholder": "Number of Rooms",
@@ -136,7 +136,7 @@
 	"classifiedList.sortBy.leastExpensive": "Least Expensive Classified",
 	"classifiedList.sortBy.mostExpensive": "Most Expensive Classified",
 	"classifiedList.sortBy.mostRecent": "Most Recent Classified",
-    "classifiedList.loadMore":"Load More...",
+	"classifiedList.loadMore": "Load More...",
 	"footer.followus": "Follow News About Properties",
 	"footer.classified.sale": "Sale",
 	"footer.classified.rent": "Rent",
@@ -164,5 +164,9 @@
 	"classified.categoryundefined": "classified.categoryundefined",
 	"classified.rent": "classified.rent",
 	"classified.undefined": "classified.undefined",
-	"wegeoo.undefined": "wegeoo.undefined"
+	"wegeoo.undefined": "wegeoo.undefined",
+	"wegeoo.eatndrink": "wegeoo.eatndrink",
+	"wegeoo.restaurant": "wegeoo.restaurant",
+	"Wegeoo Society": "Wegeoo Society",
+	"Follow Us": "Follow Us"
 }

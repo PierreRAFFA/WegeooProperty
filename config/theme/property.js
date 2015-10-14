@@ -14,5 +14,38 @@ module.exports = {
     defaultCategory: 'rent',
     defaultCityPostcode: 'city',
     defaultCityName: 'london',
-    defaultSlugName: 'city-london'
+    defaultSlugName: 'city-london',
+
+    /**
+     * Configure the classified details for 'property' theme
+     */
+    classifiedDetails: {
+        price: {
+            type: Number,
+            required: 'price cannot be blank'
+        },
+        weekPrice: {
+            type: Number
+        },
+        monthPrice: {
+            type: Number
+        },
+        deposit: {
+            type: Number
+        },
+        currency: {
+            type: String,
+            default: '£'
+        },
+        propertyType:{
+            type: String,
+            required: 'propertyType cannot be blank'
+        },
+        furnishing:{
+            type: String
+        },
+        lettingType:{
+            type: String
+        }
+    }
 };

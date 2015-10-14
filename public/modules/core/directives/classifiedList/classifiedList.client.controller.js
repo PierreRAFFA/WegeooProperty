@@ -1,14 +1,13 @@
 'use strict';
 
-angular.module('core').controller('ClassifiedListController', [ '$scope', 'WegeooService', 'I18n', '$sce', '$compile',
+angular.module('core').controller('ClassifiedListController', [ '$scope', 'I18n', '$sce', '$compile',
 
-    function( $scope, WegeooService, I18n, $sce, $compile) {
+    function( $scope, I18n, $sce, $compile) {
 
         ///////////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////  CONSTRUCTOR
         var ClassifiedListController = function() {
             this.$scope = $scope;
-            this.wegeooService = WegeooService;
             this.I18n = I18n;
             this.$sce = $sce;
             this.$compile = $compile;

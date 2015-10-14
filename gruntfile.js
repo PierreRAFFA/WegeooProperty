@@ -1,4 +1,5 @@
 'use strict';
+var fs = require('fs');
 
 module.exports = function(grunt) {
 
@@ -11,6 +12,11 @@ module.exports = function(grunt) {
 
     //define the theme environnement
     process.env.THEME = theme;
+
+    //edit config.js file Angular
+    var data = fs.readFileSync('public/config.js', 'utf-8');
+    var themeConfig = data.replace(/var theme = '[a-zA-Z]*'/gim, 'var theme = \'' + process.env.THEME + '\'');
+    fs.writeFileSync('public/config.js', themeConfig, 'utf-8');
 
     // Unified Watch Object
     var watchFiles = {

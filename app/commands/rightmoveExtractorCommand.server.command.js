@@ -24,19 +24,36 @@ RightmoveExtractorCommand.prototype.constructor = RightmoveExtractorCommand;
 RightmoveExtractorCommand.PREFIX = 'rm-';
 ///////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////// BUILD URLs
+RightmoveExtractorCommand.prototype.registerUrls = function(shellParams) {
+    var categories = 'both';
+
+    if (shellParams.length)
+        categories = shellParams[0];
+
+    //sale
+    if (categories === 'both' || categories === 'sale') {
+        this.registerSaleRss();
+    }
+
+    //rent
+    if (categories === 'both' || categories === 'rent') {
+        this.registerRentRss();
+    }
+};
+
 RightmoveExtractorCommand.prototype.registerSaleRss = function()
 {
     ExtractorCommand.prototype.registerSaleRss.call(this);
 
-    var baseURL = 'http://www.rightmove.co.uk/rss/property-for-sale/find.html?locationIdentifier=REGION%5E{0}';
+    var baseURL = 'http://www.rightmove.co.uk/rss/property-for-sale/find.html?locati    onIdentifier=REGION%5E{0}';
 
     for(var id = 87490 ; id <= 90000 ; id++)
     {
-        this.rssUrls.push({url:baseURL.replace('{0}', id), category: 'rent'});
+        this.urls.push({url:baseURL.replace('{0}', id), category: 'rent'});
     }
     for(id = 1 ; id <= 87490 ; id++)
     {
-        this.rssUrls.push({url:baseURL.replace('{0}', id), category: 'rent'});
+        this.urls.push({url:baseURL.replace('{0}', id), category: 'rent'});
     }
 
 };
@@ -48,11 +65,11 @@ RightmoveExtractorCommand.prototype.registerRentRss = function()
 
     for(var id = 87490 ; id <= 90000 ; id++)
     {
-        this.rssUrls.push({url:baseURL.replace('{0}', id), category: 'rent'});
+        this.urls.push({url:baseURL.replace('{0}', id), category: 'rent'});
     }
     for(id = 1 ; id <= 87490 ; id++)
     {
-        this.rssUrls.push({url:baseURL.replace('{0}', id), category: 'rent'});
+        this.urls.push({url:baseURL.replace('{0}', id), category: 'rent'});
     }
 };
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -70,7 +87,7 @@ RightmoveExtractorCommand.prototype.getItems = function(rss)
 };
 ///////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////// GET RSS LOGO
-ExtractorCommand.prototype.getRssLogo = function(rss)
+RightmoveExtractorCommand.prototype.getMainLogo = function(rss)
 {
     if (rss)
     {
@@ -79,7 +96,19 @@ ExtractorCommand.prototype.getRssLogo = function(rss)
         return [];
     }
 };
+///////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////// GET ASYNC TASKS
+RightmoveExtractorCommand.prototype.getAsyncTasks = function(item)
+{
+    var self = this;
 
+    var asyncTasks = ExtractorCommand.getAsyncTasks.call(this,item);
+    asyncTasks.propertyType = function(callback){
+        self.getItemPropertyType(item, callback);
+    };
+
+    return asyncTasks;
+};
 ///////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////// CRAWLER
 RightmoveExtractorCommand.prototype.onLinkCrawled = function(error, result, $, callback)
@@ -513,23 +542,14 @@ RightmoveExtractorCommand.prototype.getItemContact = function(item, callback)
         this.warn('No Contact Name in the description');
     }
 
-
-
     //overrided by the crawler
     itemContact.name = _.trim(this.crawlerInfos.contact.name);
     itemContact.address = _.trim(this.crawlerInfos.contact.address);
     itemContact.postcode = _.trim(this.crawlerInfos.contact.postcode);
     itemContact.city = _.trim(this.crawlerInfos.contact.city);
 
-    //itemContact.name = 'ok';
-    //itemContact.address = 'ok';
-    //itemContact.postcode = 'ok';
-    //itemContact.city = 'ok';
-    //itemContact.phone = 'ok';
 
-    //console.dir(itemContact);
-
-
+    //to simplify, check eatNdrinkExtractor
     Contact.findOne(itemContact,
         function (err, contact) {
 
@@ -567,6 +587,12 @@ RightmoveExtractorCommand.prototype.getItemContact = function(item, callback)
             }
         }
     );
+};
+///////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////// IS VALID BEFORE SAVING
+ExtractorCommand.prototype.isValid = function()
+{
+    return this.currentClassified.details.hasOwnProperty('price');
 };
 
 

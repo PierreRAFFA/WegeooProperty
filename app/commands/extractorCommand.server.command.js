@@ -15,6 +15,7 @@ require('../models/city.server.model');
 require('../models/contact.server.model');
 var Classified = mongoose.model('Classified');
 var City = mongoose.model('City');
+var Contact = mongoose.model('Contact');
 
 
 var Crawler = require('crawler');
@@ -23,65 +24,43 @@ var Crawler = require('crawler');
 //////////////////////////////////////////////////////////////////////////////// CONSTRUCTOR
 function ExtractorCommand() {
 
+    this.params = null;
     this.numClassifiedsAdded         = 0;
     this.numClassifiedsFound         = 0;
     this.numClassifiedsAlreadyExists = 0;
 
-    this.rssUrls            = [];
-    this.rssItems           = [];
-    this.rssLogo            = '';
+    this.urls            = [];
+    this.items           = [];
+    this.mainLogo            = '';
     this.currentCategory    = '';
     this.crawler            = null;
-    this.crawlerInfos       = null;
+    this.currentClassified  = null;
+    this.currentContact     = null;
+
 }
 ExtractorCommand.DEBUG = false;
 ExtractorCommand.GOOGLE_GEOCODE_URL = 'http://maps.google.com/maps/api/geocode/json?sensor=false&address=%s';
 ///////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////// EXECUTE
-ExtractorCommand.prototype.execute = function(categories) {
+ExtractorCommand.prototype.execute = function() {
 
-    console.log('categories:' + categories);
+    console.log('categories:' + arguments);
 
+    this.registerUrls(arguments);
 
-    //sale
-    if ( categories === null || categories === 'both' || categories === 'sale')
-    {
-        this.registerSaleRss();
-    }
-
-    //rent
-    if ( categories === null || categories === 'both' || categories === 'rent')
-    {
-        this.registerRentRss();
-    }
-
-    this.parseNextRss();
+    this.parseNextUrls();
 };
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////  BUILD URLS
-/**
- * These methods create all the rss url depending on the extractor.
- * That's why these methods have to be overrided by specific rss extractors.
- */
-ExtractorCommand.prototype.registerSaleRss = function()
-{
-   console.log('Registering Sale Classifieds Rss...');
-};
-ExtractorCommand.prototype.registerRentRss = function()
-{
-    console.log('Registering Rent Classifieds Rss...');
-};
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////  PARSE NEXT URL
-ExtractorCommand.prototype.parseNextRss = function()
+ExtractorCommand.prototype.parseNextUrls = function()
 {
-    console.log('this.rssUrls.length:' + this.rssUrls.length);
+    console.log('this.urls.length:' + this.urls.length);
 
-    if ( this.rssUrls.length)
+    if ( this.urls.length)
     {
-        var rss = this.rssUrls.shift();
-        this.parseRss(rss.url,rss.category);
+        var url = this.urls.shift();
+        this.parseUrl(url.url,url.category,url.type);
     }else{
         this.displayResult();
     }
@@ -92,7 +71,7 @@ ExtractorCommand.prototype.parseNextRss = function()
  * @param url
  * @param category
  */
-ExtractorCommand.prototype.parseRss = function(url, category)
+ExtractorCommand.prototype.parseUrl = function(url, category,type)
 {
     var self = this;
 
@@ -106,26 +85,49 @@ ExtractorCommand.prototype.parseRss = function(url, category)
     console.log('Downloading from "' + url + '"...');
 
     //download
-    var request = http.get(url, function(res) {
-        var xml = '';
-        res.setEncoding('utf8');
-        res.on('data', function (chunk) {
+    if ( type === null || type === 'rss')
+    {
+        var request = http.get(url, function(res) {
+            var content = '';
+            res.setEncoding('utf8');
+            res.on('data', function (chunk) {
 
-            if (chunk)
-                xml += chunk;
-        });
-        res.on('end', function(){
+                if (chunk)
+                    content += chunk;
+            });
+            res.on('end', function(){
 
-            parser.parseString(xml.substring(0, xml.length), function (err, json) {
-                //console.dir(json.rss.channel[0].item.length);
-                self.rssItems = self.getItems(json);
-                self.rssLogo = self.getRssLogo(json);
+                parser.parseString(content.substring(0, content.length), function (err, json) {
+                    self.items = self.getItems(json);
+                    self.mainLogo = self.getMainLogo(json);
 
-                self.parseNextItem();
+                    self.parseNextItem();
+                });
+
             });
         });
-    });
+    }else if (type === null || type === 'webpage')
+    {
+        console.log('begin crawl');
+        var c = new Crawler({
+            maxConnections : 1,
+            callback : function(error, result, $){
+                console.log('end crawl');
+                self.items = self.getItemsFromCrawler(result,$);
+                console.dir(self.items);
+                self.parseNextItem();
+            }
+        });
+        c.queue(url);
+    }
 };
+///////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////// CRAW URL
+ExtractorCommand.prototype.crawlUrl = function(error, result, $)
+{
+    return [];
+};
+
 ///////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////// PARSE ITEMS
 /**
@@ -138,6 +140,10 @@ ExtractorCommand.prototype.getItems = function(rss)
 {
     return [];
 };
+ExtractorCommand.prototype.getItemsFromCrawler = function(result,$)
+{
+    return [];
+};
 ///////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////// GET RSS LOGO
 /**
@@ -146,7 +152,7 @@ ExtractorCommand.prototype.getItems = function(rss)
  * @param rss
  * @param category
  */
-ExtractorCommand.prototype.getRssLogo = function(rss)
+ExtractorCommand.prototype.getMainLogo = function(rss)
 {
     return '';
 };
@@ -154,15 +160,15 @@ ExtractorCommand.prototype.getRssLogo = function(rss)
 //////////////////////////////////////////////////////////////////////////////////// PARSE ITEM
 ExtractorCommand.prototype.parseNextItem = function()
 {
-    //console.log('this.rssItems.length:' + this.rssItems.length);
+    //console.log('this.items.length:' + this.items.length);
 
-    if ( this.rssItems.length)
+    if ( this.items.length)
     {
-        var item = this.rssItems.shift();
+        var item = this.items.shift();
         this.parseItem(item);
     }else{
         this.displayResult();
-        this.parseNextRss();
+        this.parseNextUrls();
     }
 };
 
@@ -175,10 +181,13 @@ ExtractorCommand.prototype.parseItem = function(item)
     //get reference
     var reference = this.getItemReference(item);
 
-    //console.log('reference:' + reference);
+    console.log('reference:' + reference);
 
     if (reference)
     {
+        this.currentClassified = new Classified();
+        this.currentContact = new Contact();
+
         //check if reference already exists.
         //console.log('reference:' + reference);
 
@@ -189,7 +198,7 @@ ExtractorCommand.prototype.parseItem = function(item)
                 }else{
 
                    if(classified){
-                       //console.log('classified found => go to the next');
+                       console.log('classified found => go to the next');
                        self.numClassifiedsAlreadyExists++;
 
                        self.parseNextItem();
@@ -209,48 +218,51 @@ ExtractorCommand.prototype.doParseItem = function(item)
 {
     var self = this;
 
-    async.series({
+    var asyncTasks = this.getAsyncTasks(item);
 
-            crawlerInfos: function(callback){
-                self.crawlLink(item,callback);
-            },
-            contact:function(callback){
-                self.getItemContact(item, callback);
-            },
-            title: function(callback){
-                self.getItemTitle(item,callback);
-            },
-            description: function(callback){
-                self.getItemDescription(item,callback);
-            },
-            link: function(callback){
-                self.getItemLink(item,callback);
-            },
-            reference:function(callback){
-                self.getItemReference(item,callback);
-            },
-            city: function(callback){
-                self.getItemCity(item, callback);
-            },
-
-            creationDate: function(callback){
-                self.getItemCreationDate(item, callback);
-            },
-            countryCode: function(callback){
-                self.getItemCountryCode(item, callback);
-            },
-            propertyType: function(callback){
-                self.getItemPropertyType(item, callback);
-            }
-
-        },
+    async.series(asyncTasks ,
         function(err, results) {
             // results is now equal to: {one: 1, two: 2}
             //console.dir(results);
-            console.log('onAsyncFinished:' + results.reference);
-            self.createClassified(results);
+            console.log('onAsyncFinished:');
+            console.dir(results);
+            self.createClassified();
         }
     );
+};
+ExtractorCommand.prototype.getAsyncTasks = function(item)
+{
+    var self = this;
+
+    return {
+        crawlerInfos: function (callback) {
+            self.crawlLink(item, callback);
+        },
+        contact: function (callback) {
+            self.registerContact(item, callback);
+        },
+        title: function (callback) {
+            self.registerTitle(item, callback);
+        },
+        description: function (callback) {
+            self.registerDescription(item, callback);
+        },
+        link: function (callback) {
+            self.registerLink(item, callback);
+        },
+        reference: function (callback) {
+            self.registerReference(item, callback);
+        },
+        city: function (callback) {
+            self.registerCity(item, callback);
+        },
+        creationDate: function (callback) {
+            self.registerCreationDate(item, callback);
+        },
+        countryCode: function (callback) {
+            self.registerCountryCode(item, callback);
+        }
+    };
 };
 ///////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////// CRAWLER
@@ -277,83 +289,114 @@ ExtractorCommand.prototype.onLinkCrawled = function(error, result, $, callback)
 };
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
-ExtractorCommand.prototype.createClassified = function(infos)
+ExtractorCommand.prototype.createClassified = function()
 {
     var self = this;
 
-    if (infos)
-    {
-        if ( infos.crawlerInfos.hasOwnProperty('price')) {
+    if ( this.isValid()) {
 
-            //console.dir('contact:' + infos.contact);
-            if ( infos.crawlerInfos.contact && infos.crawlerInfos.contact.logo)
-                infos.contact.logo = infos.crawlerInfos.contact.logo;
+        console.log('save');
+        //console.dir(this.currentClassified);
+        //console.dir(this.currentContact);
 
-            //process.exit();
+        this.currentClassified.active = true;
+        this.currentClassified.clientIp = 'REMOTE_ADDR';
+        this.currentClassified.modificationDate = new Date().toUTCString();
+        //this.currentClassified.external = true;
+        this.currentClassified.category = this.currentCategory;
 
-            var details = {};
-            if (infos.crawlerInfos.price)
-                details.price = infos.crawlerInfos.price;
-            if (infos.crawlerInfos.weekPrice)
-                details.weekPrice = infos.crawlerInfos.weekPrice;
-            if (infos.crawlerInfos.monthPrice)
-                details.monthPrice = infos.crawlerInfos.monthPrice;
-            if (infos.propertyType)
-                details.propertyType = infos.propertyType;
+        this.currentClassified.save(function (err) {
 
+            console.log('on Save:' + self.currentClassified.reference);
+            if (err) {
+                console.log('Error when trying to save the classified');
+                console.dir(err);
+            } else {
 
-            var classified = new Classified();
-            classified.reference = infos.reference;
-            console.log('createClassified with reference:' + classified.reference);
-            classified.active = true;
-            classified.external = true;
-            classified.externalLink = infos.link;
-            classified.externalLogo = this.rssLogo;
-            classified.category = this.currentCategory;
-            classified.clientIp = 'REMOTE_ADDR';
-            classified.contactType = '1';
-            classified.contact = infos.contact;
-            classified.nContact = {name: infos.contact.name, address: infos.contact.address};
-            classified.creationDate = infos.creationDate;
-            //classified.modificationDate = Date.now;
-            classified.title = infos.title;
-            classified.description = infos.description;
-            classified.details = details;
-            classified.countryCode = infos.countryCode;
-            classified.latitude = infos.crawlerInfos.latitude;
-            classified.longitude = infos.crawlerInfos.longitude;
-            classified.medias = infos.crawlerInfos.medias;
-            classified.geolocalized = true;
-
-            if ( infos.city )
-            {
-                console.log('city !!');
-                classified.nCity = {
-                    slugName:infos.city.slugName,
-                    parentCode: infos.city.parentCode,
-                    postcode: infos.city.postcode,
-                    name: infos.city.name
-                };
+                console.log('SAAAAAVVVVEEEEED ' + self.currentClassified.reference);
+                self.numClassifiedsAdded++;
+                self.parseNextItem();
             }
-            //console.dir(classified);
+        });
 
-            classified.save(function (err) {
-
-                console.log('on Save:' + classified.reference);
-                if (err) {
-                    console.log('Error when trying to save the classified');
-                    console.dir(err);
-                } else {
-
-                    console.log('SAAAAAVVVVEEEEED ' + classified.reference);
-                    self.numClassifiedsAdded++;
-                    self.parseNextItem();
-                }
-            });
-        }else{
-            self.parseNextItem();
-        }
+        ////console.dir('contact:' + infos.contact);
+        //if ( infos.currentClassified.contact && infos.currentClassified.contact.logo)
+        //    infos.contact.logo = infos.currentClassified.contact.logo;
+        //
+        ////process.exit();
+        //
+        //var details = {};
+        //if (infos.currentClassified.price)
+        //    details.price = infos.currentClassified.price;
+        //if (infos.currentClassified.weekPrice)
+        //    details.weekPrice = infos.currentClassified.weekPrice;
+        //if (infos.currentClassified.monthPrice)
+        //    details.monthPrice = infos.currentClassified.monthPrice;
+        //if (infos.propertyType)
+        //    details.propertyType = infos.propertyType;
+        //
+        //
+        //classified.reference = infos.reference;
+        //console.log('createClassified with reference:' + classified.reference);
+        //classified.active = true;
+        //classified.external = true;
+        //classified.externalLink = infos.link;
+        //classified.externalLogo = this.mainLogo;
+        //classified.category = this.currentCategory;
+        //classified.clientIp = 'REMOTE_ADDR';
+        //classified.contactType = '1';
+        //classified.contact = infos.contact;
+        //classified.nContact = {name: infos.contact.name, address: infos.contact.address};
+        //classified.creationDate = infos.creationDate;
+        ////classified.modificationDate = Date.now;
+        //classified.title = infos.title;
+        //classified.description = infos.description;
+        //classified.details = details;
+        //classified.countryCode = infos.countryCode;
+        //classified.latitude = infos.currentClassified.latitude;
+        //classified.longitude = infos.currentClassified.longitude;
+        //classified.medias = infos.currentClassified.medias;
+        //classified.geolocalized = true;
+        //
+        //if ( infos.city )
+        //{
+        //    console.log('city !!');
+        //    classified.nCity = {
+        //        slugName:infos.city.slugName,
+        //        parentCode: infos.city.parentCode,
+        //        postcode: infos.city.postcode,
+        //        name: infos.city.name
+        //    };
+        //}
+        //console.dir(classified);
+        //process.exit();
+        //
+        //classified.save(function (err) {
+        //
+        //    console.log('on Save:' + classified.reference);
+        //    if (err) {
+        //        console.log('Error when trying to save the classified');
+        //        console.dir(err);
+        //    } else {
+        //
+        //        console.log('SAAAAAVVVVEEEEED ' + classified.reference);
+        //        self.numClassifiedsAdded++;
+        //        self.parseNextItem();
+        //    }
+        //});
+    }else{
+        self.parseNextItem();
     }
+};
+/**
+ * Last check before saving the classified
+ *
+ * @param infos
+ * @returns {boolean}
+ */
+ExtractorCommand.prototype.isValid = function()
+{
+    return true;
 };
 ///////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////// ITEM PROPERTIES
@@ -362,27 +405,36 @@ ExtractorCommand.prototype.getItemReference = function(item,callback)
     return '';
     //return 'wg-e98db88df';
 };
-ExtractorCommand.prototype.getItemTitle = function(item, callback)
+ExtractorCommand.prototype.registerReference = function(item,callback)
+{
+    return '';
+    //return 'wg-e98db88df';
+};
+ExtractorCommand.prototype.registerTitle = function(item, callback)
 {
     return '';
 };
-ExtractorCommand.prototype.getItemDescription = function(item, callback)
+ExtractorCommand.prototype.registerDescription = function(item, callback)
 {
     return '';
 };
-ExtractorCommand.prototype.getItemLink = function(item, callback)
+ExtractorCommand.prototype.getItemLink = function(item)
 {
     return '';
 };
-ExtractorCommand.prototype.getItemCity = function(item, callback)
+ExtractorCommand.prototype.registerLink = function(item, callback)
+{
+    return '';
+};
+ExtractorCommand.prototype.registerCity = function(item, callback)
 {
     return null;
 };
-ExtractorCommand.prototype.getItemContact = function(item, callback)
+ExtractorCommand.prototype.registerContact = function(item, callback)
 {
     return null;
 };
-ExtractorCommand.prototype.getItemCountryCode = function(item, callback)
+ExtractorCommand.prototype.registerCountryCode = function(item, callback)
 {
     return null;
 };
@@ -390,9 +442,10 @@ ExtractorCommand.prototype.getItemPropertyType = function(item, callback)
 {
     return null;
 };
-ExtractorCommand.prototype.getItemCreationDate = function(item, callback)
+ExtractorCommand.prototype.registerCreationDate = function(item, callback)
 {
-    return callback(null, new Date(item.pubDate[0]).toUTCString());
+    this.currentClassified.creationDate = new Date(item.pubDate[0]).toUTCString();
+    return callback(null, true);
 };
 ///////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////// RESULT

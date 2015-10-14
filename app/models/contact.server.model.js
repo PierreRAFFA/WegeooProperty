@@ -31,7 +31,40 @@ var ContactSchema = new Schema({
     },
     password: {
         type: String
+    },
+    website: {
+        type: String
     }
 });
+
+ContactSchema.statics.getOrCreate = function(clauses, callback)
+{
+    var Self = this;
+    this.findOne(clauses ,  function (err, contact) {
+
+        if (err) {
+            console.log('Error when trying to get contact');
+        } else {
+            if (!contact) {
+
+                //Create a contact
+                console.log('create a contact');
+                var newContact = new Self(clauses);
+
+                newContact.save(function (err) {
+                    if (err) {
+                        console.log('Error when trying to save the contact');
+                    } else {
+                        console.log('contact created');
+                        return callback.call(null, newContact);
+                    }
+                });
+            } else {
+                console.log('contact found');
+                return callback.call(null, contact);
+            }
+        }
+    });
+};
 
 mongoose.model('Contact', ContactSchema , 'contacts');

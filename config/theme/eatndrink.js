@@ -14,5 +14,12 @@ module.exports = {
     defaultCategory: 'rent',
     defaultCityPostcode: 'city',
     defaultCityName: 'london',
-    defaultSlugName: 'city-london'
+    defaultSlugName: 'city-london',
+
+    /**
+     * Configure the classified details for 'property' theme
+     */
+    classifiedDetails: {
+
+    }
 };
