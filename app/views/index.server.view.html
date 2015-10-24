@@ -7,17 +7,28 @@
     <!--header-->
     {% include 'templates/header.server.view.html' %}
 
-    <!-- include 'templates/map.server.view.html' -->
+    <!-- SEARCH FIELDS -->
+    <wg-search data-city="main.wegeooService.getCity()" data-city-slugname="main.wegeooService.getSlugName()"></wg-search>
 
-        <section data-ui-view="map"></section>
+    <!--MAP-->
+    <section class="row show-grid row-margin row-colored row-search map" data-ng-controller="MapController as map">
+        {% include 'templates/map.server.view.html' %}
+    </section>
 
-        <section data-ui-view="latestClassifieds"></section>
+    <!--BANNER-->
+    <section class="row show-grid row-margin row-colored latestClassifieds">
+        <wg-banner class="banner" data-title="main.bannerTitle" data-provider="main.bannerImages"></wg-banner>
+    </section>
 
-        <section data-ui-view="classifiedList" class="classifiedList"></section>
+    <section data-ui-view="classifiedList" class="classifiedList"></section>
 
-        <wg-goto-top-button active="!main.getMapVisible()"></wg-goto-top-button>
+    <wg-goto-top-button active="!main.getMapVisible()"></wg-goto-top-button>
 
+    <!--FOOTER-->
+    <footer class="row show-grid row-margin latestClassifieds">
         {% include 'templates/footer.server.view.html' %}
+    </footer>
+
 
         <!--<a ui-sref="home.citySearch({theme:'property', category: 'rent', cityPostcode: 'city' , cityName: 'london' })"-->
             <!--ui-sref-opts="{reload: false}">London</a>-->

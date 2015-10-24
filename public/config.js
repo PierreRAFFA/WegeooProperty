@@ -6,7 +6,7 @@ var ApplicationConfiguration = (function() {
 	var applicationModuleName = 'wegeoo';
     var theme = 'property';
 
-	var applicationModuleVendorDependencies = ['ngResource', 'ngCookies',  'ngAnimate',  'ngTouch',  'ngSanitize',
+	var applicationModuleVendorDependencies = ['ngResource', 'ngCookies',  'ngAnimate',  'ngTouch', 'ngSanitize',
         'ui.router', 'ui.bootstrap', 'ui.utils','uiGmapgoogle-maps' , 'classifieds'];
 
 	// Add a new vertical module

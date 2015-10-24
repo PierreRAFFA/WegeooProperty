@@ -181,7 +181,7 @@ ClassifiedSchema.statics.findMostRecent = function(slugName,callback)
     var lCityName = slugName.substring(slugName.indexOf('-') + 1);
     return this
         .find( { $or: [ {'nCity.slugName' : slugName} , {'nCity.parentCode' : lCityName}] })
-        .select('-_id medias reference title details.price category nCity.slugName countryLocale')
+        .select('-_id medias reference title details.price details.currency category nCity.slugName countryLocale')
         .sort('-modificationDate')
         .limit(15)
         .exec(callback);

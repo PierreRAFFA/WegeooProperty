@@ -36,6 +36,7 @@ module.exports = {
 				'public/lib/angular-ui-utils/ui-utils.js',
 				'public/lib/angular-bootstrap/ui-bootstrap-tpls.js',
                 'public/lib/lodash/lodash.js',
+                'public/lib/gsap/src/minified/TweenMax.min.js',
                 'public/lib/angular-google-maps/dist/angular-google-maps_dev_mapped.js'
             ]
 		},

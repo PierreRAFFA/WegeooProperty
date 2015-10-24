@@ -1,87 +1,84 @@
 <!-- NEWS -->
-<footer>
-    <div class ="row show-grid news">
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="newsLayoutTextContainer">
-                <div class="title" data-ng-bind="main.I18n.t('footerFollowus')"></div>
-                <a href="https://www.facebook.com/wegeoo">
-                    <div class="facebookLogo"></div>
-                </a>
-                <div class="twitterLogo"></div>
-            </div>
+<div class ="row show-grid news">
+    <div class="col-xs-12 col-sm-12 col-md-12">
+        <div class="newsLayoutTextContainer">
+            <div class="title" data-ng-bind="main.I18n.t('footerFollowus')"></div>
+            <a href="https://www.facebook.com/wegeoo">
+                <div class="facebookLogo"></div>
+            </a>
+            <div class="twitterLogo"></div>
+        </div>
+    </div>
+</div>
+
+<!-- SEARCH SHORTCUTS -->
+<div class ="row show-grid cityLinks">
+    <div class="col-xs-12 col-sm-6 col-md-6 linkContainer">
+        <div class="title">
+            <span>{{ __('footer.classified.sale') }}</span>
+        </div>
+
+        <div class="cityLink">
+            {% for city in mostPopulatedCities %}
+                <a href="/{{theme}}/{{ __('wegeoo.sale') }}/{{city.slugName}}">{{city.name}}</a><br/>
+            {% endfor %}
         </div>
     </div>
 
-    <!-- SEARCH SHORTCUTS -->
-    <div class ="row show-grid cityLinks">
-        <div class="col-xs-12 col-sm-6 col-md-6 searchShortcutsContainers">
-            <div class="title">
-                <span>{{ __('footer.classified.sale') }}</span>
-            </div>
-
-            <div class="cityLink">
-                {% for city in cities %}
-                    <a href="/{{theme}}/{{ __('wegeoo.sale') }}/{{city.slugName}}">{{city.name}}</a><br/>
-                {% endfor %}
-            </div>
+    <div class="col-xs-12 col-sm-6 col-md-6 linkContainer">
+        <div class="title">
+            <span>{{ __('footer.classified.rent') }}</span>
         </div>
-
-        <div class="col-xs-12 col-sm-6 col-md-6 cityLinks">
-            <div class="title">
-                <span>{{ __('footer.classified.rent') }}</span>
-            </div>
-            <div class="cityLink">
-                {% for city in cities %}
-                <a href="/{{theme}}/{{ __('wegeoo.rent') }}/{{city.slugName}}">{{city.name}}</a><br/>
-                {% endfor %}
-            </div>
+        <div class="cityLink">
+            {% for city in mostPopulatedCities %}
+            <a href="/{{theme}}/{{ __('wegeoo.rent') }}/{{city.slugName}}">{{city.name}}</a><br/>
+            {% endfor %}
         </div>
     </div>
+</div>
 
-    <!-- OTHER LINKS -->
-    <div class ="row show-grid otherLinks">
+<!-- OTHER LINKS -->
+<div class ="row show-grid otherLinks">
 
 
-        <div class="col-xs-12 col-sm-12 col-md-12">
+    <div class="col-xs-12 col-sm-12 col-md-12">
 
-            <!-- COMPANY -->
-            <span class="title">{{ __('Wegeoo Society') }}</span>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <span class="links">
-                <a href="/a-propos">{{ __('footer.about') }}</a>&nbsp;&nbsp;&nbsp;&nbsp;
-                <a href="emploi">{{ __('footer.job') }}</a>&nbsp;&nbsp;&nbsp;&nbsp;
-                <a href="presse">{{ __('footer.media') }}</a>&nbsp;&nbsp;&nbsp;&nbsp;
-                <a href="aide">{{ __('footer.help') }}</a>&nbsp;&nbsp;&nbsp;&nbsp;
-                <a href="cg">{{ __('footer.conditions') }}</a>&nbsp;&nbsp;&nbsp;&nbsp;
-                <a href="mailto:wegeoo.uk@gmail.com">{{ __('footer.contact') }}</a>&nbsp;&nbsp;&nbsp;&nbsp;
-            </span>
-            <br/>
+        <!-- COMPANY -->
+        <span class="title">{{ __('Wegeoo Society') }}</span>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <span class="links">
+            <a href="/a-propos">{{ __('footer.about') }}</a>&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="emploi">{{ __('footer.job') }}</a>&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="presse">{{ __('footer.media') }}</a>&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="aide">{{ __('footer.help') }}</a>&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="cg">{{ __('footer.conditions') }}</a>&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="mailto:wegeoo.uk@gmail.com">{{ __('footer.contact') }}</a>&nbsp;&nbsp;&nbsp;&nbsp;
+        </span>
+        <br/>
 
-            <!-- ADVERTISERS -->
-            <span class="title">{{ __('footer.advertiser') }}</span>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <span class="links">
-                <a href="annonceurs">{{ __('footer.advertiser.discoverOffers') }}</a>&nbsp;&nbsp;&nbsp;&nbsp;
-            </span>
-            <br/>
+        <!-- ADVERTISERS -->
+        <span class="title">{{ __('footer.advertiser') }}</span>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <span class="links">
+            <a href="annonceurs">{{ __('footer.advertiser.discoverOffers') }}</a>&nbsp;&nbsp;&nbsp;&nbsp;
+        </span>
+        <br/>
 
-            <!-- FOLLOW US -->
-            <span class="title">{{ __('Follow Us') }}</span>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <span class="links">
-                <a href="https://www.facebook.com/wegeoo">Facebook</a>&nbsp;&nbsp;&nbsp;&nbsp;
-                <a href="annonceurs">Twitter</a>&nbsp;&nbsp;&nbsp;&nbsp;
-                <a href="annonceurs">Google</a>&nbsp;&nbsp;&nbsp;&nbsp;
-            </span>
+        <!-- FOLLOW US -->
+        <span class="title">{{ __('Follow Us') }}</span>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <span class="links">
+            <a href="https://www.facebook.com/wegeoo">Facebook</a>&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="annonceurs">Twitter</a>&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="annonceurs">Google</a>&nbsp;&nbsp;&nbsp;&nbsp;
+        </span>
 
-        </div>
-
-        <div class ="row show-grid">
-            <div class="col-xs-12 col-sm-12 col-md-12 copyright">
-                {{ __('footer.copyright') }}<br/>
-                {{ __('footer.use') }}
-            </div>
-        </div>
     </div>
 
-</footer>
+    <div class ="col-xs-12 col-sm-12 col-md-12">
+        <div class="col-xs-12 col-sm-12 col-md-12 copyright">
+            {{ __('footer.copyright') }}<br/>
+            {{ __('footer.use') }}
+        </div>
+    </div>
+</div>

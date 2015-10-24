@@ -16,7 +16,9 @@
     "angular-ui-utils": "~0.1.1",
     "bootstrap": "~3",
     "bootstrap-sass-official": "~3.3.5",
-    "lodash": "~3.10.0"
+    "lodash": "~3.10.0",
+    "ngtouchmove": "~1.0.1",
+    "gsap": "~1.18.0"
   },
   "resolutions": {
     "angular": "~1.4.x"

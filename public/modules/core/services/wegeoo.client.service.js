@@ -5,13 +5,18 @@
 
 
 //Menu service used for managing  menus
-angular.module('core').service('WegeooService', ['SearchModel', 'Classifieds',
+angular.module('core').service('WegeooService', ['Classifieds', '$filter',
 
-    function(SearchModel,Classifieds) {
+    function(Classifieds, $filter) {
 
         ///////////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////  CONSTRUCTOR
         var WegeooService = function() {
+
+            /**
+             * Classifieds
+             */
+            this.Classifieds = Classifieds;
 
             /**
              * Test for check if unique
@@ -19,9 +24,14 @@ angular.module('core').service('WegeooService', ['SearchModel', 'Classifieds',
              */
             this.test = Math.random();
 
-            this._searchModel = new SearchModel();
+            /**
+             * Loaded Classifieds
+             *
+             * @type {Array}
+             * @private
+             */
+            this._loadedClassifieds = [];
 
-            this.Classifieds = Classifieds;
         };
         WegeooService.NUM_CLASSIFIEDS_LOADED_IN_A_ROW = 10;
 
@@ -35,8 +45,7 @@ angular.module('core').service('WegeooService', ['SearchModel', 'Classifieds',
          * @param value
          */
         WegeooService.prototype.loadReferences = function(value) {
-            this._searchModel.references = value;
-            this._searchModel.loadedClassifieds = [];
+            this._loadedClassifieds = [];
             this.loadNextClassifieds();
         };
 
@@ -47,34 +56,44 @@ angular.module('core').service('WegeooService', ['SearchModel', 'Classifieds',
 
         WegeooService.prototype.onClassifiedsLoadComplete = function(event)
         {
-            this._searchModel.loadedClassifieds = this._searchModel.loadedClassifieds.concat(event);
+            this._loadedClassifieds = this._loadedClassifieds.concat(event);
         };
         WegeooService.prototype.getLoadedClassifieds = function()
         {
-            return this._searchModel.loadedClassifieds;
+            return this._loadedClassifieds;
         };
         ///////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////  LOAD CLASSIFIEDS FROM SLUGNAME
+        WegeooService.prototype.loadImagesForAnimatedBanner = function(slugName, callback)
+        {
+            var self = this;
+            var classifieds = this.Classifieds.getMostRecentfromCity(slugName).query(function()
+            {
+                var images = [];
+
+                console.log('classifieds found:' + classifieds.length);
+
+                for (var iC=0; iC < classifieds.length; iC++)
+                {
+                    var classified = classifieds[iC];
+                    var image = {};
+                    image.caption = classified.title.substr(0,30) + '...' + '<br/>' + $filter('formatPrice')(classified.details.price, classified.details.currency);
+                    image.href = '/property/sale/city-london/rm-34964157';
+                    image.src = classified.medias[0];
+                    images.push(image);
+                }
+
+                if(callback)
+                    callback.call(null,images);
+
+                //angular.element(self.$element[0]).displayImages(lImages,true);
+                //angular.element(self.$element[0]).find('.bannerTitle .part2').text(slugName.substr(slugName.indexOf('-') +1));
+
+            });
+        };
+
+        ///////////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////  SEARCH TYPE
-        WegeooService.prototype.setSearchType = function(value) {
-            this._searchModel.searchType = value;
-        };
-        WegeooService.prototype.getSearchType = function() {
-            return this._searchModel.searchType;
-        };
-
-        WegeooService.prototype.setMapBounds = function(value) {
-            this._searchModel.mapBounds = value.replace(/ /g, '');
-        };
-        WegeooService.prototype.getMapBounds = function() {
-            return this._searchModel.mapBounds;
-        };
-
-        WegeooService.prototype.setSlugName = function(value) {
-            this._searchModel.slugName = value;
-        };
-        WegeooService.prototype.getSlugName = function() {
-            return this._searchModel.slugName;
-        };
 
 
         return new WegeooService();

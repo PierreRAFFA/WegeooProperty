@@ -11,21 +11,21 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
             state('home', {
                 url: '/',
                 views:{
-                    'map@': {
-                        templateUrl: 'modules/core/views/partials/map.client.view.html',
-                        controller: 'MapController'
-                    },
-                    'latestClassifieds@': {
-                        templateUrl: 'modules/core/views/partials/latestClassifieds.client.view.html',
-                        controller: ['$scope' , 'WegeooService' , function($scope, WegeooService) {
-
-                            this.WegeooService = WegeooService;
-                            WegeooService.setSlugName(window.slugName);
-                            console.log(WegeooService.getSlugName());
-
-                        }],
-                        controllerAs: 'vm'
-                    },
+                    //'map@': {
+                    //    templateUrl: 'modules/core/views/partials/map.client.view.html',
+                    //    controller: 'MapController'
+                    //},
+                    //'latestClassifieds@': {
+                    //    templateUrl: 'modules/core/views/partials/latestClassifieds.client.view.html',
+                    //    controller: ['$scope' , 'WegeooService' , function($scope, WegeooService) {
+                    //
+                    //        //this.WegeooService = WegeooService;
+                    //        //WegeooService.setSlugName(window.slugName);
+                    //        //console.log(WegeooService.getSlugName());
+                    //
+                    //    }],
+                    //    controllerAs: 'vm'
+                    //},
                     'classifiedList@' : {
                         templateUrl: 'modules/core/views/partials/classifiedList.client.view.html'
                     }

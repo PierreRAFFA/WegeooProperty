@@ -23,7 +23,10 @@ angular.module('core').service('SearchModel', [
              * @type {string}
              */
             // Define the city by slugName ( {postcode}-{cityName}
-            this.slugName = 'undefinedSlugName';
+            this.slugName = 'undefined-slugName';
+
+
+            this.city = {};
 
             /**
              * The current mapBounds in the page
@@ -37,12 +40,19 @@ angular.module('core').service('SearchModel', [
              * @type {array}
              */
             this.loadedClassifieds = [];
+
+            this.id = Math.floor(Math.random() * 100);
         };
 
         SearchModel.SEARCH_BY_SLUGNAME    = 'bySlugName';
         SearchModel.SEARCH_BY_MAPBOUNDS   = 'byMapBounds';
 
-        return SearchModel;
+
+        SearchModel.prototype.setMapBounds = function(value) {
+            this.mapBounds = value.replace(/ /g, '');
+        };
+
+        return new SearchModel();
 
     }
 ]);

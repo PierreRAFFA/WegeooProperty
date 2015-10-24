@@ -1,0 +1,14 @@
+<div class="searchForm">
+
+    <!-- LOCATION-->
+    <div class="searchParameterContainer searchLocation">
+        <div class="searchParameterTitle">Location</div>
+
+        <!-- LOCATION -->
+        <input id="search_town_input" class="searchTownInput" type="text" placeholder="{% trans %} search.city.placeholder {% endtrans %}"
+               data-cityName="{%  if cityName is defined %}{{ cityName }}{% endif %}"
+               data-cityPostCode="{%  if cityPostCode is defined %}{{ cityPostCode }}{% endif %}"/>
+    </div>
+
+
+</div>

@@ -6,18 +6,23 @@
 
     ///////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////  CONSTRUCTOR
-    function MapController($scope, Classifieds, WegeooService , $window)
+    function MapController($scope, Classifieds, WegeooService, SearchModel , $window)
     {
-        this.wegeooService      = WegeooService;
+        this.SearchModel        = SearchModel;
+        this.WegeooService      = WegeooService;
         this.Classifieds        = Classifieds;
         this.$scope             = $scope;
         this.$window            = $window;
+
+        console.log('this.SearchModel.id:'+this.SearchModel.id);
 
         this.lastVisibility     = true;
 
         this.initMap();
 
         this.addEvents();
+
+        console.log('MapController');
     }
     ///////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////   EVENT TO BROADCAST
@@ -95,7 +100,7 @@
     ///////////////////////////////////////////////////////////  ON MAP DRAG END/ ZOOM END
     MapController.prototype.onMapIdle = function (mapModel, eventName, originalEventArgs) {
 
-        this.wegeooService.setMapBounds(mapModel.getBounds().toString());
+        this.SearchModel.setMapBounds(mapModel.getBounds().toString());
         this.updateClassifieds();
 
         // mapModel.getBounds().getSouthWest()
@@ -107,13 +112,13 @@
     ///////////////////////////////////////////////////////////  UPDATE CLASSIFIEDS
     MapController.prototype.updateClassifieds = function()
     {
-        console.log(this.wegeooService.getSlugName());
+        console.log(this.SearchModel.slugName);
 
-        if ( this.wegeooService.getSearchType() === 'bySlugName' )
+        if ( this.SearchModel.searchType === 'bySlugName' )
         {
-            this.Classifieds.getClassifiedsFromCity(this.wegeooService.getSlugName()).query(this.onClassifiedsLoadComplete.bind(this));
+            this.Classifieds.getClassifiedsFromCity(this.SearchModel.slugName).query(this.onClassifiedsLoadComplete.bind(this));
         }else{
-            this.Classifieds.getClassifiedsFromMapBounds(this.wegeooService.getMapBounds()).query(this.onClassifiedsLoadComplete.bind(this));
+            this.Classifieds.getClassifiedsFromMapBounds(this.SearchModel.mapBounds).query(this.onClassifiedsLoadComplete.bind(this));
         }
     };
 
@@ -123,7 +128,7 @@
 
         var lMarkers = [];
 
-        //prepare an array of references to be stored in the searchModel
+        //prepare an array of references to be stored in the SearchModel
         var references = [];
 
         var lClassifieds    = event[0].classifieds;
@@ -153,10 +158,10 @@
                 longitude: lCity.longitude
             };
 
-            this.wegeooService.setSearchType('byMapBounds');
+            this.SearchModel.searchType = 'byMapBounds';
         }
 
-        this.wegeooService.loadReferences(references);
+        this.WegeooService.loadReferences(references);
     };
     ///////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////  ON MARKER CLICKED
@@ -166,7 +171,7 @@
 
     ///////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////// ANGULAR REGISTERING
-    MapController.$inject = ['$scope', 'Classifieds', 'WegeooService','$window'];
+    MapController.$inject = ['$scope', 'Classifieds', 'WegeooService', 'SearchModel','$window'];
     angular.module('core').controller('MapController', MapController);
 
 })(angular);

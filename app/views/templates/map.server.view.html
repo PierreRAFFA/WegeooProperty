@@ -1,19 +1,14 @@
 <!-- SEARCH & MAP-->
-<section class="row show-grid row-margin row-colored row-search map">
-    <ui-gmap-google-map
-            options="map.options" draggable="true">
+<ui-gmap-google-map data-ok="numInMap"
+                    center='map.center' zoom='map.zoom' events='map.events'>
 
-        <!--<ui-gmap-marker ng-repeat="m in map.markers" coords="m" icon="m.icon" click="onMarkerClicked(m)" idKey="m.id" options="m.options">-->
-        <!--</ui-gmap-marker>-->
+    <ui-gmap-markers models="map.markers" coords="'self'" icon="'icon'"
+                     type="'cluster'" typeEvents="map.markersEvents" typeOptions="map.typeOptions"
+                     idKey="'id'" doRebuildAll="false" fit="false">
+    </ui-gmap-markers>
 
+</ui-gmap-google-map>
 
-        <ui-gmap-markers models="map.markers" coords="'self'" icon="'icon'" click="onMarkerClicked"
-                         doCluster="map.markers" clusterOptions="map.clusterOptions" modelsbyref="true">
-        </ui-gmap-markers>
-
-    </ui-gmap-google-map>
-
-    <div class="scroll">
-        <img src="/modules/core/img/scroll.png" width="15" height="30">
-    </div>
-</section>
+<div class="scroll">
+    <img src="/modules/core/img/scroll.png" width="15" height="30">
+</div>
