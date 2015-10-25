@@ -6,6 +6,8 @@
     ///////////////////////////////////////////////////////////  CONSTRUCTOR
     function MainController($scope, Classifieds, SearchModel, WegeooService, I18n)
     {
+        console.log('MAIN CONTROLLER');
+
         /**
          * Scope
          */
@@ -14,7 +16,7 @@
         /**
          * Service to access to Wegeoo db
          */
-        this.wegeooService = WegeooService;
+        this.WegeooService = WegeooService;
 
         /**
          *
@@ -51,8 +53,7 @@
         this.SearchModel.city = window.city;
         this.SearchModel.slugName = window.city.slugName;
 
-        this.loadClassifiedsFromSlugName(window.city.slugName);
-
+        this.WegeooService.setCity(window.city);
     }
 
     MainController.prototype.bindEvents = function()
@@ -69,7 +70,7 @@
 
         this.$scope.$on('classifiedListLoadMore' , function(event)
         {
-            self.wegeooService.loadNextClassifieds();
+            self.WegeooService.loadNextClassifieds();
 
             //force to refresh
             //self.$scope.$apply();
@@ -81,10 +82,10 @@
     };
     ///////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////// LOAD CLASSIFIEDS FROM SLUGNAME
-    MainController.prototype.loadClassifiedsFromSlugName = function(slugName)
+    MainController.prototype.loadImagesForAnimatedBanner = function(slugName)
     {
         var self = this;
-        this.wegeooService.loadImagesForAnimatedBanner(slugName, function(images)
+        this.WegeooService.loadImagesForAnimatedBanner(slugName, function(images)
         {
             self.bannerTitle = window.translations.wegeooLastClassifiedsIn + ' ' + self.SearchModel.city.name;
             self.bannerImages = images;

@@ -4,11 +4,13 @@
 <!--override of the block content-->
 {% block content %}
 
+    <div ui-view></div>
+
     <!--header-->
     {% include 'templates/header.server.view.html' %}
 
     <!-- SEARCH FIELDS -->
-    <wg-search data-city="main.wegeooService.getCity()" data-city-slugname="main.wegeooService.getSlugName()"></wg-search>
+    <wg-search data-city="main.WegeooService.getCity()" data-city-slugname="main.WegeooService.getSlugName()"></wg-search>
 
     <!--MAP-->
     <section class="row show-grid row-margin row-colored row-search map" data-ng-controller="MapController as map">
@@ -17,10 +19,12 @@
 
     <!--BANNER-->
     <section class="row show-grid row-margin row-colored latestClassifieds">
-        <wg-banner class="banner" data-title="main.bannerTitle" data-provider="main.bannerImages"></wg-banner>
+        <wg-banner class="banner" data-title="main.WegeooService.bannerTitle" data-provider="main.WegeooService.bannerImages"></wg-banner>
     </section>
 
-    <section data-ui-view="classifiedList" class="classifiedList"></section>
+    <section class="row show-grid row-margin row-colored row-search classifiedList">
+        <wg-classified-list data-classifieds="main.WegeooService.getLoadedClassifieds()"></wg-classified-list>
+    </section>
 
     <wg-goto-top-button active="!main.getMapVisible()"></wg-goto-top-button>
 
@@ -29,6 +33,11 @@
         {% include 'templates/footer.server.view.html' %}
     </footer>
 
+
+        <div style="position: fixed;top:0;left:0;z-index:1">
+            <a data-ui-sref="city({ theme: 'property', category: 'rent' , cityPostcode: 'city' , cityName: 'manchester' })">Manchester</a>
+            <a data-ui-sref="city({ theme: 'property', category: 'rent' , cityPostcode: 'city' , cityName: 'london' })">London</a>
+        </div>
 
         <!--<a ui-sref="home.citySearch({theme:'property', category: 'rent', cityPostcode: 'city' , cityName: 'london' })"-->
             <!--ui-sref-opts="{reload: false}">London</a>-->

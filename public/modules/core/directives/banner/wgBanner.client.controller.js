@@ -86,6 +86,7 @@
             function ( newValue, oldValue ) {
 
                 console.log( 'vm.provider:', newValue );
+                console.log( 'provider:', self.provider );
                 self.displayImages();
             }
         );
@@ -185,9 +186,25 @@
 
     BannerController.prototype.displayImages = function()
     {
+        this._destroyImageContainer();
+
         this._createImageContainer();
 
         this._loadImagesAround();
+    };
+    BannerController.prototype._destroyImageContainer = function()
+    {
+        if (this.$imageContainer)
+        {
+            this.$imageContainer.remove();
+            this.$imageContainer = null;
+
+            this.currentImageIndex = 0;
+            this.leftOffset = 0;
+            this.rightOffset = 0;
+            this.displayedImages = {};
+        }
+
     };
     //////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////  CREATE CONTAINER

@@ -5,9 +5,9 @@
 
 
 //Menu service used for managing  menus
-angular.module('core').service('WegeooService', ['Classifieds', '$filter',
+angular.module('core').service('WegeooService', ['Classifieds', 'SearchModel' , '$filter',
 
-    function(Classifieds, $filter) {
+    function(Classifieds, SearchModel, $filter) {
 
         ///////////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////  CONSTRUCTOR
@@ -17,6 +17,11 @@ angular.module('core').service('WegeooService', ['Classifieds', '$filter',
              * Classifieds
              */
             this.Classifieds = Classifieds;
+
+            /**
+             * Search Model
+             */
+            this.SearchModel = SearchModel;
 
             /**
              * Test for check if unique
@@ -32,11 +37,26 @@ angular.module('core').service('WegeooService', ['Classifieds', '$filter',
              */
             this._loadedClassifieds = [];
 
+
+            this.bannerImages = [];
+
         };
         WegeooService.NUM_CLASSIFIEDS_LOADED_IN_A_ROW = 10;
 
+
+        WegeooService.prototype.setCity = function(city)
+        {
+            if (city)
+            {
+                this.SearchModel.city = city;
+
+                this.loadImagesForAnimatedBanner(city);
+            }
+
+
+        };
         ///////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////  REFERENCES MANAGEMENT
+        ///////////////////////////////////////////////////////////  CLASSIFIED LIST
         /**
          * Load all classifieds from the references.
          * New references are set in SearchModel.
@@ -44,7 +64,7 @@ angular.module('core').service('WegeooService', ['Classifieds', '$filter',
          *
          * @param value
          */
-        WegeooService.prototype.loadReferences = function(value) {
+        WegeooService.prototype.updateClassifiedList = function(value) {
             this._loadedClassifieds = [];
             this.loadNextClassifieds();
         };
@@ -64,10 +84,10 @@ angular.module('core').service('WegeooService', ['Classifieds', '$filter',
         };
         ///////////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////  LOAD CLASSIFIEDS FROM SLUGNAME
-        WegeooService.prototype.loadImagesForAnimatedBanner = function(slugName, callback)
+        WegeooService.prototype.loadImagesForAnimatedBanner = function(city)
         {
             var self = this;
-            var classifieds = this.Classifieds.getMostRecentfromCity(slugName).query(function()
+            var classifieds = this.Classifieds.getMostRecentfromCity(city.slugName).query(function()
             {
                 var images = [];
 
@@ -83,8 +103,8 @@ angular.module('core').service('WegeooService', ['Classifieds', '$filter',
                     images.push(image);
                 }
 
-                if(callback)
-                    callback.call(null,images);
+                self.bannerTitle = window.translations.wegeooLastClassifiedsIn + ' ' + city.name;
+                self.bannerImages = images;
 
                 //angular.element(self.$element[0]).displayImages(lImages,true);
                 //angular.element(self.$element[0]).find('.bannerTitle .part2').text(slugName.substr(slugName.indexOf('-') +1));

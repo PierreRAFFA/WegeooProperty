@@ -6067,7 +6067,7 @@ footer .otherLinks {
 
 section.classifiedList {
   margin-top: 15px; }
-  section.classifiedList div.classifiedList .classified {
+  section.classifiedList .classified {
     position: relative;
     clear: both;
     float: left;
@@ -6076,11 +6076,11 @@ section.classifiedList {
     cursor: pointer;
     border: 1px solid #E0E0E0;
     margin-bottom: 10px; }
-    section.classifiedList div.classifiedList .classified a {
+    section.classifiedList .classified a {
       text-decoration: none; }
-      section.classifiedList div.classifiedList .classified a:hover {
+      section.classifiedList .classified a:hover {
         background: #CEE0EE; }
-      section.classifiedList div.classifiedList .classified a .media {
+      section.classifiedList .classified a .media {
         position: relative;
         float: left;
         clear: left;
@@ -6090,15 +6090,15 @@ section.classifiedList {
         width: 101px;
         overflow: hidden;
         margin: 10px; }
-        section.classifiedList div.classifiedList .classified a .media.premium {
+        section.classifiedList .classified a .media.premium {
           position: relative;
           float: left;
           max-width: 127px;
           width: 127px;
           height: 95px; }
-          section.classifiedList div.classifiedList .classified a .media.premium img {
+          section.classifiedList .classified a .media.premium img {
             max-width: 127px; }
-        section.classifiedList div.classifiedList .classified a .media img {
+        section.classifiedList .classified a .media img {
           overflow: hidden;
           max-width: 101px;
           margin: auto;
@@ -6106,16 +6106,16 @@ section.classifiedList {
           height: 100%;
           object-fit: cover;
           width: 101%; }
-    section.classifiedList div.classifiedList .classified .details {
+    section.classifiedList .classified .details {
       overflow: hidden;
       margin-top: 10px; }
-      section.classifiedList div.classifiedList .classified .details .priceContainer {
+      section.classifiedList .classified .details .priceContainer {
         width: 154px;
         position: relative;
         float: left;
         font: 0.875em FuturaStd-Bold;
         color: #52AAD1; }
-      section.classifiedList div.classifiedList .classified .details .title {
+      section.classifiedList .classified .details .title {
         position: relative;
         float: left;
         clear: left;
@@ -6126,7 +6126,7 @@ section.classifiedList {
         color: #000000;
         text-overflow: ellipsis;
         overflow: hidden; }
-      section.classifiedList div.classifiedList .classified .details .description {
+      section.classifiedList .classified .details .description {
         display: none;
         position: relative;
         float: left;
@@ -6134,7 +6134,7 @@ section.classifiedList {
         height: 64px;
         overflow: hidden;
         margin-top: 10px; }
-        section.classifiedList div.classifiedList .classified .details .description h2 {
+        section.classifiedList .classified .details .description h2 {
           font: 1em FuturaStd-Light;
           line-height: 1.5em;
           position: relative;
@@ -6143,13 +6143,13 @@ section.classifiedList {
           text-align: justify;
           text-overflow: ellipsis;
           overflow: hidden; }
-        section.classifiedList div.classifiedList .classified .details .description img {
+        section.classifiedList .classified .details .description img {
           display: none; }
-      section.classifiedList div.classifiedList .classified .details .externalLogo {
+      section.classifiedList .classified .details .externalLogo {
         position: relative;
         float: right;
         margin-top: 10px; }
-  section.classifiedList div.classifiedList .loadMore {
+  section.classifiedList .loadMore {
     background: #F0F0F0;
     position: relative;
     font: 1.2em FuturaStd-Light;
@@ -6160,7 +6160,7 @@ section.classifiedList {
     padding-bottom: 10px;
     text-align: center;
     margin-bottom: 10px; }
-    section.classifiedList div.classifiedList .loadMore .icon {
+    section.classifiedList .loadMore .icon {
       position: absolute;
       float: left;
       top: 0px;

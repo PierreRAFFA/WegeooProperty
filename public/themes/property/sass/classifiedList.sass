@@ -1,123 +1,121 @@
 section.classifiedList
   margin-top: $sectionMarginTop
 
-  div.classifiedList
+  .classified
+    position: relative
+    clear: both
+    float: left
+    margin-top: 0
+    width: 100%
+    cursor: pointer
+    border: 1px solid $classifiedListStrokeColor
+    margin-bottom: 10px
 
-    .classified
-      position: relative
-      clear: both
-      float: left
-      margin-top: 0
-      width: 100%
-      cursor: pointer
-      border: 1px solid $classifiedListStrokeColor
-      margin-bottom: 10px
+    a
+      text-decoration: none
 
-      a
-        text-decoration: none
+      &:hover
+        background: $classifiedListHover
 
-        &:hover
-          background: $classifiedListHover
+      .media
+        position: relative
+        float: left
+        clear: left
+        border: 2px solid
+        border-color: #424242
+        height: 76px
+        width: 101px
+        overflow: hidden
+        margin: 10px
 
-        .media
+        &.premium
           position: relative
           float: left
-          clear: left
-          border: 2px solid
-          border-color: #424242
-          height: 76px
-          width: 101px
-          overflow: hidden
-          margin: 10px
-
-          &.premium
-            position: relative
-            float: left
-            max-width: 127px
-            width: 127px
-            height: 95px
-
-            img
-              max-width: 127px
+          max-width: 127px
+          width: 127px
+          height: 95px
 
           img
-            overflow: hidden
-            max-width: 101px
-            margin: auto
-            display: block
-            height: 100%
-            object-fit: cover
-            width: 101% /* 101% to prevent liseret */
+            max-width: 127px
 
-      .details
+        img
+          overflow: hidden
+          max-width: 101px
+          margin: auto
+          display: block
+          height: 100%
+          object-fit: cover
+          width: 101% /* 101% to prevent liseret */
+
+    .details
+      overflow: hidden
+      margin-top: 10px
+
+      .priceContainer
+        width: 154px
+        position: relative
+        float: left
+        font: 0.875em FuturaStd-Bold
+        color: $themeColor1
+
+      .title
+        position: relative
+        float: left
+        clear: left
+        margin-top: 5px
+        font: 0.875em FuturaStd-Bold
+        width: 100%
+        overflow: hidden
+        color: #000000
+        text-overflow: ellipsis
+        overflow: hidden
+
+      .description
+        display: none
+        position: relative
+        float: left
+        clear: left
+        height: 64px
         overflow: hidden
         margin-top: 10px
 
-        .priceContainer
-          width: 154px
+        h2
+          font: 1em FuturaStd-Light
+          line-height: 1.5em
           position: relative
-          float: left
-          font: 0.875em FuturaStd-Bold
-          color: $themeColor1
-
-        .title
-          position: relative
-          float: left
-          clear: left
-          margin-top: 5px
-          font: 0.875em FuturaStd-Bold
-          width: 100%
-          overflow: hidden
-          color: #000000
+          color: $grey
+          margin-top: 15px
+          text-align: justify
           text-overflow: ellipsis
           overflow: hidden
 
-        .description
+
+        img
           display: none
-          position: relative
-          float: left
-          clear: left
-          height: 64px
-          overflow: hidden
-          margin-top: 10px
 
-          h2
-            font: 1em FuturaStd-Light
-            line-height: 1.5em
-            position: relative
-            color: $grey
-            margin-top: 15px
-            text-align: justify
-            text-overflow: ellipsis
-            overflow: hidden
+      .externalLogo
+        position: relative
+        float: right
+        margin-top: 10px
 
+  .loadMore
+    background: $greyIndicator
+    position: relative
+    font: 1.2em FuturaStd-Light
+    cursor: pointer
+    float: left
+    width: 100%
+    padding-top: 10px
+    padding-bottom: 10px
+    text-align: center
+    margin-bottom: 10px
 
-          img
-            display: none
-
-        .externalLogo
-          position: relative
-          float: right
-          margin-top: 10px
-
-    .loadMore
-      background: $greyIndicator
-      position: relative
-      font: 1.2em FuturaStd-Light
-      cursor: pointer
+    .icon
+      position: absolute
       float: left
-      width: 100%
-      padding-top: 10px
-      padding-bottom: 10px
-      text-align: center
-      margin-bottom: 10px
-
-      .icon
-        position: absolute
-        float: left
-        top: 0px
-        background-image: url('/modules/core/img/loadMoreIcon.png')
-        background-size: 72px 40px
-        background-repeat: no-repeat
-        width: 72px
-        height: 40px
+      top: 0px
+      background-image: url('/modules/core/img/loadMoreIcon.png')
+      background-size: 72px 40px
+      background-repeat: no-repeat
+      width: 72px
+      height: 40px

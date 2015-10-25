@@ -151,7 +151,7 @@
         //center the map to the city if information is present
         if (event[0].hasOwnProperty('city'))
         {
-            var lCity           = event[0].city;
+            var lCity = event[0].city;
 
             this.$scope.map.center = {
                 latitude: lCity.latitude,
@@ -161,7 +161,7 @@
             this.SearchModel.searchType = 'byMapBounds';
         }
 
-        this.WegeooService.loadReferences(references);
+        this.WegeooService.updateClassifiedList(references);
     };
     ///////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////  ON MARKER CLICKED
