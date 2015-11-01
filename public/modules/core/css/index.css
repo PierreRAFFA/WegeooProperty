@@ -6105,7 +6105,9 @@ section.classifiedList {
           display: block;
           height: 100%;
           object-fit: cover;
-          width: 101%; }
+          width: 101%;
+          color: #000;
+          font-size: 0.8em; }
     section.classifiedList .classified .details {
       overflow: hidden;
       margin-top: 10px; }

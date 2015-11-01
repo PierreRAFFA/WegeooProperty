@@ -5,7 +5,7 @@
 
 
 //Menu service used for managing  menus
-angular.module('core').service('WegeooService', ['Classifieds', 'SearchModel' , '$filter',
+angular.module('core').service('WegeooService', ['Classifieds', /*'Cities', */'SearchModel' , '$filter',
 
     function(Classifieds, SearchModel, $filter) {
 
@@ -50,9 +50,14 @@ angular.module('core').service('WegeooService', ['Classifieds', 'SearchModel' , 
             {
                 this.SearchModel.city = city;
 
-                this.loadImagesForAnimatedBanner(city);
+                this.updateAnimatedBanner(city);
+                
+                this.updateMap(city);
             }
+        };
 
+        WegeooService.prototype.updateMap = function(city)
+        {
 
         };
         ///////////////////////////////////////////////////////////////////////////
@@ -84,7 +89,7 @@ angular.module('core').service('WegeooService', ['Classifieds', 'SearchModel' , 
         };
         ///////////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////  LOAD CLASSIFIEDS FROM SLUGNAME
-        WegeooService.prototype.loadImagesForAnimatedBanner = function(city)
+        WegeooService.prototype.updateAnimatedBanner = function(city)
         {
             var self = this;
             var classifieds = this.Classifieds.getMostRecentfromCity(city.slugName).query(function()
