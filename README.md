@@ -5,5 +5,5 @@
 PHP  
 Symfony2  
 Cron  
-Javascript  
-CSS
+OO Javascript  
+CSS  
